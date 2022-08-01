@@ -20,7 +20,8 @@
 }
 
 p {
-    color: var(--darkest)
+    color: var(--darkest);
+    font-weight: 700;
 }
 
 a {

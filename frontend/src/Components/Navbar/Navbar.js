@@ -1,54 +1,64 @@
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { Link } from "react-router-dom"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import NavbarMessage from "./NavbarMessage";
+import { URL_CONSTANTS } from "../Constants/constants";
+
 import "./Navbar.css"
 
 const Navbar = () => {
-    const message = "Runner is currently in Beta | Read the latest article";
-    const directTo = "https://www.medium.com"
-
     return (
         <>
-            <NavbarMessage message={message} directTo={directTo} />
-            
             <nav>
                 <ul>
                     <li>
-                        <div className="text-with-icon">
-                            <div className="img-container">
-                                <img id="badge" src="/badge.svg" alt="Runner badge" />
-                            </div>
+                        <Link className="link" to="/">
+                            <div className="text-with-icon">
+                                <div className="img-container">
+                                    <img id="badge" src="/badge.svg" alt="Runner badge" />
+                                </div>
                             <h5>runner</h5>
-                        </div>
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <p>Roadmap</p>
+                        <Link className="link" to="/roadmap">
+                            <p>Roadmap</p>
+                        </Link>
                     </li>
                     <li>
-                        <p>Governance</p>
+                        <Link className="link" to="/governance">
+                            <p>Governance</p>
+                        </Link>
                     </li>
                     <li>
-                        <p>FAQ</p>
+                        <Link className="link" to="/FAQ">
+                            <p>FAQ</p>
+                        </Link>
                     </li>
                 </ul>
 
                 <div className="nav-icons">
-
-                    <div className="text-with-icon">
-                        <div className="img-container">
-                            <StarBorderIcon id="star" fontSize="small" sx={{color: '#707070'}} />
+                    <a className="link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
+                        <div className="text-with-icon">
+                            <div className="img-container">
+                                <FontAwesomeIcon icon={["fal", "star"]} style={{color: 'inherit'}} />
+                            </div>
+                            <p>Star on GitHub</p>
                         </div>
-                        <p>Star on GitHub</p>
-                    </div>
+                    </a>
 
                     <div className="social-icons">
-                        <div className="img-container">
-                            <img src="/twitter-white.png" alt="Twitter logo" />
-                        </div>
+                        <a className="link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
+                            <div className="img-container">
+                                <FontAwesomeIcon icon={["fa-brands", "fa-discord"]} />
+                            </div>
+                        </a>
 
-                        <div className="img-container">
-                            <img src="/discord-white.png" alt="Discord logo" />
-                        </div>
+                        <a className="link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
+                            <div className="img-container">
+                                <FontAwesomeIcon icon="fa-brands fa-twitter" />
+                            </div>
+                        </a>
                     </div>
                 </div>
             </nav>

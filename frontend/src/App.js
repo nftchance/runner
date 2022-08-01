@@ -1,9 +1,16 @@
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
-import Router from "./Components/Router/Router";
-import SEO_CONSTANTS from "./Components/SEO/constants";
+import Router from "./components/Router/Router";
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { fal } from '@fortawesome/pro-light-svg-icons'
+
+import { SEO_CONSTANTS } from "./components/Constants/constants";
 
 import './App.css';
+
+library.add(fab, fal)
 
 function App() {
   return (

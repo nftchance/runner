@@ -1,4 +1,4 @@
-@import url("https://use.typekit.net/lww0ojo.css");
+@import url("https://use.typekit.net/evr1bsi.css%22");
 
 :root {
   --darkest: #1C1C1C;
@@ -10,7 +10,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'franklin-gothic-atf', sans-serif;
+  font-family: 'franklin-gothic-urw', sans-serif;
   margin: 0;
 }
 
@@ -34,4 +34,5 @@ h5 {
 p {
   color: var(--dark-border);
   font-size: 14;
+  font-weight: 500;
 }

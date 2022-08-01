@@ -22,6 +22,26 @@ li {
     flex-grow: 1;
 }
 
+p {
+    color: inherit;
+}
+p:hover,
+p:focus,
+p:active {
+    color: inherit;
+}
+
+.link {
+    color: var(--dark-border);
+}
+
+.link:hover,
+.link:focus,
+.link:active {
+    color: #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+}
+
 .nav-icons {
     display: flex;
     float: right;

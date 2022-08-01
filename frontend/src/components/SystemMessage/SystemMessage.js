@@ -3,9 +3,9 @@ import { useState } from "react"
 import { IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
-import "./NavbarMessage.css"
+import "./SystemMessage.css"
 
-const NavbarMessage = (props) => {
+const SystemMessage = (props) => {
     const { message, directTo } = props;
     const [ closed, setClosed ] = useState(false);
 
@@ -34,4 +34,4 @@ const NavbarMessage = (props) => {
     )
 }
 
-export default NavbarMessage;
+export default SystemMessage;
