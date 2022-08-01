@@ -1,6 +1,33 @@
-.nav {
+nav {
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+    border-bottom: 1px solid var(--dark-border);
+    padding-left: 140px;
+    padding-right: 140px;
+}
+
+ul {
     display: flex;
     flex-direction: row;
-    height: 60px;
-    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline-flex;
+    flex-grow: 1;
+}
+
+.img-container {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.badge > img {
+    height: 19px;
+    width: 20px;
+    vertical-align: middle;
 }

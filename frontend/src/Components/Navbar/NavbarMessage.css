@@ -1,0 +1,30 @@
+.msg-container {
+    height: 50px;
+    line-height: 50px;
+    width: 100%;
+    text-align: center;
+    justify-content: middle;
+    background-color: var(--yellow);
+    padding-left: 140px;
+    padding-right: 140px;
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.close {
+    display: flex;
+    justify-content: middle;
+    align-items: center;
+    float: right;
+    margin-left: auto;
+}
+
+p {
+    color: var(--darkest)
+}
+
+a {
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+}

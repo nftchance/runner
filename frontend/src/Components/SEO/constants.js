@@ -1,6 +1,6 @@
 const SEO_CONSTANTS = {
     home: {
-        title: "RUNNER",
+        title: "runner",
         description: "Revolutionize your service business with automation tools of 2032."
     }
 }

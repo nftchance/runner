@@ -1,0 +1,37 @@
+@import url("https://use.typekit.net/lww0ojo.css");
+
+:root {
+  --darkest: #1C1C1C;
+  --dark: #272727;
+  --dark-border: #707070;
+  --yellow: #EFF855;
+  --dark-yellow: #BEC729;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'franklin-gothic-atf', sans-serif;
+  margin: 0;
+}
+
+body {
+  background: var(--darkest);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  color: #FFFFFF;
+  font-size: 48;
+}
+
+h5 {
+  color: #FFFFFF;
+  font-size: 16;
+}
+
+p {
+  color: var(--dark-border);
+  font-size: 14;
+}
