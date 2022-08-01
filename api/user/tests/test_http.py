@@ -10,7 +10,6 @@ from rest_framework.test import APITestCase
 from utils.tests.user import PASSWORD, create_user
 
 class AuthenticationTest(APITestCase):
-    # Function collapsed for clarity.
     def test_user_can_sign_up(self):
         response = self.client.post(
             reverse("sign_up"),
@@ -29,7 +28,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(response.data["first_name"], user.first_name)
         self.assertEqual(response.data["last_name"], user.last_name)
 
-    def test_user_can_log_in(self):  # new
+    def test_user_can_log_in(self):
         user = create_user()
         response = self.client.post(
             reverse("log_in"),
