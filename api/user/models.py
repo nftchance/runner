@@ -5,4 +5,4 @@ from django.db import models
 from org.models import Org
 
 class User(AbstractUser):
-    org = models.ManyToManyField(Org)
+    orgs = models.ManyToManyField(Org)

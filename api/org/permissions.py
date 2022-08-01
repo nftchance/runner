@@ -17,5 +17,5 @@ class IsOrgMember(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Determine if  user is in org 
-        return obj in request.user.orgs
+        # Determine if user is admin of or in org being accessed
+        return obj in request.user.orgs.all()

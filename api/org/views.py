@@ -9,10 +9,12 @@ class OrgViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_id"
 
-    queryset = Org.objects.all()
     serializer_class = OrgSerializer
 
     permission_classes = [permissions.IsAuthenticated, IsOrgMember]
+
+    def get_queryset(self, *args, **kwargs):
+        return self.request.user.orgs.all()
 
     # Allow only admins to create new orgs and any other user to view 
     # the orgs they are customers of.
@@ -25,4 +27,9 @@ class OrgViewSet(viewsets.ModelViewSet):
         return [permission() for permission in self.permission_classes]
 
     def perform_create(self, serializer):
-        serializer.save(admin=self.request.user)
+        # save the new org into the database
+        obj = serializer.save(admin=self.request.user)
+
+        # add this org to the users orgs
+        self.request.user.orgs.add(obj)
+        self.request.user.save()

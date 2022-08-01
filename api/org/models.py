@@ -21,7 +21,7 @@ class Org(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
-        return reverse("org_detail", kwargs={"org_id": self.pk})
+        return reverse("org-detail", kwargs={"org_id": self.pk})
     
     class Meta:
         ordering = ["created_at"]
