@@ -1,24 +1,29 @@
-import logo from './logo.svg';
+import { HelmetProvider, Helmet } from "react-helmet-async";
+
+import Router from "./Components/Router/Router";
+import SEO_CONSTANTS from "./Components/SEO/constants";
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <>
+        <HelmetProvider>
+          <Helmet>
+              <title>{SEO_CONSTANTS.home.title}</title>
+              <meta name="og:title" content={SEO_CONSTANTS.home.title} />
+              <meta name="og:description" content={SEO_CONSTANTS.home.title} />
+
+              <meta name="description" content={SEO_CONSTANTS.home.description} />
+              <meta name="og:description" content={SEO_CONSTANTS.home.description} />
+              <meta name="twitter:description" content={SEO_CONSTANTS.home.description} />
+
+              <meta property="og:url" content={`${window.location.href}`} />
+          </Helmet>
+        </HelmetProvider>
+
+        <Router />
+      </>
   );
 }
 
