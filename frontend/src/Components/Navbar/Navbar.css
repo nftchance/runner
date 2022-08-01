@@ -5,14 +5,16 @@ nav {
     border-bottom: 1px solid var(--dark-border);
     padding-left: 140px;
     padding-right: 140px;
+    display: inline-flex;
+    flex-direction: row;
 }
 
 ul {
-    display: flex;
-    flex-direction: row;
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    gap: 30px;
 }
 
 li {
@@ -20,14 +22,36 @@ li {
     flex-grow: 1;
 }
 
+.nav-icons {
+    display: flex;
+    float: right;
+    margin-left: auto;
+    gap: 30px;
+}
+
+.social-icons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.text-with-icon {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 .img-container {
     display: inline-block;
     height: 100%;
-    vertical-align: middle;
 }
 
-.badge > img {
+#badge {
     height: 19px;
     width: 20px;
-    vertical-align: middle;
+    vertical-align: sub;
+}
+
+#star {
+    vertical-align: sub;
 }
