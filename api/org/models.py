@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse 
 
@@ -13,6 +14,8 @@ class Org(models.Model):
     id = models.CharField(primary_key=True, max_length=256, blank=True, unique=True)
 
     name = models.CharField(max_length=256)
+
+    admin = models.ForeignKey('user.User', null=True, on_delete=models.CASCADE, related_name="admin")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

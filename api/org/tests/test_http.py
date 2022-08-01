@@ -22,25 +22,24 @@ class HttpTest(APITestCase):
         self.access = response.data["access"]
 
     def test_user_can_create_org(self):
-        pass
+        response = self.client.post(
+            reverse("org-list"),
+            data={
+                "name": "The Best of Times"
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        org = Org.objects.get(name="The Best of Times")
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(response.data["id"], org.id)
+        self.assertEqual(response.data["name"], org.name)
+        self.assertEqual(response.data["admin"], org.admin.id)
 
     def test_user_can_list_own_orgs(self):
         pass
 
     def test_user_can_retrieve_own_org_by_id(self):
         pass
-        # # create org
-        # org = Org.objects.create(name="Simpler Times")
-
-        # # add member to org
-        # self.user.orgs.add(org)
-        # self.user.save()
-
-        # response = self.client.get(org.get_absolute_url(),
-        #     HTTP_AUTHORIZATION=f'Bearer {self.access}'
-        # )
-        # self.assertEqual(status.HTTP_200_OK, response.status_code)
-        # self.assertEqual(str(org.id), response.data.get('id'))
 
     def test_user_cannot_list_other_orgs_as_customer(self):
         pass
