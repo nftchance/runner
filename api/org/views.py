@@ -17,7 +17,6 @@ class OrgViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsOrgMember]
 
     def get_queryset(self, *args, **kwargs):
-        print('ACTION', self.action)
         if self.action == 'use_invitation':
             return Org.objects.filter(id=self.kwargs['org_id'])
         return self.request.user.orgs.all()
@@ -54,7 +53,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         if org in request.user.orgs.all():
             return Response(
                 {"error": "You are already a member of this org."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if org_invitation.org != org:
@@ -63,7 +62,7 @@ class OrgViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if org_invitation.invited_user != None:
+        if org_invitation.invited_user:
             return Response(
                 {"error": "This invitation has already been used."},
                 status=status.HTTP_400_BAD_REQUEST,

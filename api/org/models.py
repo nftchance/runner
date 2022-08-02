@@ -1,4 +1,5 @@
-from django.contrib.auth import get_user_model
+import django
+
 from django.db import models
 from django.shortcuts import reverse 
 
@@ -41,6 +42,7 @@ class OrgInvitation(models.Model):
     invited_user = models.ForeignKey('user.User', null=True, on_delete=models.CASCADE, related_name="invited_user")
 
     expires_at = models.DateTimeField(null=True)
+    accepted_at = models.DateTimeField(null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -50,11 +52,10 @@ class OrgInvitation(models.Model):
 
     # Add the invited user to the org
     def accept(self, user):
+        self.accepted_at = django.utils.timezone.now()
         self.invited_user = user
-        self.save()
-
         self.invited_user.orgs.add(self.org)
-        self.invited_user.save()
+        self.save()
 
     class Meta:
         ordering = ["created_at"]
