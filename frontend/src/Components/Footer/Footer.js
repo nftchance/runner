@@ -1,5 +1,9 @@
-import "./Footer.css"
-import {useEffect} from 'react'
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { URL_CONSTANTS } from "@components/Constants/constants";
+
+import "./Footer.css";
 
 const Footer = () => {
     const links = [
@@ -7,123 +11,162 @@ const Footer = () => {
             Product: [
                 {
                     'title': 'Organizations',
-                    'link': '/organizations'
+                    'link': '/organizations',
+                    'external': false
                 },
                 {
                     'title': 'Jobs',
-                    'link': '/jobs'
+                    'link': '/jobs',
+                    'external': false
                 },
                 {
                     'title': 'Teams',
-                    'link': '/teams'
+                    'link': '/teams',
+                    'external': false
                 },
                 {
                     'title': 'Task Automation',
-                    'link': '/task-automation'
+                    'link': '/task-automation',
+                    'external': false
                 },
                 {
                     'title': 'Pricing',
-                    'link': '/pricing'
+                    'link': '/pricing',
+                    'external': false
                 },
             ]
         },
         {
             Resources: [
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Community',
+                    'link': '/community',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Brand Assets',
+                    'link': '/brand',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Integrations',
+                    'link': '/integrations',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'System Status',
+                    'link': '/system-status',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Support',
+                    'link': '/support',
+                    'external': false
                 },
             ]
         },
         {
             Developers: [
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Documentation',
+                    'link': '/docs',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'API Reference',
+                    'link': '/docs/api',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Guides',
+                    'link': '/guides',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Pre-Built Plugins',
+                    'link': '/plugins',
+                    'external': false
                 },
             ]
         },
         {
             Company: [
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Open Source',
+                    'link': URL_CONSTANTS.github,
+                    'external': true
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Terms of Service',
+                    'link': '/terms-of-service',
+                    'external': false
                 },
                 {
-                    'title': 'Jobs',
-                    'link': '/jobs'
+                    'title': 'Privacy Policy',
+                    'link': '/privacy-policy',
+                    'external': false
                 },
             ]
         }
     ]
 
-    const data = () => {
-        links.forEach((category) => {
-            console.log('Category', Object.keys(category))
-            console.log('Items', Object.values(category))
-            Object.values(category)[0].forEach((index, item) => {
-                console.log('index', index)
-                console.log(item)
-            })
-        })
-    }
-
-    useEffect(() => {
-        data()
-    }, [])
-
     return (
         <div className="footer">
             <div className="grid">
-                <div className="social-icons">
+                <div className="footer-icons">
+                    <div>
+                        <Link className="footer-link" to="/">
+                            <div className="text-with-icon">
+                                <div className="img-container">
+                                    <img id="footer-badge" src="/badge.svg" alt="Runner badge" />
+                                </div>
+                                <h4>runner</h4>
+                            </div>
+                        </Link>
 
+                        <div className="footer-icons-social">
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
+                                <div className="img-container">
+                                    <FontAwesomeIcon icon={["fa-brands", "fa-twitter"]} />
+                                </div>
+                            </a>
+
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
+                                <div className="img-container">
+                                    <FontAwesomeIcon icon={["fa-brands", "fa-discord"]} />
+                                </div>
+                            </a>
+
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
+                                <div className="img-container">
+                                    <FontAwesomeIcon icon={["fa-brands", "fa-github"]} />
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                {links.map((category) => (
-                    <ul key={`${Object.keys(category)}`}>
-                        <li>
-                            <h5>{Object.keys(category)}</h5>
-                        </li>
-                        {Object.values(category)[0].map((item) => (
-                            <li key={`${item.title}`}>
-                                <a>
-                                    <p>{item.title}</p>
-                                </a>
+                {links.map((category, index) => (
+                    <div className="footer-items" key={`${Object.keys(category)}`} style={{gridArea: `item-${index}`}}>
+                        <ul>
+                            <li>
+                                <h5>{Object.keys(category)}</h5>
                             </li>
-                        ))}
-                    </ul>
+                            {Object.values(category)[0].map((item, idx) => (
+                                <li key={`${item.title}-${idx}`}>
+                                    {item.external ? 
+                                        <a href={item.link} className="footer-link" target='_blank' rel='noreferrer'>
+                                            <p>{item.title}</p>
+                                        </a>
+                                        :
+                                        <Link className="footer-link" to={item.link}>
+                                            <p>{item.title}</p>
+                                        </Link>
+                                    }
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 ))}
             </div>
 

@@ -37,15 +37,15 @@ nav > ul > li:active {
     color: inherit;
 }
 
-.link {
+.nav-link {
     color: var(--dark-border);
     flex: 1;
     text-decoration: none;
 }
 
-.link:hover,
-.link:focus,
-.link:active {
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:active {
     color: #FFFFFF;
     border-bottom: 1px solid #FFFFFF;
 }
@@ -57,7 +57,7 @@ nav > ul > li:active {
     gap: 30px;
 }
 
-.social-icons {
+.nav-icons > .social-icons {
     display: flex;
     flex-direction: row;
     gap: 15px;
@@ -74,7 +74,7 @@ nav > ul > li:active {
     height: 100%;
 }
 
-#badge {
+#nav-badge {
     height: 19px;
     width: 20px;
     vertical-align: sub;
