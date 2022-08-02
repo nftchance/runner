@@ -6,7 +6,7 @@ from org.models import Org
 from utils.tests.org import create_org, create_invitation
 from utils.tests.user import PASSWORD, create_user
 
-from org.models import Org, OrgInvitation
+from org.models import Org, OrgRelationship, OrgInvitation
 
 
 class HttpTest(APITestCase):
@@ -473,3 +473,10 @@ class HttpTest(APITestCase):
         self.assertEqual(
             response.data.get("error"), "This invitation has already been revoked."
         )
+
+    def test_user_relationship_permissions_empty_for_own_org(self):
+        org = create_org(self.user, name="The Best of Times")
+        relationship = OrgRelationship.objects.get(org=org, related_user=self.user)
+
+        self.assertEqual(relationship.permissions.all().count(), 0)
+        self.assertEqual(relationship.has_perm('org.view_org'), False)

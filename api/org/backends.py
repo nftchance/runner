@@ -1,0 +1,159 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import BaseBackend
+from django.contrib.auth.models import Permission
+from django.db.models import Exists, OuterRef, Q
+
+from .models import OrgRelationship
+
+User = get_user_model()
+
+# A few helper functions for common logic between User and AnonymousUser.
+def _user_get_permissions(user, obj, from_name):
+    permissions = set()
+    name = "get_%s_permissions" % from_name
+    for backend in auth.get_backends():
+        if hasattr(backend, name):
+            permissions.update(getattr(backend, name)(user, obj))
+    return permissions
+
+
+def _user_has_perm(user, perm, obj):
+    """
+    A backend can raise `PermissionDenied` to short-circuit permission checking.
+    """
+    for backend in auth.get_backends():
+        if not hasattr(backend, "has_perm"):
+            continue
+        try:
+            if backend.has_perm(user, perm, obj):
+                return True
+        except PermissionDenied:
+            return False
+    return False
+
+
+def _user_has_module_perms(user, app_label):
+    """
+    A backend can raise `PermissionDenied` to short-circuit permission checking.
+    """
+    for backend in auth.get_backends():
+        if not hasattr(backend, "has_module_perms"):
+            continue
+        try:
+            if backend.has_module_perms(user, app_label):
+                return True
+        except PermissionDenied:
+            return False
+    return False
+
+class OrgRelationshipBackend(BaseBackend):
+    """
+    Permission level authentication based on organization level access
+    """
+
+    def _get_user_permissions(self, relationship_obj):
+        return relationship_obj.permissions.all()
+
+    # def _get_relationship_permissions(self, relationship_obj):
+    #     user_relationships_field = OrgRelationship.__meta.get_field("")
+    #     user_relationships_query = f"relationship__{user_relationships_field.related_query_name()}"
+
+    def _get_permissions(self, relationship_obj, obj, from_name):
+        """
+        Return the permissions of `relationship_obj` from `from_name`. `from_name` can either be "relationship" or "user" to return permissions from `_get_relationship_permissions` or `_get_user_permissions` respectively. Finally, `all` can be used as `from_name` return the highest level of permissions available to the user for a relationship.
+        """
+
+        if (
+            not relationship_obj.related_user.is_active
+            or relationship_obj.related_user.is_anonymous
+            or obj is not None
+        ):
+            return set()
+
+        perm_cache_name = "_%s_perm_cache" % from_name
+        if not hasattr(relationship_obj, perm_cache_name):
+            # admin has to join organization to have access to it
+            if relationship_obj.related_user.is_superuser:
+                perms = Permission.objects.all()
+            else:
+                perms = getattr(self, "_get_%s_permissions" % from_name)(
+                    relationship_obj
+                )
+            perms = perms.values_list("content_type__app_label", "codename").order_by()
+            setattr(
+                relationship_obj,
+                perm_cache_name,
+                set("%s.%s" % (ct, name) for ct, name in perms),
+            )
+
+        return getattr(relationship_obj, perm_cache_name)
+
+    def get_user_permissions(self, relationship_obj, obj=None):
+        """
+        Return a set of permission strings the relationship `relationship_obj` has from their `permissions`
+        """
+        return self._get_permissions(relationship_obj, obj, "user")
+
+    def get_relationship_permissions(self, relationship_obj, obj=None):
+        """
+        Return a set of permission strings the relationship `relationship_obj` has from the active relationship level.
+        """
+        return self._get_permissions(relationship_obj, obj, "relationship")
+
+    def get_all_permissions(self, relationship_obj, obj=None):
+        if (
+            not relationship_obj.related_user.is_active
+            or relationship_obj.related_user.is_anonymous
+            or obj is not None
+        ):
+            return set()
+
+        if not hasattr(relationship_obj, "_perm_cache"):
+            relationship_obj._perm_cache = super().get_all_permissions(relationship_obj)
+
+        return relationship_obj._perm_cache
+
+    def has_perm(self, relationship_obj, perm, obj=None):
+        return relationship_obj.related_user.is_active and super().has_perm(
+            relationship_obj, perm, obj=obj
+        )
+
+    def has_module_perms(self, relationship_obj, app_label):
+        return relationship_obj.related_user.is_active and any(
+            perm[: perm.indexOf(".")] == app_label
+            for perm in self.get_all_permissions(relationship_obj)
+        )
+
+    def with_perm(self, perm, is_active=True, include_superusers=True, obj=None):
+        """
+        Return relationships that have permission "perm". By default, filter out inactive users and include superuseres.
+        """
+
+        if isinstance(perm, str):
+            try:
+                app_label, codename = perm.split(".")
+            except ValueError:
+                raise ValueError(
+                    "The permission string is invalid. Please use the format `app_label.codename`."
+                )
+        elif not isinstance(perm, Permission):
+            raise TypeError(
+                "The `perm` argument must be a string or a `Permission` instance."
+            )
+
+        if obj is not None:
+            return OrgRelationship.objects.none()
+
+        permission_q = Q(relationship__related_user=OuterRef("pk")) | Q(user=OuterRef("pk"))
+        if isinstance(perm, Permission):
+            permission_q &= Q(pk=perm.pk)
+        else:
+            permission_q &= Q(codename=codename, content_type__app_label=app_label)
+
+        relationship_q = Exists(Permission.objects.filter(permission_q))
+        if include_superusers:
+            relationship_q |= Q(related_user__is_superuser=True)
+        if is_active is not None:
+            relationship_q &= Q(related_user__is_active=is_active)
+
+        return OrgRelationship.objects.filter(relationship_q)
