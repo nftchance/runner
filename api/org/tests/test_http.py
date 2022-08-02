@@ -329,3 +329,95 @@ class HttpTest(APITestCase):
             response.data.get("error"),
             "This invitation has already been used.",
         )
+    
+    def test_user_can_revoke_invitation_of_own_org(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+
+        # accept invitation
+        invitation.accept(self.secondary_user)
+
+        # revoke invitation
+        response = self.client.post(
+            reverse(
+                "org-revoke-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertNotEqual(response.data.get('invited_by'), None)
+        self.assertNotEqual(response.data.get('revoked_at'), None)
+
+    def test_user_cannot_revoke_invitation_of_other_org(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+
+        # accept invitation
+        invitation.accept(self.secondary_user)
+
+        # revoke invitation
+        response = self.client.post(
+            reverse(
+                "org-revoke-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
+        )
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_user_cannot_revoke_invitation_from_organization_with_wrong_invitation_id(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+
+        # accept invitation
+        invitation.accept(self.secondary_user)
+
+        # revoke invitation
+        response = self.client.post(
+            reverse(
+                "org-revoke-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": 'CA9',}
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+    def test_user_cannot_revoke_invitation_of_wrong_organization(self):
+        org = create_org(self.user, name="The Best of Times")
+        secondary_org = create_org(self.secondary_user, name="The Worst of Times")
+        invitation = create_invitation(secondary_org, self.user)
+
+        # accept invitation
+        invitation.accept(self.secondary_user)
+
+        # revoke invitation
+        response = self.client.post(
+            reverse(
+                "org-revoke-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data.get('error'), 'This invitation is not for this org.')
+
+    def test_user_cannot_revoke_invitation_twice(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+
+        # accept invitation
+        invitation.accept(self.secondary_user)
+        invitation.revoke()
+        
+        response = self.client.post(
+            reverse(
+                "org-revoke-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(
+            response.data.get("error"), "This invitation has already been revoked."
+        )

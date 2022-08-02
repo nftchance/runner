@@ -74,6 +74,35 @@ class OrgViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="revoke_invitation/(?P<org_invitation_id>[^/.]+)",
+        permission_classes=[permissions.IsAuthenticated, IsOrgAdmin]
+    )
+    def revoke_invitation(self, request, org_id=None, org_invitation_id=None):
+        org_invitation = get_object_or_404(OrgInvitation, id=org_invitation_id)
+
+        org = self.get_object()
+
+        if org_invitation.org != org:
+            return Response(
+                {"error": "This invitation is not for this org."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if org_invitation.revoked_at:
+            return Response(
+                {"error": "This invitation has already been revoked."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        org_invitation.revoke()
+
+        serializer = OrgInvitationSerializer(org_invitation)
+
+        return Response(serializer.data)
+
 class OrgInvitationViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_invitation_id"
