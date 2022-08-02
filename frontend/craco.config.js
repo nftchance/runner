@@ -2,6 +2,9 @@ const path = require('path');
 
 module.exports = {
     webpack: {
+        eslint: { 
+            enable: false
+        },
         module: {
             rules: [
                 {
