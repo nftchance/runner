@@ -80,12 +80,12 @@ class OrgRole(models.Model):
         ordering = ["name"]
 
 
-def _get_role(self, role):
+def _get_role():
     return OrgRole.objects.get_or_create(name="revoked")[0]
 
 
-def _get_role_id(self):
-    return self._get_role().id
+def _get_role_id():
+    return _get_role().id
 
 
 class OrgRelationship(models.Model):

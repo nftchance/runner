@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import Permission
 from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, Q
@@ -9,46 +8,29 @@ from .models import OrgRelationship
 
 User = get_user_model()
 
-# A few helper functions for common logic between User and AnonymousUser.
-def user_get_permissions(user, obj, from_name):
-    permissions = set()
-    name = "get_%s_permissions" % from_name
-    for backend in auth.get_backends():
-        if hasattr(backend, name):
-            permissions.update(getattr(backend, name)(user, obj))
-    return permissions
+class OrgRelationshipBaseBackend:
+    def authenticate(self, request, **kwargs):
+        return None
 
+    def get_user(self, user_id):
+        return None
 
-def user_has_perm(user, perm, obj):
-    """
-    A backend can raise `PermissionDenied` to short-circuit permission checking.
-    """
-    for backend in auth.get_backends():
-        if not hasattr(backend, "has_perm"):
-            continue
-        try:
-            if backend.has_perm(user, perm, obj):
-                return True
-        except PermissionDenied:
-            return False
-    return False
+    def get_user_permissions(self, relationship_obj, obj=None):
+        return set()
 
+    def get_role_permissions(self, relationship_obj, obj=None):
+        return set()
 
-def user_has_module_perms(user, app_label):
-    """
-    A backend can raise `PermissionDenied` to short-circuit permission checking.
-    """
-    for backend in auth.get_backends():
-        if not hasattr(backend, "has_module_perms"):
-            continue
-        try:
-            if backend.has_module_perms(user, app_label):
-                return True
-        except PermissionDenied:
-            return False
-    return False
+    def get_all_permissions(self, relationship_obj, obj=None):
+        return {
+            *self.get_user_permissions(relationship_obj, obj=obj),
+            *self.get_role_permissions(relationship_obj, obj=obj),
+        }
 
-class OrgRelationshipBackend(BaseBackend):
+    def has_perm(self, relationship_obj, perm, obj=None):
+        return perm in self.get_all_permissions(relationship_obj, obj=obj)
+
+class OrgRelationshipBackend(OrgRelationshipBaseBackend):
     """
     Permission level authentication based on organization level access
     """
@@ -56,9 +38,8 @@ class OrgRelationshipBackend(BaseBackend):
     def _get_user_permissions(self, relationship_obj):
         return relationship_obj.permissions.all()
 
-    # def _get_relationship_permissions(self, relationship_obj):
-    #     user_relationships_field = OrgRelationship.__meta.get_field("")
-    #     user_relationships_query = f"relationship__{user_relationships_field.related_query_name()}"
+    def _get_role_permissions(self, relationship_obj):
+        return relationship_obj.role.permissions.all()
 
     def _get_permissions(self, relationship_obj, obj, from_name):
         """
@@ -91,16 +72,10 @@ class OrgRelationshipBackend(BaseBackend):
         return getattr(relationship_obj, perm_cache_name)
 
     def get_user_permissions(self, relationship_obj, obj=None):
-        """
-        Return a set of permission strings the relationship `relationship_obj` has from their `permissions`
-        """
         return self._get_permissions(relationship_obj, obj, "user")
 
-    def get_relationship_permissions(self, relationship_obj, obj=None):
-        """
-        Return a set of permission strings the relationship `relationship_obj` has from the active relationship level.
-        """
-        return self._get_permissions(relationship_obj, obj, "relationship")
+    def get_role_permissions(self, relationship_obj, obj=None):
+        return self._get_permissions(relationship_obj, obj, "role")
 
     def get_all_permissions(self, relationship_obj, obj=None):
         if (
@@ -146,7 +121,9 @@ class OrgRelationshipBackend(BaseBackend):
         if obj is not None:
             return OrgRelationship.objects.none()
 
-        permission_q = Q(relationship__related_user=OuterRef("pk")) | Q(user=OuterRef("pk"))
+        permission_q = Q(relationship__related_user=OuterRef("pk")) | Q(
+            user=OuterRef("pk")
+        )
         if isinstance(perm, Permission):
             permission_q &= Q(pk=perm.pk)
         else:
@@ -159,3 +136,43 @@ class OrgRelationshipBackend(BaseBackend):
             relationship_q &= Q(related_user__is_active=is_active)
 
         return OrgRelationship.objects.filter(relationship_q)
+
+
+# A few helper functions for common logic between User and AnonymousUser.
+def user_get_permissions(user, obj, from_name):
+    permissions = set()
+    name = "get_%s_permissions" % from_name
+    for backend in auth.get_backends():
+        if hasattr(backend, name):
+            permissions.update(getattr(backend, name)(user, obj))
+    return permissions
+
+
+def user_has_perm(user, perm, obj):
+    """
+    A backend can raise `PermissionDenied` to short-circuit permission checking.
+    """
+    for backend in auth.get_backends():
+        if not hasattr(backend, "has_perm"):
+            continue
+        try:
+            if backend.has_perm(user, perm, obj):
+                return True
+        except PermissionDenied:
+            return False
+    return False
+
+
+def user_has_module_perms(user, app_label):
+    """
+    A backend can raise `PermissionDenied` to short-circuit permission checking.
+    """
+    for backend in auth.get_backends():
+        if not hasattr(backend, "has_module_perms"):
+            continue
+        try:
+            if backend.has_module_perms(user, app_label):
+                return True
+        except PermissionDenied:
+            return False
+    return False
