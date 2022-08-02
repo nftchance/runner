@@ -1,4 +1,4 @@
-from org.models import Org
+from org.models import Org, OrgInvitation
 
 def create_org(admin, name="Simpler Times"):
     # create the org
@@ -9,3 +9,10 @@ def create_org(admin, name="Simpler Times"):
     admin.save()
     
     return org
+
+def create_invitation(org, user):
+    # create the invitation
+    invitation = OrgInvitation.objects.create(org=org, invited_by=user)
+
+    # update the user
+    return invitation

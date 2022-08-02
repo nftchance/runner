@@ -3,10 +3,10 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 from org.models import Org
 
-from utils.tests.org import create_org
+from utils.tests.org import create_org, create_invitation
 from utils.tests.user import PASSWORD, create_user
 
-from org.models import Org
+from org.models import Org, OrgInvitation
 
 class HttpTest(APITestCase):
     def setUp(self):
@@ -127,3 +127,140 @@ class HttpTest(APITestCase):
         )
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
         self.assertEqual(response.data.get('id'), None)
+    
+    def test_user_can_create_invitation_own_org(self):
+        org = create_org(self.user, name="The Best of Times")
+        response = self.client.post(
+            reverse("org-invitation-list"),
+            data={
+                "org": org.id
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+
+        invitation = OrgInvitation.objects.first()
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(response.data["id"], invitation.id)
+
+    def test_user_can_list_own_invitations(self):
+        org = create_org(self.user, name="The Best of Times")
+
+        invitations = [
+            create_invitation(org, self.user),
+            create_invitation(org, self.user)
+        ]
+
+        response = self.client.get(reverse('org-invitation-list'),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        exp_inv_ids = [str(invitation.id) for invitation in invitations]
+        act_inv_ids = [invitation.get('id') for invitation in response.data]
+        self.assertCountEqual(exp_inv_ids, act_inv_ids)
+
+
+    def test_user_can_retrieve_own_invitations(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+        response = self.client.get(invitation.get_absolute_url(),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(str(invitation.id), response.data.get('id'))
+
+    def test_user_can_update_own_invitations(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+        response = self.client.put(invitation.get_absolute_url(),
+            data={
+                "expires_at": "2020-01-01T00:00:00Z"
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get('expires_at'), "2020-01-01T00:00:00Z") 
+
+    def test_user_can_delete_own_invitations(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+        self.assertEqual(OrgInvitation.objects.count(), 1)
+        response = self.client.delete(invitation.get_absolute_url(),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+        self.assertEqual(OrgInvitation.objects.count(), 0)
+
+    def test_user_cannot_create_invitation_for_other_org(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+
+        response = self.client.post(
+            reverse("org-invitation-list"),
+            data={
+                "org": org.id
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_user_cannot_list_other_invitations(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+        self.assertEqual(OrgInvitation.objects.count(), 0)
+        response = self.client.get(reverse('org-invitation-list'),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, [])
+
+    def test_user_cannot_retrieve_other_invitations(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+        invitation = create_invitation(org, self.secondary_user)
+        response = self.client.get(invitation.get_absolute_url(),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+        self.assertEqual(response.data.get('id'), None)
+
+    def test_user_cannot_update_other_invitations(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+        invitation = create_invitation(org, self.secondary_user)
+        response = self.client.put(invitation.get_absolute_url(),
+            data={
+                "expires_at": "2020-01-01T00:00:00Z"
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+        self.assertEqual(response.data.get('id'), None)
+
+    def test_user_cannot_delete_other_invitations(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+        invitation = create_invitation(org, self.secondary_user)
+        self.assertEqual(OrgInvitation.objects.count(), 1)
+        response = self.client.delete(invitation.get_absolute_url(),
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+        self.assertEqual(response.data.get('id'), None)
+
+    def test_user_cannot_create_invitation_for_other_org_with_wrong_token(self):
+        org = create_org(self.secondary_user, name="The Best of Times")
+
+        response = self.client.post(
+            reverse("org-invitation-list"),
+            data={
+                "org": org.id
+            },
+            HTTP_AUTHORIZATION=f'Bearer {self.access}'
+        )
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    # TODO: This is not functioning correctly.
+    def test_user_can_use_invitation(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user)
+        response = self.client.post(
+            reverse("org-use-invitation", kwargs={'org_id': org.id, 'org_invitation_id': invitation.id}),
+            HTTP_AUTHORIZATION=f'Bearer {self.secondary_access}'
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get('org'), org.id)

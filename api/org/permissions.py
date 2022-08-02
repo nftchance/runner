@@ -19,3 +19,13 @@ class IsOrgMember(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # Determine if user is admin of or in org being accessed
         return obj in request.user.orgs.all()
+
+class IsOrgMemberForInvitation(permissions.BasePermission):
+    """
+    Object-level permission to only allow members of an organization to read 
+    the object.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Determine if user is admin of or in org being accessed
+        return obj.org in request.user.orgs.all()
