@@ -3,7 +3,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Org, OrgInvitation, OrgRelationship
+from .models import ADMIN, Org, OrgInvitation, OrgRelationship
 from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
 from .serializers import OrgSerializer, OrgInvitationSerializer
 
@@ -24,7 +24,6 @@ class OrgViewSet(viewsets.ModelViewSet):
         relationships = self.request.user.org_relationships.all()
         return Org.objects.filter(relationships__in=relationships)
 
-
     # Allow only admins to create new orgs and any other user to view
     # the orgs they are customers of.
     def get_permissions(self):
@@ -43,7 +42,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         relationship, created = OrgRelationship.objects.get_or_create(
             org=obj, related_user=self.request.user
         )
-        relationship.relationship = OrgRelationship.ADMIN
+        relationship.relationship = ADMIN
         relationship.save()
 
         # add this org to the users orgs
@@ -124,7 +123,11 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsOrgMemberForInvitation]
 
     def get_queryset(self, *args, **kwargs):
-        return OrgInvitation.objects.filter(org__in=self.request.user.org_relationships.all().values_list('org', flat=True))
+        return OrgInvitation.objects.filter(
+            org__in=self.request.user.org_relationships.all().values_list(
+                "org", flat=True
+            )
+        )
 
     # return obj.org.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)
 

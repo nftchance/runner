@@ -5,6 +5,20 @@ from django.shortcuts import reverse
 
 from utils.uuid import id_generator
 
+REVOKED = "revoked"
+CUSTOMER = "customer"
+TEAM = "team"
+MANAGER = "manager"
+ADMIN = "admin"
+
+RELATIONSHIPS = (
+    (REVOKED, "Revoked"),
+    (CUSTOMER, "Customer"),
+    (TEAM, "Team"),
+    (MANAGER, "Manager"),
+    (ADMIN, "Admin"),
+)
+
 
 class Org(models.Model):
     def save(self, *args, **kwargs):
@@ -32,20 +46,6 @@ class Org(models.Model):
 
 
 class OrgRelationship(models.Model):
-    REVOKED = "revoked"
-    CUSTOMER = "customer"
-    TEAM = "team"
-    MANAGER = "manager"
-    ADMIN = "admin"
-
-    RELATIONSHIPS = (
-        (REVOKED, "revoked"),
-        (CUSTOMER, "Customer"),
-        (TEAM, "Team"),
-        (MANAGER, "Manager"),
-        (ADMIN, "Admin"),
-    )
-
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="relationships")
     related_user = models.ForeignKey("user.User", on_delete=models.CASCADE)
 
@@ -73,14 +73,20 @@ class OrgInvitation(models.Model):
         "org.Org", null=True, on_delete=models.CASCADE, related_name="invitations"
     )
 
-    invited_by = models.ForeignKey(
-        "user.User", null=True, on_delete=models.CASCADE, related_name="invited_by"
-    )
+    # if user is null, anyone will be able to join using the code
     invited_user = models.ForeignKey(
         "user.User", null=True, on_delete=models.CASCADE, related_name="invited_user"
     )
-
+    relationship = models.CharField(
+        max_length=256, choices=RELATIONSHIPS, default=CUSTOMER
+    )
     expires_at = models.DateTimeField(null=True)
+
+    # automatically handled
+    invited_by = models.ForeignKey(
+        "user.User", null=True, on_delete=models.CASCADE, related_name="invited_by"
+    )
+
     accepted_at = models.DateTimeField(null=True)
     revoked_at = models.DateTimeField(null=True)
 
@@ -101,7 +107,7 @@ class OrgInvitation(models.Model):
         )
 
         # set the users role
-        org_relationship.relationship = OrgRelationship.CUSTOMER
+        org_relationship.relationship = self.relationship
         org_relationship.save()
 
         # add the relationship to the user
@@ -120,7 +126,7 @@ class OrgInvitation(models.Model):
             )
 
             # set the users role as revoked
-            org_relationship.relationship = OrgRelationship.REVOKED
+            org_relationship.relationship = REVOKED
             org_relationship.save()
 
     class Meta:
