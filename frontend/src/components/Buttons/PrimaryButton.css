@@ -10,7 +10,7 @@
     background-color: var(--dark-yellow);
 }
 
-.btn-primary > .btn-text {
+.btn-primary > .text {
     color: var(--darkest);
     opacity: 0.65;
     font-size: 14px;

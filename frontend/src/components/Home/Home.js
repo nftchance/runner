@@ -5,16 +5,22 @@ import Page from "../Page/Page";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import SecondaryButton from "../Buttons/SecondaryButton";
 import TextFieldInline from "../TextFields/TextFieldInline";
+import ModuleCard from "../Cards/ModuleCard";
+import GhostCard from "../Cards/GhostCard";
 
+import { LANDING_CATEGORIES, LANDING_MODULES } from "@components/Constants/constants";
 import "./Home.css";
 
 const Home = () => {
     const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState('Join Waitlist')
-    const [ emailError, setEmailError ] = useState();
 
     const handleJoinWaitlist = () => {
         // validate email? or handle on backend
-        setJoinWaitlistMsg('✔️ Joined')
+        var valid = true;
+        if (!valid) 
+            setJoinWaitlistMsg('Invalid Email!');
+        else
+            setJoinWaitlistMsg('✔️ Joined')
     }
 
     return (
@@ -35,7 +41,6 @@ const Home = () => {
                         <div className='email-signup'>
                             <TextFieldInline
                                 placeholder='Email address...'
-                                error={emailError ? true : false}
                             />
                             <PrimaryButton
                                 text={joinWaitlistMsg}
@@ -48,10 +53,21 @@ const Home = () => {
 
                 <div className="categories">
                     <h3>Modernize your business operations and services</h3>
-                </div>
+                    <div className="categories-grid">
+                        {LANDING_CATEGORIES.map((category, index) => (
+                            <div key={`${category.title}`} style={{gridArea: `item-${index}`}}>
+                                <GhostCard
+                                    title={category.title}
+                                    description={category.description}
+                                    icon={category.icon}
+                                    buttonText={'Learn more'}
+                                    buttonRedirect={category.link}
+                                />
+                            </div>
+                        ))}
+                    </div>
 
-                {/* DELETE THIS */}
-                <div style={{marginTop: '300px'}} />
+                </div>
 
                 <div className="modules">
                     <h3>What is unlocked with runner?</h3>
@@ -65,6 +81,14 @@ const Home = () => {
                             text='View all features'
                         />
                     </Link>
+
+                    {LANDING_MODULES.map((mod) => (
+                        <ModuleCard
+                            key={`${mod.title}`}
+                        />
+                    ))
+
+                    }
                 </div>
 
                 {/* DELETE THIS */}
@@ -105,7 +129,7 @@ const Home = () => {
 
                 {/* DELETE THIS */}
                 <div style={{marginTop: '300px'}} />
-                
+
                 <div className="cta">
                     <h1>Prevent your business from withering.</h1>
                     <br />
@@ -114,7 +138,6 @@ const Home = () => {
                     <div className='email-signup'>
                         <TextFieldInline
                             placeholder={'Email address...'}
-                            error={emailError ? true : false}
                         />
                         <PrimaryButton
                             text={joinWaitlistMsg}

@@ -19,7 +19,7 @@ const PrimaryButton = (props) => {
                 disabled={disabled ? true : false}
                 sx={{style}}
             >
-                <span className="btn-text">{text}</span>
+                <span className="text">{text}</span>
             </Button>
         </StyledEngineProvider>
     )

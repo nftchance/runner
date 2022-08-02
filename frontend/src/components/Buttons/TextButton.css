@@ -1,0 +1,23 @@
+.btn-text {
+    color: var(--dark-border);
+    text-transform: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-text:hover,
+.btn-text:focus {
+    color: #FFFFFF;
+    background-color: transparent;
+}
+
+.btn-text > p {
+    color: inherit;
+}
+
+.chevron {
+    margin-left: 5px;
+    height: 12px;
+    margin-top: 2px;
+}

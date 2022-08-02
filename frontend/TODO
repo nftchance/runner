@@ -4,10 +4,21 @@
 ☐ base.html set up
 
 Home:
-☐ Volume Earning Image in CSS
-☐ Hero img
+☐ Hero img positioning responsiveness
 ☐ Cards
-☐ Email input
+☐ Email input text styling
+☐ Email error message display
+☐ Categories
+☐ Modules
+    ☐ Module Card
+☐ Dashboard
+    ☐ Dashboard image
+    ☐ Dashboard text categories
+☐ Governance
+    ☐ Formula positioning
+    ☐ Volume Earning Image in CSS not static svg
+☐ CTA
+    ☐ Second email form
 
 
 Roadmap:

@@ -6,7 +6,6 @@ import "./TextFieldInline.css"
 const TextFieldInline = (props) => {
     const {
         placeholder,
-        error,
         style
     } = props;
 
@@ -15,7 +14,6 @@ const TextFieldInline = (props) => {
             <Input
                 className="text-field-inline"
                 placeholder={placeholder}
-                error={error ? true : false}
                 sx={{style}}
             />
         </StyledEngineProvider>

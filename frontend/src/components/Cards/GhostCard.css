@@ -1,0 +1,30 @@
+.ghost-card > .title-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ghost-card > .title-line > .icon-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #D4D4D4;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.icon-container > .ghost-icon {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ghost-card > .title-line > .ghost-title {
+    line-height: 30px;
+    margin-left: 10px;
+}
+
+.ghost-card > .ghost-description {
+    margin-bottom: 20px;
+}
