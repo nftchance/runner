@@ -3,25 +3,38 @@
 ☐ manifest
 ☐ base.html set up
 
-Header:
-    ☐ Developers dropdown
-    ☐ Links working
-
-Footer:
-    ☐ All links on the footer
-
 Home:
 ☐ Volume Earning Image in CSS
+☐ Hero img
 ☐ Cards
-☐ Footer
-☐ Header
-☐ Opengraph images
+☐ Email input
+
 
 Roadmap:
-☐ 
+☐ Dynamic versioning
+☐ Left aligned indicator
+☐ Cards
+☐ Status indicators
 
 Governance:
+    ☐ Cards
+    ☐ Tags
+    ☐ Pending/In Progress/Concluded Filter
+    ☐ Sorting
+    ☐ Vote Status
+
     Proposals:
 
 
 FAQ:
+    ☐ Dropdown
+    ☐ Copywriting
+
+OTHER:
+    ☐ Opengraph images
+
+ARCHIVE:
+    ✔ Footer @done(22-08-02 02:04)
+    ✔ Header @done(22-08-02 02:04)
+    ✔ All links on the footer @done(22-08-02 02:04)
+    ✔ Links working @done(22-08-02 02:04)
