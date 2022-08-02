@@ -254,7 +254,6 @@ class HttpTest(APITestCase):
         )
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
-    # TODO: This is not functioning correctly.
     def test_user_can_use_invitation(self):
         org = create_org(self.user, name="The Best of Times")
         invitation = create_invitation(org, self.user)

@@ -3,7 +3,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import OrgInvitation
+from .models import Org, OrgInvitation
 from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
 from .serializers import OrgSerializer, OrgInvitationSerializer
 
@@ -17,6 +17,9 @@ class OrgViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsOrgMember]
 
     def get_queryset(self, *args, **kwargs):
+        print('ACTION', self.action)
+        if self.action == 'use_invitation':
+            return Org.objects.filter(id=self.kwargs['org_id'])
         return self.request.user.orgs.all()
 
     # Allow only admins to create new orgs and any other user to view
@@ -37,19 +40,18 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.orgs.add(obj)
         self.request.user.save()
 
-    # TODO: Right now we have a bug where a user cannot accept an invitation because they cannot retrieve the top level org
-
     @action(
         detail=True,
         methods=["post"],
         url_path="use_invitation/(?P<org_invitation_id>[^/.]+)",
+        permission_classes=[permissions.IsAuthenticated]
     )
     def use_invitation(self, request, org_id=None, org_invitation_id=None):
         org_invitation = get_object_or_404(OrgInvitation, id=org_invitation_id)
 
         org = self.get_object()
 
-        if org in request.user.orgs:
+        if org in request.user.orgs.all():
             return Response(
                 {"error": "You are already a member of this org."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -69,8 +71,9 @@ class OrgViewSet(viewsets.ModelViewSet):
 
         org_invitation.accept(request.user)
 
-        return Response(status=status.HTTP_200_OK)
+        serializer = OrgInvitationSerializer(org_invitation)
 
+        return Response(serializer.data)
 
 class OrgInvitationViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
