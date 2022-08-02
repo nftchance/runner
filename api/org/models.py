@@ -104,13 +104,16 @@ class OrgRelationship(models.Model):
         OrgRole,
         on_delete=models.SET(_get_role),
         default=_get_role_id,
+        related_name="relationship_set",
+        related_query_name="relationship",
     )
 
     permissions = models.ManyToManyField(
         Permission,
         blank=True,
-        related_name="permissions",
         help_text="Permissions for the user of this relationship in this organization.",
+        related_name="relationship_set",
+        related_query_name="relationship",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

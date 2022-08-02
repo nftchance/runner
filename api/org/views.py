@@ -3,7 +3,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import ADMIN, Org, OrgInvitation, OrgRelationship
+from .models import Org, OrgInvitation, OrgRelationship
 from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
 from .serializers import OrgSerializer, OrgInvitationSerializer
 
@@ -42,7 +42,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         relationship, created = OrgRelationship.objects.get_or_create(
             org=obj, related_user=self.request.user
         )
-        relationship.relationship = ADMIN
+        relationship.relationship = OrgRelationship.ADMIN
         relationship.save()
 
         # add this org to the users orgs

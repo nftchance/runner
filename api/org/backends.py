@@ -2,11 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, Q
-
-
-from .models import OrgRelationship
-
-User = get_user_model()
+from django.utils.module_loading import import_string
 
 class OrgRelationshipBaseBackend:
     def authenticate(self, request, **kwargs):
@@ -30,6 +26,7 @@ class OrgRelationshipBaseBackend:
     def has_perm(self, relationship_obj, perm, obj=None):
         return perm in self.get_all_permissions(relationship_obj, obj=obj)
 
+
 class OrgRelationshipBackend(OrgRelationshipBaseBackend):
     """
     Permission level authentication based on organization level access
@@ -43,7 +40,12 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
 
     def _get_permissions(self, relationship_obj, obj, from_name):
         """
-        Return the permissions of `relationship_obj` from `from_name`. `from_name` can either be "relationship" or "user" to return permissions from `_get_relationship_permissions` or `_get_user_permissions` respectively. Finally, `all` can be used as `from_name` return the highest level of permissions available to the user for a relationship.
+        Return the permissions of `relationship_obj` from `from_name`.
+        `from_name` can either be "relationship" or "user" to return permissions
+        from `_get_relationship_permissions` or `_get_user_permissions` respectively.
+
+        Finally, `all` can be used as `from_name` return the highest level of
+        permissions available to the user for a relationship.
         """
 
         if (
@@ -103,8 +105,11 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
 
     def with_perm(self, perm, is_active=True, include_superusers=True, obj=None):
         """
-        Return relationships that have permission "perm". By default, filter out inactive users and include superuseres.
+        Return relationships that have permission "perm". By default, filter out
+        inactive users and include superusers.
         """
+
+        from .models import OrgRelationship
 
         if isinstance(perm, str):
             try:
@@ -121,9 +126,10 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
         if obj is not None:
             return OrgRelationship.objects.none()
 
-        permission_q = Q(relationship__related_user=OuterRef("pk")) | Q(
-            user=OuterRef("pk")
+        permission_q = Q(role__relationship=OuterRef("pk")) | Q(
+            relationship=OuterRef("pk")
         )
+
         if isinstance(perm, Permission):
             permission_q &= Q(pk=perm.pk)
         else:
@@ -139,12 +145,17 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
 
 
 # A few helper functions for common logic between User and AnonymousUser.
+def get_backend():
+    return import_string('org.backends.OrgRelationshipBackend')()
+
 def user_get_permissions(user, obj, from_name):
     permissions = set()
     name = "get_%s_permissions" % from_name
-    for backend in auth.get_backends():
-        if hasattr(backend, name):
-            permissions.update(getattr(backend, name)(user, obj))
+    
+    backend = get_backend()
+    if hasattr(backend, name):
+        permissions.update(getattr(backend, name)(user, obj))
+    
     return permissions
 
 
@@ -152,14 +163,17 @@ def user_has_perm(user, perm, obj):
     """
     A backend can raise `PermissionDenied` to short-circuit permission checking.
     """
-    for backend in auth.get_backends():
-        if not hasattr(backend, "has_perm"):
-            continue
-        try:
-            if backend.has_perm(user, perm, obj):
-                return True
-        except PermissionDenied:
-            return False
+
+    backend = get_backend()
+    if not hasattr(backend, "has_perm"):
+        return False
+
+    try:
+        if backend.has_perm(user, perm, obj):
+            return True
+    except PermissionDenied:
+        return False
+    
     return False
 
 
@@ -167,12 +181,15 @@ def user_has_module_perms(user, app_label):
     """
     A backend can raise `PermissionDenied` to short-circuit permission checking.
     """
-    for backend in auth.get_backends():
-        if not hasattr(backend, "has_module_perms"):
-            continue
-        try:
-            if backend.has_module_perms(user, app_label):
-                return True
-        except PermissionDenied:
-            return False
+
+    backend = get_backend()
+    if not hasattr(backend, "has_module_perms"):
+        return False
+    
+    try:
+        if backend.has_module_perms(user, app_label):
+            return True
+    except PermissionDenied:
+        return False
+
     return False
