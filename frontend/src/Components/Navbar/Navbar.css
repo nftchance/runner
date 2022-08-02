@@ -9,7 +9,7 @@ nav {
     flex-direction: row;
 }
 
-ul {
+nav > ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -17,22 +17,30 @@ ul {
     gap: 30px;
 }
 
-li {
+nav > li {
     display: inline-flex;
     flex-grow: 1;
 }
 
-p {
+nav > ul > li:hover,
+nav > ul > li:focus,
+nav > ul > li:active {
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.nav-item {
     color: inherit;
 }
-p:hover,
-p:focus,
-p:active {
+.nav-item:hover,
+.nav-item:focus,
+.nav-item:active {
     color: inherit;
 }
 
 .link {
     color: var(--dark-border);
+    flex: 1;
+    text-decoration: none;
 }
 
 .link:hover,
