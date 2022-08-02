@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import Permission
+from django.core.exceptions import PermissionDenied
 from django.db.models import Exists, OuterRef, Q
+
 
 from .models import OrgRelationship
 
 User = get_user_model()
 
 # A few helper functions for common logic between User and AnonymousUser.
-def _user_get_permissions(user, obj, from_name):
+def user_get_permissions(user, obj, from_name):
     permissions = set()
     name = "get_%s_permissions" % from_name
     for backend in auth.get_backends():
@@ -17,7 +19,7 @@ def _user_get_permissions(user, obj, from_name):
     return permissions
 
 
-def _user_has_perm(user, perm, obj):
+def user_has_perm(user, perm, obj):
     """
     A backend can raise `PermissionDenied` to short-circuit permission checking.
     """
@@ -32,7 +34,7 @@ def _user_has_perm(user, perm, obj):
     return False
 
 
-def _user_has_module_perms(user, app_label):
+def user_has_module_perms(user, app_label):
     """
     A backend can raise `PermissionDenied` to short-circuit permission checking.
     """

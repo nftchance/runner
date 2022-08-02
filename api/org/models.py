@@ -2,26 +2,13 @@ import django
 
 from django.contrib import auth
 from django.contrib.auth.models import Permission
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.itercompat import is_iterable
 
 from utils.uuid import id_generator
 
-REVOKED = "revoked"
-CUSTOMER = "customer"
-TEAM = "team"
-MANAGER = "manager"
-ADMIN = "admin"
-
-RELATIONSHIPS = (
-    (REVOKED, "Revoked"),
-    (CUSTOMER, "Customer"),
-    (TEAM, "Team"),
-    (MANAGER, "Manager"),
-    (ADMIN, "Admin"),
-)
+from . import backends
 
 
 class Org(models.Model):
@@ -54,6 +41,7 @@ class OrgRoleManager(models.Manager):
 
     def get_by_natural_key(self, name):
         return self.get(name=name)
+
 
 class OrgRole(models.Model):
     REVOKED = "revoked"
@@ -89,14 +77,16 @@ class OrgRole(models.Model):
         return (self.name,)
 
     class Meta:
-        ordering = ["name"] 
+        ordering = ["name"]
 
 
 def _get_role(self, role):
     return OrgRole.objects.get_or_create(name="revoked")[0]
 
+
 def _get_role_id(self):
     return self._get_role().id
+
 
 class OrgRelationship(models.Model):
     """
@@ -108,8 +98,10 @@ class OrgRelationship(models.Model):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="relationships")
     related_user = models.ForeignKey("user.User", on_delete=models.CASCADE)
 
+    # immediately the role is set to revoked if not provided to prevent
+    # the user from being able to access the organization if maliciously
     role = models.ForeignKey(
-        OrgRole, 
+        OrgRole,
         on_delete=models.SET(_get_role),
         default=_get_role_id,
     )
@@ -125,16 +117,16 @@ class OrgRelationship(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_user_permissions(self, obj=None):
-        return _user_get_permissions(self, obj, "user")
+        return backends.user_get_permissions(self, obj, "user")
 
     def get_role_permissions(self, obj=None):
-        return _user_get_permissions(self, obj, "role")
+        return backends.user_get_permissions(self, obj, "role")
 
     def get_all_permissions(self, obj=None):
-        return _user_get_permissions(self, obj, "all")
+        return backends.user_get_permissions(self, obj, "all")
 
     def has_perm(self, perm, obj=None):
-        return _user_has_perm(self, perm, obj)
+        return backends.user_has_perm(self, perm, obj)
 
     def has_perms(self, perm_list, obj=None):
         if not is_iterable(perm_list) or isinstance(perm_list, str):
@@ -143,7 +135,7 @@ class OrgRelationship(models.Model):
         return all(self.has_perm(perm, obj) for perm in perm_list)
 
     def has_module_perms(self, app_label):
-        return _user_has_module_perms(self, app_label)
+        return backends.user_has_module_perms(self, app_label)
 
     class Meta:
         ordering = ["created_at"]
@@ -166,8 +158,8 @@ class OrgInvitation(models.Model):
     invited_user = models.ForeignKey(
         "user.User", null=True, on_delete=models.CASCADE, related_name="invited_user"
     )
-    relationship = models.CharField(
-        max_length=256, choices=RELATIONSHIPS, default=CUSTOMER
+    role = models.CharField(
+        max_length=256, choices=OrgRole.ROLES, default=OrgRole.REVOKED
     )
     expires_at = models.DateTimeField(null=True)
 
@@ -191,12 +183,13 @@ class OrgInvitation(models.Model):
         self.invited_user = user
 
         # create the relationship
-        org_relationship, created = OrgRelationship.objects.get_or_create(
+        org_relationship = OrgRelationship.objects.get_or_create(
             org=self.org, related_user=self.invited_user
-        )
+        )[0]
 
         # set the users role
-        org_relationship.relationship = self.relationship
+        org_relationship_role = OrgRole.objects.get_or_create(name=self.role)[0]
+        org_relationship.role = org_relationship_role
         org_relationship.save()
 
         # add the relationship to the user
@@ -210,12 +203,12 @@ class OrgInvitation(models.Model):
 
         if self.invited_user:
             # get the users relationship object
-            org_relationship, created = OrgRelationship.objects.get_or_create(
+            org_relationship = OrgRelationship.objects.get_or_create(
                 org=self.org, related_user=self.invited_user
-            )
+            )[0]
 
             # set the users role as revoked
-            org_relationship.relationship = REVOKED
+            org_relationship.role = OrgRole.objects.get_or_create(name="revoked")[0]
             org_relationship.save()
 
     class Meta:
