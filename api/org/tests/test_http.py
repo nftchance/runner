@@ -242,7 +242,7 @@ class HttpTest(APITestCase):
         )
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
-    def test_user_can_use_invitation(self):
+    def test_user_can_use_invitation_customer(self):
         org = create_org(self.user, name="The Best of Times")
         invitation = create_invitation(org, self.user)
         response = self.client.post(
@@ -257,6 +257,58 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
         self.assertEqual(response.data.get("invited_by"), self.user.id)
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("relationship"), "customer")
+
+    def test_user_can_use_invitation_team(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user, relationship="team")
+        response = self.client.post(
+            reverse(
+                "org-use-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get("org"), org.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("invited_by"), self.user.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("relationship"), "team")
+
+    def test_user_can_use_invitation_manager(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user, relationship="manager")
+        response = self.client.post(
+            reverse(
+                "org-use-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get("org"), org.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("invited_by"), self.user.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("relationship"), "manager")
+
+    def test_user_can_use_invitation_admin(self):
+        org = create_org(self.user, name="The Best of Times")
+        invitation = create_invitation(org, self.user, relationship="admin")
+        response = self.client.post(
+            reverse(
+                "org-use-invitation",
+                kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get("org"), org.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("invited_by"), self.user.id)
+        self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
+        self.assertEqual(response.data.get("relationship"), "admin")
 
     def test_user_cannot_user_invitation_as_member(self):
         org = create_org(self.user, name="The Best of Times")
