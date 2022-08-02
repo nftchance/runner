@@ -1,0 +1,20 @@
+.btn-primary {
+    background-color: var(--yellow);
+    text-transform: none;
+    border-radius: 8px;
+    border: 1px solid var(--dark-yellow);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--dark-yellow);
+}
+
+.btn-primary > .btn-text {
+    color: var(--darkest);
+    opacity: 0.65;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -120,7 +120,7 @@ const Footer = () => {
                                 <div className="img-container">
                                     <img id="footer-badge" src="/badge.svg" alt="Runner badge" />
                                 </div>
-                                <h4>runner</h4>
+                                <h3>runner</h3>
                             </div>
                         </Link>
 
@@ -150,7 +150,7 @@ const Footer = () => {
                     <div className="footer-items" key={`${Object.keys(category)}`} style={{gridArea: `item-${index}`}}>
                         <ul>
                             <li>
-                                <h5>{Object.keys(category)}</h5>
+                                <h4>{Object.keys(category)}</h4>
                             </li>
                             {Object.values(category)[0].map((item, idx) => (
                                 <li key={`${item.title}-${idx}`}>

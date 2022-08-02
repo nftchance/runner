@@ -1,0 +1,4 @@
+.page-margin {
+    padding-left: var(--page-margins);
+    padding-right: var(--page-margins);
+}

@@ -1,0 +1,54 @@
+.hero {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: auto;
+    margin-top: 15vh;
+}
+.hero-text > h1 {
+    display: inline;
+}
+
+.shadow-text {
+    color: #FFFFFF;
+    font-size: 48px;
+    font-weight: 500;
+    font-style: italic;
+    opacity: 0.15;
+    margin-top: -25px;
+    margin-left: 5vw;
+}
+
+.subtitle {
+    margin-top: 15px;
+    margin-right: 100px;
+}
+
+.email-signup {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 50%;
+    margin-top: 50px;
+}
+
+.link-wrapper {
+    text-decoration: none;
+}
+
+#hero-img {
+    margin-left: calc(-1 * var(--page-margins));
+    margin-right: calc(-1 * var(--page-margins));
+    width: 100vw;
+    margin-top: -100px;
+}
+
+#volume-img {
+    width: 100%;
+}
+
+.cta {
+    align-content: center;
+}
+.cta > h1 {
+    text-align: center;
+}

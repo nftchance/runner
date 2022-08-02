@@ -2,11 +2,8 @@
     width: 100%;
     height: 390px;
     border-top: 1px solid var(--dark-border);
-    padding-left: 140px;
-    padding-right: 140px;
-    position: absolute;
-    bottom: 0;
-    overflow-y: hidden;
+    padding-left: var(--page-margins);
+    padding-right: var(--page-margins);
 }
 
 .grid {
@@ -71,11 +68,10 @@
 
 .footer-appendage {
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-top: 1px solid var(--dark-border);
 }
 
 .footer-appendage > p {
     margin-top: 10px;
-    margin-bottom: 10px;
 }

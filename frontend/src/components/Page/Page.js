@@ -14,7 +14,9 @@ const Page = ({children}) => {
 
             <Navbar />
 
-            {children}
+            <div className="page-margin">
+                {children}
+            </div>
 
             <Footer />
         </>

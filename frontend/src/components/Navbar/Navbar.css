@@ -3,8 +3,8 @@ nav {
     line-height: 60px;
     width: 100%;
     border-bottom: 1px solid var(--dark-border);
-    padding-left: 140px;
-    padding-right: 140px;
+    padding-left: var(--page-margins);
+    padding-right: var(--page-margins);
     display: inline-flex;
     flex-direction: row;
 }

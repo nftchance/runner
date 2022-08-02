@@ -1,4 +1,4 @@
-@import url("https://use.typekit.net/evr1bsi.css%22");
+@import url("https://use.typekit.net/evr1bsi.css");
 
 :root {
   --darkest: #1C1C1C;
@@ -6,11 +6,13 @@
   --dark-border: #707070;
   --yellow: #EFF855;
   --dark-yellow: #BEC729;
+
+  --page-margins: 140px;
 }
 
 * {
   box-sizing: border-box;
-  font-family: 'franklin-gothic-urw', sans-serif;
+  font-family: franklin-gothic-urw, serif;
   margin: 0;
 }
 
@@ -24,17 +26,32 @@ body {
 h1 {
   color: #FFFFFF;
   font-size: 48px;
+  font-weight: 500;
 }
 
-h4 {
+h3 {
   color: #FFFFFF;
   font-size: 24px;
   font-weight: 500;
 }
 
-h5 {
+h4 {
   color: #FFFFFF;
   font-size: 16px;
+  font-weight: 500;
+}
+
+h5 {
+  color: #FFFFFF;
+  font-size: 18px;
+  opacity: 0.65;
+  font-weight: 500;
+}
+
+h6 {
+  color: #FFFFFF;
+  font-size: 16px;
+  opacity: 0.65;
   font-weight: 500;
 }
 
@@ -42,4 +59,8 @@ p {
   color: var(--dark-border);
   font-size: 14px;
   font-weight: 500;
+}
+
+.yellow {
+  color: var(--yellow);
 }

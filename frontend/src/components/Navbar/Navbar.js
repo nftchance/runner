@@ -15,7 +15,7 @@ const Navbar = () => {
                             <div className="img-container">
                                 <img id="nav-badge" src="/badge.svg" alt="Runner badge" />
                             </div>
-                            <h5>runner</h5>
+                            <h4>runner</h4>
                         </div>
                     </Link>
                 </li>
