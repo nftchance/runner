@@ -18,7 +18,7 @@ class IsOrgMember(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Determine if user is admin of or in org being accessed
-        return obj in request.user.orgs.all()
+        return obj.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)
 
 class IsOrgMemberForInvitation(permissions.BasePermission):
     """
@@ -28,4 +28,4 @@ class IsOrgMemberForInvitation(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Determine if user is admin of or in org being accessed
-        return obj.org in request.user.orgs.all()
+        return obj.org.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)

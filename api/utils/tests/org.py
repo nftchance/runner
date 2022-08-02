@@ -1,11 +1,16 @@
-from org.models import Org, OrgInvitation
+from org.models import Org, OrgInvitation, OrgRelationship
 
 def create_org(admin, name="Simpler Times"):
     # create the org
     org = Org.objects.create(name=name, admin=admin)
     
+    # create the admin relationship
+    relationship, created = OrgRelationship.objects.get_or_create(
+        org=org, related_user=admin, relationship=OrgRelationship.ADMIN
+    )
+
     # update the admin
-    admin.orgs.add(org)
+    admin.org_relationships.add(relationship)
     admin.save()
     
     return org
