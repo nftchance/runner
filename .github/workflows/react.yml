@@ -11,13 +11,12 @@ on:
     branches: 
           - '**'        # matches every branch
 
-defaults:
-  run:
-    working-directory: frontend
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend/
 
     env:
       FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FONT_AWESOME_AUTH_TOKEN }}
@@ -34,6 +33,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
     - run: |
         npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONT_AWESOME_AUTH_TOKEN }}"
         npm ci
