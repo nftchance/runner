@@ -9,7 +9,7 @@ from django.utils.itercompat import is_iterable
 from utils.uuid import id_generator
 
 from . import backends
-from .permission_constants import Role
+from .utils import Role
 
 class Org(models.Model):
     def save(self, *args, **kwargs):
