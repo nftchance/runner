@@ -22,32 +22,33 @@ nav > li {
     flex-grow: 1;
 }
 
-nav > ul > li:hover,
-nav > ul > li:focus,
-nav > ul > li:active {
-    border-bottom: 1px solid #FFFFFF;
-}
-
 .nav-item {
-    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
 }
 .nav-item:hover,
 .nav-item:focus,
 .nav-item:active {
-    color: inherit;
+    opacity: 1;
+}
+
+.nav-link.opaque {
+    opacity: 0.65;
 }
 
 .nav-link {
-    color: var(--dark-border);
+    color: #FFFFFF;
     flex: 1;
     text-decoration: none;
+    height: 100%;
+    display: block;
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active {
-    color: #FFFFFF;
-    border-bottom: 1px solid #FFFFFF;
+    opacity: 1;
+    border-bottom: 2px solid #FFFFFF;
 }
 
 .nav-icons {

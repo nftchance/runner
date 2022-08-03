@@ -28,7 +28,7 @@ const Home = () => {
             <div className="home">
                 <div className="hero">
                     <div className="hero-text">
-                        <h1>Revolutionize your service business <br/>with</h1>
+                        <h1>Revolutionize your service business with</h1>
                         <h1 className="yellow"> automation tools of 2032.</h1>
                         <div className="shadow-text">No we're not time travelers.</div>
 
@@ -69,30 +69,40 @@ const Home = () => {
 
                 </div>
 
-                <div className="modules">
+                <div className="modules-headline">
                     <h3>What is unlocked with runner?</h3>
-                    <h5>
+                    <h5 className="modules-desc">
                         Driven by an ethos of optimizing the time-consuming and 
                         high-impacts of your service business unlocks entirely new models.
                     </h5>
 
-                    <Link className="link-wrapper" to="/features">
-                        <SecondaryButton
-                            text='View all features'
-                        />
-                    </Link>
-
-                    {LANDING_MODULES.map((mod) => (
-                        <ModuleCard
-                            key={`${mod.title}`}
-                        />
-                    ))
-
-                    }
+                    <div className="modules-btn">
+                        <Link className="link-wrapper" to="/features">
+                            <SecondaryButton
+                                text='View all features'
+                            />
+                        </Link>
+                    </div>
                 </div>
 
-                {/* DELETE THIS */}
-                <div style={{marginTop: '300px'}} />
+                <div className="modules">
+                    <div className="modules-grid">
+                        {LANDING_MODULES.map((mod, index) => (
+                            <div key={`${mod.title}`}>
+                                <ModuleCard
+                                    title={mod.title}
+                                    description={mod.description}
+                                    provider={mod.provider}
+                                    providerLogo={mod.providerLogo}
+                                    primaryBtnText='Enable'
+                                    // primaryBtnOnClick={}
+                                    secondaryBtnText='Launch demo'
+                                    // secondaryBtnOnClick={}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 <div className="dashboard">
                     <h3>Run your business without leaving the dashboard</h3>

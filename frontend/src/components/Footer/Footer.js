@@ -1,115 +1,11 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { URL_CONSTANTS } from "@components/Constants/constants";
+import { URL_CONSTANTS, FOOTER_ITEMS } from "@components/Constants/constants";
 
 import "./Footer.css";
 
 const Footer = () => {
-    const links = [
-        {
-            Product: [
-                {
-                    'title': 'Organizations',
-                    'link': '/organizations',
-                    'external': false
-                },
-                {
-                    'title': 'Jobs',
-                    'link': '/jobs',
-                    'external': false
-                },
-                {
-                    'title': 'Teams',
-                    'link': '/teams',
-                    'external': false
-                },
-                {
-                    'title': 'Task Automation',
-                    'link': '/task-automation',
-                    'external': false
-                },
-                {
-                    'title': 'Pricing',
-                    'link': '/pricing',
-                    'external': false
-                },
-            ]
-        },
-        {
-            Resources: [
-                {
-                    'title': 'Community',
-                    'link': '/community',
-                    'external': false
-                },
-                {
-                    'title': 'Brand Assets',
-                    'link': '/brand',
-                    'external': false
-                },
-                {
-                    'title': 'Integrations',
-                    'link': '/integrations',
-                    'external': false
-                },
-                {
-                    'title': 'System Status',
-                    'link': '/system-status',
-                    'external': false
-                },
-                {
-                    'title': 'Support',
-                    'link': '/support',
-                    'external': false
-                },
-            ]
-        },
-        {
-            Developers: [
-                {
-                    'title': 'Documentation',
-                    'link': '/docs',
-                    'external': false
-                },
-                {
-                    'title': 'API Reference',
-                    'link': '/docs/api',
-                    'external': false
-                },
-                {
-                    'title': 'Guides',
-                    'link': '/guides',
-                    'external': false
-                },
-                {
-                    'title': 'Pre-Built Plugins',
-                    'link': '/plugins',
-                    'external': false
-                },
-            ]
-        },
-        {
-            Company: [
-                {
-                    'title': 'Open Source',
-                    'link': URL_CONSTANTS.github,
-                    'external': true
-                },
-                {
-                    'title': 'Terms of Service',
-                    'link': '/terms-of-service',
-                    'external': false
-                },
-                {
-                    'title': 'Privacy Policy',
-                    'link': '/privacy-policy',
-                    'external': false
-                },
-            ]
-        }
-    ]
-
     return (
         <div className="footer">
             <div className="grid">
@@ -125,19 +21,19 @@ const Footer = () => {
                         </Link>
 
                         <div className="footer-icons-social">
-                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
+                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-twitter"]} />
                                 </div>
                             </a>
 
-                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
+                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-discord"]} />
                                 </div>
                             </a>
 
-                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
+                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-github"]} />
                                 </div>
@@ -146,8 +42,8 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {links.map((category, index) => (
-                    <div className="footer-items" key={`${Object.keys(category)}`} style={{gridArea: `item-${index}`}}>
+                {FOOTER_ITEMS.map((category, index) => (
+                    <div className="footer-items opaque" key={`${Object.keys(category)}`} style={{gridArea: `item-${index}`}}>
                         <ul>
                             <li>
                                 <h4>{Object.keys(category)}</h4>

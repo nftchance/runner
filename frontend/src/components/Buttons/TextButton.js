@@ -20,7 +20,7 @@ const TextButton = (props) => {
                     className="btn-text"
                     sx={{style}}
                 >
-                    <p className="text">{text}</p>
+                    <span className="text">{text}</span>
                     <FontAwesomeIcon 
                         className="chevron" 
                         icon={["fal", "angle-right"]} 

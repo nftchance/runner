@@ -20,40 +20,40 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link className="nav-link" to="/roadmap">
-                        <p className="nav-item">Roadmap</p>
+                    <Link className="nav-link opaque" to="/roadmap">
+                        <span className="nav-item">Roadmap</span>
                     </Link>
                 </li>
                 <li>
-                    <Link className="nav-link" to="/governance">
-                        <p className="nav-item">Governance</p>
+                    <Link className="nav-link opaque" to="/governance">
+                        <span className="nav-item">Governance</span>
                     </Link>
                 </li>
                 <li>
-                    <Link className="nav-link" to="/FAQ">
-                        <p className="nav-item">FAQ</p>
+                    <Link className="nav-link opaque" to="/FAQ">
+                        <span className="nav-item">FAQ</span>
                     </Link>
                 </li>
             </ul>
 
             <div className="nav-icons">
-                <a className="nav-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
+                <a className="nav-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
                     <div className="text-with-icon">
                         <div className="img-container">
                             <FontAwesomeIcon icon={["fal", "star"]} style={{color: 'inherit'}} />
                         </div>
-                        <p className="nav-item">Star on GitHub</p>
+                        <span className="nav-item">Star on GitHub</span>
                     </div>
                 </a>
 
                 <div className="social-icons">
-                    <a className="nav-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
+                    <a className="nav-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
                         <div className="img-container">
                             <FontAwesomeIcon icon={["fa-brands", "fa-discord"]} />
                         </div>
                     </a>
 
-                    <a className="nav-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
+                    <a className="nav-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
                         <div className="img-container">
                             <FontAwesomeIcon icon="fa-brands fa-twitter" />
                         </div>

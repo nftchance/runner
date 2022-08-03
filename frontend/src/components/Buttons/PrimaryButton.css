@@ -3,6 +3,7 @@
     text-transform: none;
     border-radius: 8px;
     border: 1px solid var(--dark-yellow);
+    height: 100%;
 }
 
 .btn-primary:hover,

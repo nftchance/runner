@@ -1,5 +1,8 @@
 .btn-text {
-    color: var(--dark-border);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.65;
     text-transform: none;
     display: flex;
     margin: 0;
@@ -8,15 +11,12 @@
 
 .btn-text:hover,
 .btn-text:focus {
-    color: #FFFFFF;
+    opacity: 1;
     background-color: transparent;
 }
 
-.btn-text > p {
-    color: inherit;
-}
-
 .chevron {
+    color: #FFFFFF;
     margin-left: 5px;
     height: 12px;
     margin-top: 2px;

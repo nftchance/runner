@@ -18,9 +18,9 @@ const SystemMessage = (props) => {
             {!closed &&
                 <div className="msg-container">
                     <a target="_blank" rel="noreferrer" href={directTo}>
-                        <p>
+                        <span className="system-msg">
                             {message}
-                        </p>
+                        </span>
                     </a>
 
                     <div className="close">

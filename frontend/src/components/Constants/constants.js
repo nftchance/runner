@@ -43,36 +43,140 @@ export const LANDING_MODULES = [
         title: 'Managed Team Scheduling',
         description: 'Stay ahead of the curve by utilizing historical data to predict the future. Enabling more efficient team dispatching, your business can do more in less time.',
         provider: 'runner',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
     {
         title: 'Payroll Streaming',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'QuickBooks',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
     {
         title: 'Real-Time KP Reports',
         description: 'Gain access to the key stats of your service business without the need to do any tracking or math yourself. Import, export, analyze and plan. All in one place.',
         provider: 'runner',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
     {
         title: 'Job Notifications',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Twilio',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
     {
         title: 'Transactional Emails',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Mandrill',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
     {
         title: 'Mileage Tracking',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Google',
-        providerLogo: ''
+        providerLogo: '/badge.svg'
     },
+]
+
+export const FOOTER_ITEMS = [
+    {
+        Product: [
+            {
+                'title': 'Organizations',
+                'link': '/organizations',
+                'external': false
+            },
+            {
+                'title': 'Jobs',
+                'link': '/jobs',
+                'external': false
+            },
+            {
+                'title': 'Teams',
+                'link': '/teams',
+                'external': false
+            },
+            {
+                'title': 'Task Automation',
+                'link': '/task-automation',
+                'external': false
+            },
+            {
+                'title': 'Pricing',
+                'link': '/pricing',
+                'external': false
+            },
+        ]
+    },
+    {
+        Resources: [
+            {
+                'title': 'Community',
+                'link': '/community',
+                'external': false
+            },
+            {
+                'title': 'Brand Assets',
+                'link': '/brand',
+                'external': false
+            },
+            {
+                'title': 'Integrations',
+                'link': '/integrations',
+                'external': false
+            },
+            {
+                'title': 'System Status',
+                'link': '/system-status',
+                'external': false
+            },
+            {
+                'title': 'Support',
+                'link': '/support',
+                'external': false
+            },
+        ]
+    },
+    {
+        Developers: [
+            {
+                'title': 'Documentation',
+                'link': '/docs',
+                'external': false
+            },
+            {
+                'title': 'API Reference',
+                'link': '/docs/api',
+                'external': false
+            },
+            {
+                'title': 'Guides',
+                'link': '/guides',
+                'external': false
+            },
+            {
+                'title': 'Pre-Built Plugins',
+                'link': '/plugins',
+                'external': false
+            },
+        ]
+    },
+    {
+        Company: [
+            {
+                'title': 'Open Source',
+                'link': URL_CONSTANTS.github,
+                'external': true
+            },
+            {
+                'title': 'Terms of Service',
+                'link': '/terms-of-service',
+                'external': false
+            },
+            {
+                'title': 'Privacy Policy',
+                'link': '/privacy-policy',
+                'external': false
+            },
+        ]
+    }
 ]

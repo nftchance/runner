@@ -37,18 +37,21 @@
 
 .footer-link {
     text-decoration: none;
-    color: var(--dark-border);
+    color: #FFFFFF;
     height: auto;
+}
+.footer-link.opaque {
+    opacity: 0.65;
 }
 .footer-link:hover,
 .footer-link:focus,
 .footer-link:active {
-    color: #FFFFFF;
+    opacity: 1;
 }
 .footer-link > p:hover,
 .footer-link > p:focus,
 .footer-link > p:active {
-    color: #FFFFFF;
+    opacity: 1;
 }
 
 .footer-items > ul {

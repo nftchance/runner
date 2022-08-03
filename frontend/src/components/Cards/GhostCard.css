@@ -14,7 +14,7 @@
     justify-content: center;
 }
 
-.icon-container > .ghost-icon {
+.title-line > .icon-container > .ghost-icon {
     position: relative;
     top: 50%;
     transform: translateY(-50%);

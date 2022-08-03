@@ -28,7 +28,8 @@
     display: inline-flex;
     flex-direction: row;
     gap: 20px;
-    width: 50%;
+    width: 100%;
+    height: 36px;
     margin-top: 50px;
 }
 
@@ -51,8 +52,36 @@
     margin-top: 5vh;
 }
 
-.home > .modules {
+.home > .modules-headline {
     margin-top: 15vh;
+    text-align: center;
+}
+
+.home > .modules-headline > .modules-desc {
+    width: 25vw;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.home > .modules-headline > .modules-btn {
+    display: block;
+    height: 35px;
+}
+
+.home > .modules {
+    margin-top: 75px;
+}
+
+.home > .modules > .modules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 15px;
+}
+
+.home > .dashboard {
+    margin-top: 180px;
 }
 
 #volume-img {
