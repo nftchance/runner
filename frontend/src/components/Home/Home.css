@@ -1,9 +1,14 @@
-.hero {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
-    grid-template-rows: auto;
-    margin-top: 15vh;
+.home {
+    margin-top: 200px;
 }
+
+.side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 100px;
+}
+
 .hero-text > h1 {
     display: inline;
 }
@@ -49,48 +54,133 @@
     grid-template-columns: repeat(11, 1fr);
     grid-template-rows: 1fr;
     grid-template-areas: 'item-0 item-0 . item-1 item-1 . item-2 item-2 . item-3 item-3';
-    margin-top: 5vh;
+    margin-top: 50px;
 }
 
-.home > .modules-headline {
-    margin-top: 15vh;
+.modules-headline {
+    margin-top: 180px;
     text-align: center;
 }
 
-.home > .modules-headline > .modules-desc {
+.modules-headline > .modules-desc {
     width: 25vw;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 25px;
 }
 
-.home > .modules-headline > .modules-btn {
+.modules-headline > .modules-btn {
     display: block;
     height: 35px;
 }
 
-.home > .modules {
+.modules {
     margin-top: 75px;
 }
 
-.home > .modules > .modules-grid {
+.modules > .modules-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto;
     gap: 15px;
 }
 
-.home > .dashboard {
+.dashboard {
     margin-top: 180px;
+}
+
+.dashboard > .dashboard-headline {
+    margin-bottom: 50px;
+}
+
+#dashboard-img {
+    width: 100%;
+}
+
+.dashboard-tabs {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--dark-border);
+    padding-right: 150px;
+    padding-left: 20px;
+}
+
+.dashboard-tab {
+    display: inline-flex;
+    flex-grow: 1;
+}
+
+.dashboard-tab > button {
+    background-color: transparent;
+    border: none;
+    opacity: 0.65;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.dashboard-tab > button:hover,
+.dashboard-tab > button:focus,
+.dashboard-tab > button.active {
+    opacity: 1;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.dashboard-tab > button > p {
+    font-weight: 700;
+    opacity: 1;
+}
+
+.tab-info > .ghost-card > .title-line > h4 {
+    font-weight: 700;
+}
+
+.dashboard-info > .tab-info {
+    margin-top: 30px;
+}
+
+.governance {
+    margin-top: 180px;
+}
+
+.governance-headline {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 20px;
+}
+
+.governance-headline > p {
+    font-weight: 700;
+}
+
+.governance-headline > .formula {
+    float: right;
+    margin-left: auto;
+}
+
+.governance > .btn-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 60px;
+    height: 36px;
+}
+
+.governance > h6 {
+    width: 35%;
 }
 
 #volume-img {
     width: 100%;
 }
 
-.home > .cta {
+.cta {
     align-content: center;
-}
-.home > .cta > h1 {
     text-align: center;
+    margin-top: 180px;
+    margin-bottom: 180px;
+}
+
+.cta-email.email-signup {
+    width: 30%;
+    justify-content: center;
 }

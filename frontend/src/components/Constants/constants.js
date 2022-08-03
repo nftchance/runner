@@ -81,102 +81,126 @@ export const FOOTER_ITEMS = [
     {
         Product: [
             {
-                'title': 'Organizations',
-                'link': '/organizations',
-                'external': false
+                title: 'Organizations',
+                link: '/organizations',
+                external: false
             },
             {
-                'title': 'Jobs',
-                'link': '/jobs',
-                'external': false
+                title: 'Jobs',
+                link: '/jobs',
+                external: false
             },
             {
-                'title': 'Teams',
-                'link': '/teams',
-                'external': false
+                title: 'Teams',
+                link: '/teams',
+                external: false
             },
             {
-                'title': 'Task Automation',
-                'link': '/task-automation',
-                'external': false
+                title: 'Task Automation',
+                link: '/task-automation',
+                external: false
             },
             {
-                'title': 'Pricing',
-                'link': '/pricing',
-                'external': false
+                title: 'Pricing',
+                link: '/pricing',
+                external: false
             },
         ]
     },
     {
         Resources: [
             {
-                'title': 'Community',
-                'link': '/community',
-                'external': false
+                title: 'Community',
+                link: '/community',
+                external: false
             },
             {
-                'title': 'Brand Assets',
-                'link': '/brand',
-                'external': false
+                title: 'Brand Assets',
+                link: '/brand',
+                external: false
             },
             {
-                'title': 'Integrations',
-                'link': '/integrations',
-                'external': false
+                title: 'Integrations',
+                link: '/integrations',
+                external: false
             },
             {
-                'title': 'System Status',
-                'link': '/system-status',
-                'external': false
+                title: 'System Status',
+                link: '/system-status',
+                external: false
             },
             {
-                'title': 'Support',
-                'link': '/support',
-                'external': false
+                title: 'Support',
+                link: '/support',
+                external: false
             },
         ]
     },
     {
         Developers: [
             {
-                'title': 'Documentation',
-                'link': '/docs',
-                'external': false
+                title: 'Documentation',
+                link: '/docs',
+                external: false
             },
             {
-                'title': 'API Reference',
-                'link': '/docs/api',
-                'external': false
+                title: 'API Reference',
+                link: '/docs/api',
+                external: false
             },
             {
-                'title': 'Guides',
-                'link': '/guides',
-                'external': false
+                title: 'Guides',
+                link: '/guides',
+                external: false
             },
             {
-                'title': 'Pre-Built Plugins',
-                'link': '/plugins',
-                'external': false
+                title: 'Pre-Built Plugins',
+                link: '/plugins',
+                external: false
             },
         ]
     },
     {
         Company: [
             {
-                'title': 'Open Source',
-                'link': URL_CONSTANTS.github,
-                'external': true
+                title: 'Open Source',
+                link: URL_CONSTANTS.github,
+                external: true
             },
             {
-                'title': 'Terms of Service',
-                'link': '/terms-of-service',
-                'external': false
+                title: 'Terms of Service',
+                link: '/terms-of-service',
+                external: false
             },
             {
-                'title': 'Privacy Policy',
-                'link': '/privacy-policy',
-                'external': false
+                title: 'Privacy Policy',
+                link: '/privacy-policy',
+                external: false
             },
         ]
     }
+]
+
+export const LANDING_DASHBOARD_TABS = [
+    {
+        tab: 'Organization',
+        title: 'This is placeholder organization text',
+        description: "Organization placeholder description lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor.",
+        buttonText: 'Explore Organization Metrics',
+        buttonRedirect: '/'
+    },
+    {
+        tab: 'Services',
+        title: 'Placeholder Services text',
+        description: "Services placeholder text lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum.",
+        buttonText: 'Explore Service Actions',
+        buttonRedirect: '/'
+    },
+    {
+        tab: 'Maintenance',
+        title: 'Watch as each piece of maintenance is handled automatically',
+        description: "You don't have to be a super computer to manage every piece of your service business. Our system makes every piece of business leadership easy by automating the tasks that don't need manager oversight.",
+        buttonText: 'Explore Maintenance Actions',
+        buttonRedirect: '/'
+    },
 ]

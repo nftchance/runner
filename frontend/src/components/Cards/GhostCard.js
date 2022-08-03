@@ -9,19 +9,27 @@ const GhostCard = (props) => {
         description,
         icon,
         buttonText,
-        buttonRedirect
+        buttonRedirect,
+        titleStyle,
+        noIcon
     } = props;
 
     return (
         <div className="ghost-card">
             <div className="title-line">
-                <div className="icon-container">
-                    <FontAwesomeIcon
-                        className="ghost-icon"
-                        icon={icon} 
-                    />
-                </div>
-                <h4 className="ghost-title">{title}</h4>
+                {noIcon ?
+                    <></>
+                    :
+                    <div className="icon-container">
+                        <FontAwesomeIcon
+                            className="ghost-icon"
+                            icon={icon}
+                        />
+                    </div>
+                }
+                <h4 className="ghost-title" style={titleStyle}>
+                    {title}
+                </h4>
             </div>
 
             <h6 className="ghost-description">{description}</h6>

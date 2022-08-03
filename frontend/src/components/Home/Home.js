@@ -8,11 +8,12 @@ import TextFieldInline from "../TextFields/TextFieldInline";
 import ModuleCard from "../Cards/ModuleCard";
 import GhostCard from "../Cards/GhostCard";
 
-import { LANDING_CATEGORIES, LANDING_MODULES } from "@components/Constants/constants";
+import { LANDING_CATEGORIES, LANDING_MODULES, LANDING_DASHBOARD_TABS } from "@components/Constants/constants";
 import "./Home.css";
 
 const Home = () => {
-    const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState('Join Waitlist')
+    const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState('Join Waitlist');
+    const [ dashboardTab, setDashboardTab ] = useState('Maintenance');
 
     const handleJoinWaitlist = () => {
         // validate email? or handle on backend
@@ -26,7 +27,7 @@ const Home = () => {
     return (
         <Page>
             <div className="home">
-                <div className="hero">
+                <div className="side-by-side">
                     <div className="hero-text">
                         <h1>Revolutionize your service business with</h1>
                         <h1 className="yellow"> automation tools of 2032.</h1>
@@ -105,47 +106,97 @@ const Home = () => {
                 </div>
 
                 <div className="dashboard">
-                    <h3>Run your business without leaving the dashboard</h3>
+                    <h3 className="dashboard-headline">
+                        Run your business without leaving the dashboard
+                    </h3>
+                    <div className="side-by-side">
+                        <img id="dashboard-img" src="/dashboard.svg" alt="Dashboard" />
+
+                        <div className="dashboard-info">
+                            <div className="dashboard-tabs">
+                                <div className="dashboard-tab">
+                                    <button 
+                                        className={dashboardTab === 'Organization' ? "active" : ""}
+                                        onClick={() => setDashboardTab('Organization')}
+                                    >
+                                        <p>Organization</p>
+                                    </button>
+                                </div>
+                                <div className="dashboard-tab">
+                                    <button 
+                                        className={dashboardTab === 'Services' ? "active" : ""}                                        
+                                        onClick={() => setDashboardTab('Services')}
+                                    >
+                                        <p>Services</p>
+                                    </button>
+                                </div>
+                                <div className="dashboard-tab">
+                                    <button 
+                                        className={dashboardTab === 'Maintenance' ? "active" : ""}                                                                            
+                                        onClick={() => setDashboardTab('Maintenance')}
+                                    >
+                                        <p>Maintenance</p>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {LANDING_DASHBOARD_TABS.map((tab) => (
+                                <div 
+                                    key={tab.tab}
+                                    className={dashboardTab === tab.tab ? "tab-info" : "tab-info hidden"}
+                                >
+                                    <GhostCard
+                                        title={tab.title}
+                                        description={tab.description}
+                                        buttonText={tab.buttonText}
+                                        buttonRedirect={tab.buttonRedirect}
+                                        titleStyle={{fontSize: '20px'}}
+                                        noIcon={true}
+                                    />
+                                </div>
+                            ))
+
+                            }
+                        </div>
+                    </div>
 
                 </div>
 
-                {/* DELETE THIS */}
-                <div style={{marginTop: '300px'}} />
-
                 <div className="governance">
-                    <h3>Volume driven platform governance and influence</h3>
+                    <div className="governance-headline">
+                        <h3>Volume driven platform governance and influence</h3>
+                        <p className="formula">
+                            {'$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 100000'}
+                        </p>
+                    </div>
+
                     <h6>
                         Runner turbocharges the best service business to reach new and incredible heights. 
                         In tandem with this, the businesses running the largest amounts of volume have the 
                         largest say and impact in the platforms future.
                     </h6>
-                    <p className="formula">
-                        {'$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 100000'}
-                    </p>
-
-                    <Link className="link-wrapper" to="/governance">
-                        <PrimaryButton
-                            text='View Governance Portal'
-                        />
-                    </Link>
-                    <Link className="link-wrapper" to="/governance">
-                        <SecondaryButton
-                            text='Learn More'
-                        />
-                    </Link>
+                        
+                    <div className="btn-wrapper">
+                        <Link className="link-wrapper" to="/governance">
+                            <PrimaryButton
+                                text='View Governance Portal'
+                            />
+                        </Link>
+                        <Link className="link-wrapper" to="/governance">
+                            <SecondaryButton
+                                text='Learn More'
+                            />
+                        </Link>
+                    </div>
 
                     <img id="volume-img" src="/volume.svg" alt="Volume graph" />
                 </div>
 
-                {/* DELETE THIS */}
-                <div style={{marginTop: '300px'}} />
-
                 <div className="cta">
                     <h1>Prevent your business from withering.</h1>
-                    <br />
                     <h1 className="yellow">Modernize it now.</h1>
 
-                    <div className='email-signup'>
+                    <div className='cta-email email-signup'>
                         <TextFieldInline
                             placeholder={'Email address...'}
                         />

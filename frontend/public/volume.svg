@@ -1,5 +1,5 @@
-<svg id="Component_3_1" data-name="Component 3 – 1" xmlns="http://www.w3.org/2000/svg" width="1640.5" height="326" viewBox="0 0 1640.5 326">
-  <text id="_139_RUNNER" data-name="139 $RUNNER" transform="translate(924 162)" fill="#fff" font-size="14" font-family="Helvetica"><tspan x="0" y="0">139 $RUNNER</tspan></text>
+<svg id="Component_3_1" data-name="Component 3 – 1" xmlns="http://www.w3.org/2000/svg" width="1641" height="328" viewBox="0 0 1641 328">
+  <text id="_139_RUNNER" data-name="139 $RUNNER" transform="translate(924 162)" fill="#fff" font-size="14" font-family="FranklinGothicURW-Dem, FranklinGothic URW"><tspan x="0" y="0">139 $RUNNER</tspan></text>
   <g id="Component_2_1" data-name="Component 2 – 1">
     <g id="Rectangle_73" data-name="Rectangle 73" transform="translate(0 278)" fill="#1c1c1c" stroke="#3d3d3d" stroke-width="1">
       <rect width="36" height="2" stroke="none"/>
@@ -113,9 +113,9 @@
       <rect width="36" height="280" stroke="none"/>
       <rect x="0.5" y="0.5" width="35" height="279" fill="none"/>
     </g>
-    <text id="_0.00" data-name="$0.00" transform="translate(0 323)" fill="#fff" font-size="14" font-family="Helvetica" opacity="0.65"><tspan x="0" y="0">$0.00</tspan></text>
-    <text id="_21_750.00" data-name="$21,750.00" transform="translate(1567 323)" fill="#fff" font-size="14" font-family="Helvetica" opacity="0.65"><tspan x="0" y="0">$21,750.00</tspan></text>
-    <text id="_13_050.00" data-name="$13,050.00" transform="translate(933 323)" fill="#fff" font-size="14" font-family="Helvetica"><tspan x="0" y="0">$13,050.00</tspan></text>
+    <text id="_0.00" data-name="$0.00" transform="translate(0 323)" fill="#fff" font-size="14" font-family="FranklinGothicURW-Dem, FranklinGothic URW" opacity="0.65"><tspan x="0" y="0">$0.00</tspan></text>
+    <text id="_21_750.00" data-name="$21,750.00" transform="translate(1567 323)" fill="#fff" font-size="14" font-family="FranklinGothicURW-Dem, FranklinGothic URW" opacity="0.65"><tspan x="0" y="0">$21,750.00</tspan></text>
+    <text id="_13_050.00" data-name="$13,050.00" transform="translate(933 323)" fill="#fff" font-size="14" font-family="FranklinGothicURW-Dem, FranklinGothic URW"><tspan x="0" y="0">$13,050.00</tspan></text>
     <line id="Line_12" data-name="Line 12" x2="1640" transform="translate(0.5 289.5)" fill="none" stroke="#3d3d3d" stroke-width="1"/>
     <line id="Line_13" data-name="Line 13" y1="40" transform="translate(969.5 170.5)" fill="none" stroke="#bec729" stroke-width="1"/>
     <line id="Line_16" data-name="Line 16" x2="36" transform="translate(951.5 289.5)" fill="none" stroke="#bec729" stroke-width="1"/>

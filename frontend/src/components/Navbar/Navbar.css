@@ -48,7 +48,7 @@ nav > li {
 .nav-link:focus,
 .nav-link:active {
     opacity: 1;
-    border-bottom: 2px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
 }
 
 .nav-icons {

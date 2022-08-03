@@ -12,6 +12,7 @@
     height: 30px;
     display: flex;
     justify-content: center;
+    margin-right: 10px;
 }
 
 .title-line > .icon-container > .ghost-icon {
@@ -20,11 +21,7 @@
     transform: translateY(-50%);
 }
 
-.ghost-card > .title-line > .ghost-title {
-    line-height: 30px;
-    margin-left: 10px;
-}
-
 .ghost-card > .ghost-description {
     margin-bottom: 20px;
+    width: 90%;
 }

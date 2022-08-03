@@ -62,10 +62,32 @@ p {
   font-weight: 500;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--darkest);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFFFFF65;
+  border-radius: 8px;
+  border: 2px solid var(--darkest);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
 .yellow {
   color: var(--yellow);
 }
 
 .link-wrapper {
   text-decoration: none;
+}
+
+.hidden {
+  display: none;
 }
