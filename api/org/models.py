@@ -9,7 +9,7 @@ from django.utils.itercompat import is_iterable
 from utils.uuid import id_generator
 
 from . import backends
-
+from .permission_constants import Role
 
 class Org(models.Model):
     def save(self, *args, **kwargs):
@@ -34,6 +34,11 @@ class Org(models.Model):
 
     class Meta:
         ordering = ["created_at"]
+        permissions = (
+            ("manage_org", "Can manage organization"),
+            ("manage_orgrole", "Can manage organization roles of other users"),
+            ("manage_orginvitation", "Can manage organization invitations"),
+        )
 
 
 class OrgRoleManager(models.Manager):
@@ -44,22 +49,16 @@ class OrgRoleManager(models.Manager):
 
 
 class OrgRole(models.Model):
-    REVOKED = "revoked"
-    CUSTOMER = "customer"
-    TEAM = "team"
-    MANAGER = "manager"
-    ADMIN = "admin"
-
     ROLES = (
-        (REVOKED, "Revoked"),
-        (CUSTOMER, "Customer"),
-        (TEAM, "Team"),
-        (MANAGER, "Manager"),
-        (ADMIN, "Admin"),
+        (Role.REVOKED, "Revoked"),
+        (Role.CUSTOMER, "Customer"),
+        (Role.TEAM, "Team"),
+        (Role.MANAGER, "Manager"),
+        (Role.ADMIN, "Admin"),
     )
 
     name = models.CharField(
-        max_length=256, unique=True, choices=ROLES, default=CUSTOMER
+        max_length=256, unique=True, choices=ROLES, default=Role.CUSTOMER
     )
 
     permissions = models.ManyToManyField(
@@ -162,7 +161,7 @@ class OrgInvitation(models.Model):
         "user.User", null=True, on_delete=models.CASCADE, related_name="invited_user"
     )
     role = models.CharField(
-        max_length=256, choices=OrgRole.ROLES, default=OrgRole.REVOKED
+        max_length=256, choices=OrgRole.ROLES, default=Role.REVOKED
     )
     expires_at = models.DateTimeField(null=True)
 

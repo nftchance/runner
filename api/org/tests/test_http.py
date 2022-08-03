@@ -6,7 +6,7 @@ from org.models import Org
 from utils.tests.org import create_org, create_invitation
 from utils.tests.user import PASSWORD, create_user
 
-from org.models import Org, OrgRelationship, OrgInvitation
+from org.models import Org, OrgInvitation
 
 
 class HttpTest(APITestCase):
@@ -474,4 +474,5 @@ class HttpTest(APITestCase):
             response.data.get("error"), "This invitation has already been revoked."
         )
 
+    # test for all the access related things related to permissions
     
