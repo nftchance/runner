@@ -257,11 +257,11 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
         self.assertEqual(response.data.get("invited_by"), self.user.id)
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
-        self.assertEqual(response.data.get("relationship"), "customer")
+        self.assertEqual(response.data.get("role"), "customer")
 
     def test_user_can_use_invitation_team(self):
         org = create_org(self.user, name="The Best of Times")
-        invitation = create_invitation(org, self.user, relationship="team")
+        invitation = create_invitation(org, self.user, role="team")
         response = self.client.post(
             reverse(
                 "org-use-invitation",
@@ -274,11 +274,11 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
         self.assertEqual(response.data.get("invited_by"), self.user.id)
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
-        self.assertEqual(response.data.get("relationship"), "team")
+        self.assertEqual(response.data.get("role"), "team")
 
     def test_user_can_use_invitation_manager(self):
         org = create_org(self.user, name="The Best of Times")
-        invitation = create_invitation(org, self.user, relationship="manager")
+        invitation = create_invitation(org, self.user, role="manager")
         response = self.client.post(
             reverse(
                 "org-use-invitation",
@@ -291,11 +291,11 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
         self.assertEqual(response.data.get("invited_by"), self.user.id)
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
-        self.assertEqual(response.data.get("relationship"), "manager")
+        self.assertEqual(response.data.get("role"), "manager")
 
     def test_user_can_use_invitation_admin(self):
         org = create_org(self.user, name="The Best of Times")
-        invitation = create_invitation(org, self.user, relationship="admin")
+        invitation = create_invitation(org, self.user, role="admin")
         response = self.client.post(
             reverse(
                 "org-use-invitation",
@@ -308,7 +308,7 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
         self.assertEqual(response.data.get("invited_by"), self.user.id)
         self.assertEqual(response.data.get("invited_user"), self.secondary_user.id)
-        self.assertEqual(response.data.get("relationship"), "admin")
+        self.assertEqual(response.data.get("role"), "admin")
 
     def test_user_cannot_user_invitation_as_member(self):
         org = create_org(self.user, name="The Best of Times")
@@ -474,9 +474,4 @@ class HttpTest(APITestCase):
             response.data.get("error"), "This invitation has already been revoked."
         )
 
-    def test_user_relationship_permissions_empty_for_own_org(self):
-        org = create_org(self.user, name="The Best of Times")
-        relationship = OrgRelationship.objects.get(org=org, related_user=self.user)
-
-        self.assertEqual(relationship.permissions.all().count(), 0)
-        self.assertEqual(relationship.has_perm('org.view_org'), False)
+    

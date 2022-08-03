@@ -1,13 +1,16 @@
-from org.models import ADMIN, CUSTOMER, Org, OrgInvitation, OrgRelationship
+from org.models import Org, OrgInvitation, OrgRelationship, OrgRole
 
 def create_org(admin, name="Simpler Times"):
     # create the org
     org = Org.objects.create(name=name, admin=admin)
     
+    # get the admin role object
+    role_obj = OrgRole.objects.get_or_create(name=OrgRole.ADMIN)[0]
+
     # create the admin relationship
-    relationship, created = OrgRelationship.objects.get_or_create(
-        org=org, related_user=admin, relationship=ADMIN
-    )
+    relationship = OrgRelationship.objects.get_or_create(
+        org=org, related_user=admin, role=role_obj
+    )[0]
 
     # update the admin
     admin.org_relationships.add(relationship)
@@ -15,9 +18,9 @@ def create_org(admin, name="Simpler Times"):
     
     return org
 
-def create_invitation(org, user, relationship=CUSTOMER):
+def create_invitation(org, user, role=OrgRole.CUSTOMER):
     # create the invitation
-    invitation = OrgInvitation.objects.create(org=org, invited_by=user, relationship=relationship)
+    invitation = OrgInvitation.objects.create(org=org, invited_by=user, role=role)
 
     # update the user
     return invitation

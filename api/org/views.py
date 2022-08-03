@@ -3,7 +3,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Org, OrgInvitation, OrgRelationship
+from .models import Org, OrgInvitation, OrgRelationship, OrgRole
 from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
 from .serializers import OrgSerializer, OrgInvitationSerializer
 
@@ -42,7 +42,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         relationship, created = OrgRelationship.objects.get_or_create(
             org=obj, related_user=self.request.user
         )
-        relationship.relationship = OrgRelationship.ADMIN
+        relationship.relationship = OrgRole.ADMIN
         relationship.save()
 
         # add this org to the users orgs
@@ -128,8 +128,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
                 "org", flat=True
             )
         )
-
-    # return obj.org.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)
 
     # Allow only admins to see all, create, or destory invitiations however
     # any authenticated user can accept a pending invitation.

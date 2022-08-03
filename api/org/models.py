@@ -190,7 +190,7 @@ class OrgInvitation(models.Model):
             org=self.org, related_user=self.invited_user
         )[0]
 
-        # set the users role
+        # set the users role on the relationship object
         org_relationship_role = OrgRole.objects.get_or_create(name=self.role)[0]
         org_relationship.role = org_relationship_role
         org_relationship.save()
