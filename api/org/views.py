@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Org, OrgInvitation, OrgRelationship, OrgRole
 from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
 from .serializers import OrgSerializer, OrgInvitationSerializer
+from .utils import Role
 
 
 class OrgViewSet(viewsets.ModelViewSet):
@@ -42,7 +43,9 @@ class OrgViewSet(viewsets.ModelViewSet):
         relationship, created = OrgRelationship.objects.get_or_create(
             org=obj, related_user=self.request.user
         )
-        relationship.relationship = OrgRole.ADMIN
+        # assign the admin role
+        role = OrgRole.objects.get_or_create(name=Role.ADMIN)[0]
+        relationship.role = role
         relationship.save()
 
         # add this org to the users orgs

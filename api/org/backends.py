@@ -12,9 +12,11 @@ class OrgRelationshipBaseBackend:
         return None
 
     def get_user_permissions(self, relationship_obj, obj=None):
+        print('b')
         return set()
 
     def get_role_permissions(self, relationship_obj, obj=None):
+        print('a')
         return set()
 
     def get_all_permissions(self, relationship_obj, obj=None):
@@ -33,9 +35,11 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
     """
 
     def _get_user_permissions(self, relationship_obj):
+        print('getting user permissions')
         return relationship_obj.permissions.all()
 
     def _get_role_permissions(self, relationship_obj):
+        print('getting role permissions', relationship_obj, relationship_obj.role.permissions.all())
         return relationship_obj.role.permissions.all()
 
     def _get_permissions(self, relationship_obj, obj, from_name):
@@ -80,6 +84,7 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
         return self._get_permissions(relationship_obj, obj, "role")
 
     def get_all_permissions(self, relationship_obj, obj=None):
+        print('we are in the backend')
         if (
             not relationship_obj.related_user.is_active
             or relationship_obj.related_user.is_anonymous
@@ -87,7 +92,10 @@ class OrgRelationshipBackend(OrgRelationshipBaseBackend):
         ):
             return set()
 
+        print('mad it past here')
+
         if not hasattr(relationship_obj, "_perm_cache"):
+            print('does not have perm cache')
             relationship_obj._perm_cache = super().get_all_permissions(relationship_obj)
 
         return relationship_obj._perm_cache
@@ -153,9 +161,13 @@ def user_get_permissions(user, obj, from_name):
     name = "get_%s_permissions" % from_name
     
     backend = get_backend()
+    print('got here', backend, name, obj)
     if hasattr(backend, name):
+        print('second test')
+        print(user)
         permissions.update(getattr(backend, name)(user, obj))
-    
+        print(getattr(backend, name)(user, obj))
+
     return permissions
 
 
