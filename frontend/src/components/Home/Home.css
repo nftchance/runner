@@ -14,9 +14,10 @@
 }
 
 
-.hero-text > .subtitle {
+.hero-text > h5 {
     margin-top: 15px;
     margin-right: 100px;
+    width: 45%;
 }
 
 .shadow-text {

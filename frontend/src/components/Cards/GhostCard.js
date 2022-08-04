@@ -3,17 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TextButton from "../Buttons/TextButton";
 import "./GhostCard.css"
 
-const GhostCard = (props) => {
-    const {
-        title,
-        description,
-        icon,
-        buttonText,
-        buttonRedirect,
-        titleStyle,
+const GhostCard = (
+    {
+        title, 
+        description, 
+        icon, 
+        buttonText, 
+        buttonOnClick, 
+        titleStyle, 
         noIcon
-    } = props;
-
+}) => {
     return (
         <div className="ghost-card">
             <div className="title-line">
@@ -35,7 +34,7 @@ const GhostCard = (props) => {
             <h6 className="ghost-description">{description}</h6>
             <TextButton
                 text={buttonText}
-                redirect={buttonRedirect}
+                onClick={buttonOnClick}
             />
         </div>
     )

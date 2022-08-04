@@ -3,14 +3,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 
 import "./PrimaryButton.css"
 
-const PrimaryButton = (props) => {
-    const {
-        text,
-        onClick,
-        disabled,
-        style
-    } = props;
-
+const PrimaryButton = ({text, onClick, disabled, style}) => {
     return (
         <StyledEngineProvider injectFirst>
             <Button

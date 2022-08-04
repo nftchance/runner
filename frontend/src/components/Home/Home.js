@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Page from "../Page/Page";
 import PrimaryButton from "../Buttons/PrimaryButton";
@@ -8,10 +8,19 @@ import TextFieldInline from "../TextFields/TextFieldInline";
 import ModuleCard from "../Cards/ModuleCard";
 import GhostCard from "../Cards/GhostCard";
 
-import { LANDING_CATEGORIES, LANDING_MODULES, LANDING_DASHBOARD_TABS } from "@components/Constants/constants";
+import hero from "../../images/landing/hero.svg";
+import volume from "../../images/landing/volume.svg";
+import dashboard from "../../images/landing/dashboard.svg";
+
+import { 
+    LANDING_CATEGORIES, LANDING_MODULES, LANDING_DASHBOARD_TABS 
+} from "@components/Constants/constants";
+
 import "./Home.css";
 
 const Home = () => {
+    let navigate = useNavigate();
+
     const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState('Join Waitlist');
     const [ dashboardTab, setDashboardTab ] = useState('Maintenance');
 
@@ -27,30 +36,28 @@ const Home = () => {
     return (
         <Page>
             <div className="home">
-                <div className="side-by-side">
-                    <div className="hero-text">
-                        <h1>Revolutionize your service business with</h1>
-                        <h1 className="yellow"> automation tools of 2032.</h1>
-                        <div className="shadow-text">No we're not time travelers.</div>
+                <div className="hero-text">
+                    <h1>Revolutionize your service business<br /> with</h1>
+                    <h1 className="yellow"> automation tools of 2032.</h1>
+                    <div className="shadow-text">No we're not time travelers.</div>
 
-                        <h5 className="subtitle">
-                            Runner is an open source and community led service business automation tool. 
-                            Modernize your business with automation, asynchronous task completion, 
-                            customer onboarding forms and more.
-                        </h5>
+                    <h5>
+                        Runner is an open source and community led service business automation tool. 
+                        Modernize your business with automation, asynchronous task completion, 
+                        customer onboarding forms and more.
+                    </h5>
 
-                        <div className='email-signup'>
-                            <TextFieldInline
-                                placeholder='Email address...'
-                            />
-                            <PrimaryButton
-                                text={joinWaitlistMsg}
-                                onClick={handleJoinWaitlist}
-                            />
-                        </div>
+                    <div className='email-signup'>
+                        <TextFieldInline
+                            placeholder='Email address...'
+                        />
+                        <PrimaryButton
+                            text={joinWaitlistMsg}
+                            onClick={handleJoinWaitlist}
+                        />
                     </div>
                 </div>
-                <img id="hero-img" src="/hero.svg" alt="Hero" />
+                <img id="hero-img" src={hero} alt="Hero" />
 
                 <div className="categories">
                     <h3>Modernize your business operations and services</h3>
@@ -62,7 +69,7 @@ const Home = () => {
                                     description={category.description}
                                     icon={category.icon}
                                     buttonText={'Learn more'}
-                                    buttonRedirect={category.link}
+                                    buttonOnClick={() => navigate(category.link)}
                                 />
                             </div>
                         ))}
@@ -78,11 +85,10 @@ const Home = () => {
                     </h5>
 
                     <div className="modules-btn">
-                        <Link className="link-wrapper" to="/features">
-                            <SecondaryButton
-                                text='View all features'
-                            />
-                        </Link>
+                        <SecondaryButton
+                            text='View all features'
+                            onClick={() => navigate('/features')}
+                        />
                     </div>
                 </div>
 
@@ -110,7 +116,7 @@ const Home = () => {
                         Run your business without leaving the dashboard
                     </h3>
                     <div className="side-by-side">
-                        <img id="dashboard-img" src="/dashboard.svg" alt="Dashboard" />
+                        <img id="dashboard-img" src={dashboard} alt="Dashboard" />
 
                         <div className="dashboard-info">
                             <div className="dashboard-tabs">
@@ -149,7 +155,7 @@ const Home = () => {
                                         title={tab.title}
                                         description={tab.description}
                                         buttonText={tab.buttonText}
-                                        buttonRedirect={tab.buttonRedirect}
+                                        buttonOnClick={() => navigate(tab.linkTo)}
                                         titleStyle={{fontSize: '20px'}}
                                         noIcon={true}
                                     />
@@ -177,19 +183,17 @@ const Home = () => {
                     </h6>
                         
                     <div className="btn-wrapper">
-                        <Link className="link-wrapper" to="/governance">
-                            <PrimaryButton
-                                text='View Governance Portal'
-                            />
-                        </Link>
-                        <Link className="link-wrapper" to="/governance">
-                            <SecondaryButton
-                                text='Learn More'
-                            />
-                        </Link>
+                        <PrimaryButton
+                            text='View Governance Portal'
+                            onClick={() => navigate('/roadmap')}
+                        />
+                        <SecondaryButton
+                            text='Learn More'
+                            onClick={() => navigate('/governance')}
+                        />
                     </div>
 
-                    <img id="volume-img" src="/volume.svg" alt="Volume graph" />
+                    <img id="volume-img" src={volume} alt="Volume graph" />
                 </div>
 
                 <div className="cta">

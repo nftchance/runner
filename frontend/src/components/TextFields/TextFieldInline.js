@@ -3,12 +3,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 
 import "./TextFieldInline.css"
 
-const TextFieldInline = (props) => {
-    const {
-        placeholder,
-        style
-    } = props;
-
+const TextFieldInline = ({placeholder, style}) => {
     return (
         <StyledEngineProvider injectFirst>
             <Input

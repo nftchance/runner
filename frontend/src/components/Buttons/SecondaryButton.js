@@ -3,14 +3,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 
 import "./SecondaryButton.css"
 
-const SecondaryButton = (props) => {
-    const {
-        text,
-        onClick,
-        disabled,
-        style
-    } = props;
-
+const SecondaryButton = ({text, onClick, disabled, style}) => {
     return (
         <StyledEngineProvider injectFirst>
             <Button

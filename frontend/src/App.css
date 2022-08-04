@@ -91,3 +91,27 @@ p {
 .hidden {
   display: none;
 }
+
+@media screen and (max-width: 600px) {
+  :root {
+    --page-margins: 20px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  :root {
+    --page-margins: 60px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --page-margins: 100px;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  :root {
+    --page-margins: 140px;
+  }
+}

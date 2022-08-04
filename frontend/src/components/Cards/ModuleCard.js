@@ -3,18 +3,18 @@ import SecondaryButton from "../Buttons/SecondaryButton";
 
 import "./ModuleCard.css"
 
-const ModuleCard = (props) => {
-    const {
-        title,
-        description,
-        provider,
-        providerLogo,
-        primaryBtnText,
-        primaryBtnOnClick,
-        secondaryBtnText,
-        secondaryBtnOnClick,
-    } = props;
-
+const ModuleCard = (
+    {
+        title, 
+        description, 
+        provider, 
+        providerLogo, 
+        primaryBtnText, 
+        primaryBtnOnClick, 
+        secondaryBtnText, 
+        secondaryBtnOnClick
+    }
+) => {
     return (
         <div className="module-card">
             <div className="module-info">

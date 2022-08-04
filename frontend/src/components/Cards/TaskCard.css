@@ -1,28 +1,29 @@
-.module-info {
+.task-info {
     background-color: var(--dark-border);
     border-radius: 4px 4px 0px 0px;
     padding: 20px 17px 20px 17px;
 }
 
-.module-info > .module-desc {
+.task-info > .task-desc {
     margin-top: 10px;
     margin-bottom: 10px;
     color: #FFFFFF;
     opacity: 0.65;
 }
 
-.module-provider {
+.task-status {
     display: flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
 }
 
-.module-provider > .provider-icon-container {
+.task-status > .status-icon {
     display: flex;
+    border-radius: 50%;
 }
 
-.module-provider > .provider-name {
+.task-status > .status-text {
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 500;
@@ -30,13 +31,13 @@
     padding-top: 1px;
 }
 
-.module-actions {
+.task-actions {
     background-color: var(--dark);
     border-radius: 0px 0px 4px 4px;
     padding: 12px 17px 12px 17px;
 }
 
-.module-actions > .action-btns {
+.task-actions > .action-btns {
     display: flex;
     flex-direction: row;
     height: 32px;

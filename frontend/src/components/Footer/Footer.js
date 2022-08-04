@@ -43,12 +43,12 @@ const Footer = () => {
                 </div>
 
                 {FOOTER_ITEMS.map((category, index) => (
-                    <div className="footer-items opaque" key={`${Object.keys(category)}`} style={{gridArea: `item-${index}`}}>
+                    <div className="footer-items opaque" key={category.name} style={{gridArea: `item-${index}`}}>
                         <ul>
                             <li>
-                                <h4>{Object.keys(category)}</h4>
+                                <h4>{category.name}</h4>
                             </li>
-                            {Object.values(category)[0].map((item, idx) => (
+                            {category.items.map((item, idx) => (
                                 <li key={`${item.title}-${idx}`}>
                                     {item.external ? 
                                         <a href={item.link} className="footer-link" target='_blank' rel='noreferrer'>

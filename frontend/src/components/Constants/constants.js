@@ -79,7 +79,8 @@ export const LANDING_MODULES = [
 
 export const FOOTER_ITEMS = [
     {
-        Product: [
+        name: 'Product', 
+        items: [
             {
                 title: 'Organizations',
                 link: '/organizations',
@@ -108,7 +109,8 @@ export const FOOTER_ITEMS = [
         ]
     },
     {
-        Resources: [
+        name: 'Resources',
+        items: [
             {
                 title: 'Community',
                 link: '/community',
@@ -137,7 +139,8 @@ export const FOOTER_ITEMS = [
         ]
     },
     {
-        Developers: [
+        name: 'Developers',
+        items: [
             {
                 title: 'Documentation',
                 link: '/docs',
@@ -161,7 +164,8 @@ export const FOOTER_ITEMS = [
         ]
     },
     {
-        Company: [
+        name: 'Company',
+        items: [
             {
                 title: 'Open Source',
                 link: URL_CONSTANTS.github,
@@ -187,20 +191,60 @@ export const LANDING_DASHBOARD_TABS = [
         title: 'This is placeholder organization text',
         description: "Organization placeholder description lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor.",
         buttonText: 'Explore Organization Metrics',
-        buttonRedirect: '/'
+        linkTo: '/'
     },
     {
         tab: 'Services',
         title: 'Placeholder Services text',
         description: "Services placeholder text lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum.",
         buttonText: 'Explore Service Actions',
-        buttonRedirect: '/'
+        linkTo: '/'
     },
     {
         tab: 'Maintenance',
         title: 'Watch as each piece of maintenance is handled automatically',
         description: "You don't have to be a super computer to manage every piece of your service business. Our system makes every piece of business leadership easy by automating the tasks that don't need manager oversight.",
         buttonText: 'Explore Maintenance Actions',
-        buttonRedirect: '/'
+        linkTo: '/'
+    },
+]
+
+const indicator_colors = {
+    green: '#55F855',
+    blue: '#55F8ED'
+}
+export const ROADMAP_TASKS = [
+    {
+        version: 'V0.1',
+        tasks: [
+            {
+                title: 'Global Account Systems',
+                status: 'In Progress',
+                statusIndicatorColor: indicator_colors.green,
+                linkTo: ''
+            },
+        ]
+    },
+    {
+        version: 'V0.2',
+        tasks: [
+            {
+                title: '',
+                status: '',
+                statusIndicatorColor: '',
+                linkTo: ''
+            },
+        ]
+    },
+    {
+        version: 'V0.3',
+        tasks: [
+            {
+                title: '',
+                status: '',
+                statusIndicatorColor: '',
+                linkTo: ''
+            },
+        ]
     },
 ]

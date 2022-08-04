@@ -5,8 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import "./SystemMessage.css"
 
-const SystemMessage = (props) => {
-    const { message, directTo } = props;
+const SystemMessage = ({message, directTo}) => {
     const [ closed, setClosed ] = useState(false);
 
     const handleClose = () => {
@@ -16,15 +15,17 @@ const SystemMessage = (props) => {
     return (
         <>
             {!closed &&
-                <div className="msg-container">
-                    <a target="_blank" rel="noreferrer" href={directTo}>
-                        <p className="system-msg">
-                            {message}
-                        </p>
-                    </a>
+                <div className="system-msg-container">
+                    <div className="system-msg-link">
+                        <a target="_blank" rel="noreferrer" href={directTo}>
+                            <p className="system-msg">
+                                {message}
+                            </p>
+                        </a>
+                    </div>
 
                     <div className="close">
-                        <IconButton size="small" onClick={handleClose}>
+                        <IconButton className="close-btn" size="small" onClick={handleClose}>
                             <CloseIcon fontSize="inherit"/>
                         </IconButton>
                     </div>

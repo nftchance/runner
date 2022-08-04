@@ -9,13 +9,12 @@ Home:
     ☐ Placeholder too opaque
     ☐ Input opacity is fucky
 ☐ Email error message display
-
-☐ Governance
-    ✔ Formula positioning @done(22-08-03 13:22)
-    ☐ Volume Earning Image in CSS not static svg
+    Put this in the button? (The only error would be Invalid Email)
+☐ Break out the hero and bottom CTA button messages?
+☐ Volume Earning Image in CSS not static svg
 
 Roadmap:
-☐ Dynamic versioning
+☐ Dynamic versioning image on margin
 ☐ Left aligned indicator
 ☐ Cards
 ☐ Status indicators
@@ -38,6 +37,8 @@ OTHER:
     ☐ Opengraph images
 
 ARCHIVE:
+    ✔ Governance @done(22-08-03 15:49)
+    ✔ Formula positioning @done(22-08-03 13:22)
     ✔ Input text is white @done(22-08-03 15:23)
     ✔ CTA @done(22-08-03 15:19)
     ✔ Cards @done(22-08-03 15:18)
