@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -17,10 +16,7 @@ class OrgViewSet(viewsets.ModelViewSet):
 
     permission_classes = [permissions.IsAuthenticated, CanViewOrg]
 
-    def get_queryset(self, *args, **kwargs):
-        if self.action == "use_invitation":
-            return Org.objects.filter(id=self.kwargs["org_id"])
-
+    def get_queryset(self):
         # return organizations of all relationships for request user
         relationships = self.request.user.org_relationships.all()
         return Org.objects.filter(relationships__in=relationships)
@@ -40,9 +36,9 @@ class OrgViewSet(viewsets.ModelViewSet):
         obj = serializer.save()
 
         # create admin relationship object
-        relationship, created = OrgRelationship.objects.get_or_create(
+        relationship = OrgRelationship.objects.get_or_create(
             org=obj, related_user=self.request.user
-        )
+        )[0]
         # assign the admin role
         role = OrgRole.objects.get_or_create(name=Role.ADMIN)[0]
         relationship.role = role
@@ -61,7 +57,7 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
     permission_classes = [permissions.IsAuthenticated, CanManageOrgInvitiation]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         # when they are accepting an invitiation allow it with direct code only
         if self.action == "accept":
             return OrgInvitation.objects.filter(id=self.kwargs["org_invitation_id"])

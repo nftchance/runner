@@ -1,7 +1,5 @@
 from rest_framework import permissions
 
-from .models import OrgInvitation
-
 
 class CanManageOrg(permissions.BasePermission):
     """
@@ -39,16 +37,4 @@ class CanManageOrgInvitiation(permissions.BasePermission):
         if not relationship_obj:
             return False
 
-        return relationship_obj.has_perm("org.manage_orginvitation")
-
-    def has_object_permission(self, request, view, obj):
-        if isinstance(obj, OrgInvitation):
-            relationship_obj = request.user.org_relationships.filter(
-                org=obj.org
-            ).first()
-        else:
-            relationship_obj = request.user.org_relationships.filter(org=obj).first()
-
-        if not relationship_obj:
-            return False
         return relationship_obj.has_perm("org.manage_orginvitation")
