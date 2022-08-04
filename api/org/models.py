@@ -6,20 +6,13 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.itercompat import is_iterable
 
-from utils.uuid import id_generator
+from utils.uuid import OrgIDMixin
 
 from . import backends
 from .utils import Role
 
-class Org(models.Model):
-    def save(self, *args, **kwargs):
-        while not self.id or Org.objects.filter(id=self.id).exists():
-            self.id = id_generator()
 
-        super(Org, self).save(*args, **kwargs)
-
-    id = models.CharField(primary_key=True, max_length=256, blank=True, unique=True)
-
+class Org(OrgIDMixin, models.Model):
     name = models.CharField(max_length=256)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -144,15 +137,7 @@ class OrgRelationship(models.Model):
         ordering = ["created_at"]
 
 
-class OrgInvitation(models.Model):
-    def save(self, *args, **kwargs):
-        while not self.id or OrgInvitation.objects.filter(id=self.id).exists():
-            self.id = id_generator()
-
-        super(OrgInvitation, self).save(*args, **kwargs)
-
-    id = models.CharField(primary_key=True, max_length=256, blank=True, unique=True)
-
+class OrgInvitation(OrgIDMixin, models.Model):
     org = models.ForeignKey(
         "org.Org", null=True, on_delete=models.CASCADE, related_name="invitations"
     )
