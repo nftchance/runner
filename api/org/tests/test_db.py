@@ -13,29 +13,8 @@ from org.utils import Role, load_permissions
 class OrgTestCase(TestCase):
     def setUp(self):
         self.user = create_user()
-        response = self.client.post(
-            reverse("log_in"),
-            data={
-                "username": self.user.username,
-                "password": PASSWORD,
-            },
-        )
-
-        # Parse payload data from access token.
-        self.access = response.data["access"]
-
         self.secondary_user = create_user(username="secondaryuser@example.com")
-        response = self.client.post(
-            reverse("log_in"),
-            data={
-                "username": self.secondary_user.username,
-                "password": PASSWORD,
-            },
-        )
-
-        # Parse payload data from access token.
-        self.secondary_access = response.data["access"]
-
+        
         load_permissions("org", org_permissions)
 
     def test_user_with_revoked_role_is_revoked(self):
@@ -135,3 +114,31 @@ class OrgTestCase(TestCase):
             relationship.get_user_permissions(),
             set()
         )
+
+    def test_user_with_admin_role_has_manage_org_perm(self):
+        org = create_org(self.user)
+        invitation = create_invitation(org, self.user, role=Role.ADMIN)
+        invitation.accept(self.secondary_user)
+
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        self.assertEqual(relationship.role.name, Role.ADMIN)
+
+        # make sure user with admin role has admin permissions
+        self.assertEqual(relationship.has_perm('org.manage_org'), True)
+
+    def test_user_with_admin_role_has_manage_org_perms(self):
+        org = create_org(self.user)
+        invitation = create_invitation(org, self.user, role=Role.ADMIN)
+        invitation.accept(self.secondary_user)
+
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        self.assertEqual(relationship.role.name, Role.ADMIN)
+
+        # make sure user with admin role has admin permissions
+        self.assertEqual(relationship.has_perms(['org.manage_org', 'org.manage_orgrole']), True)
