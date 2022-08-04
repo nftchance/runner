@@ -52,24 +52,47 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.org_relationships.add(relationship)
         self.request.user.save()
 
+
+class OrgInvitationViewSet(viewsets.ModelViewSet):
+    lookup_field = "id"
+    lookup_url_kwarg = "org_invitation_id"
+
+    serializer_class = OrgInvitationSerializer
+
+    permission_classes = [permissions.IsAuthenticated, CanManageOrgInvitiation]
+
+    def get_queryset(self, *args, **kwargs):
+        # when they are accepting an invitiation allow it with direct code only
+        if self.action == "accept":
+            return OrgInvitation.objects.filter(id=self.kwargs["org_invitation_id"])
+
+        # return the invitations for the users organizations
+        return OrgInvitation.objects.filter(
+            org__in=self.request.user.org_relationships.all().values_list(
+                "org", flat=True
+            )
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(invited_by=self.request.user)
+
     @action(
         detail=True,
         methods=["post"],
-        url_path="use_invitation/(?P<org_invitation_id>[^/.]+)",
         permission_classes=[permissions.IsAuthenticated],
     )
-    def use_invitation(self, request, org_id=None, org_invitation_id=None):
-        org_invitation = get_object_or_404(OrgInvitation, id=org_invitation_id)
+    def accept(self, request, **kwargs):
+        org_invitation = self.get_object()
 
-        org = self.get_object()
-
-        if org.pk in request.user.org_relationships.values_list("org__pk", flat=True):
+        if org_invitation.org.pk in request.user.org_relationships.values_list(
+            "org__pk", flat=True
+        ):
             return Response(
                 {"error": "You are already a member of this org."},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if org_invitation.org != org:
+        if org_invitation.org.pk != kwargs["org_id"]:
             return Response(
                 {"error": "This invitation is not for this org."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -87,18 +110,11 @@ class OrgViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path="revoke_invitation/(?P<org_invitation_id>[^/.]+)",
-        permission_classes=[permissions.IsAuthenticated, CanManageOrgInvitiation],
-    )
-    def revoke_invitation(self, request, org_id=None, org_invitation_id=None):
-        org_invitation = get_object_or_404(OrgInvitation, id=org_invitation_id)
+    @action(detail=True, methods=["post"])
+    def revoke(self, request, **kwargs):
+        org_invitation = self.get_object()
 
-        org = self.get_object()
-
-        if org_invitation.org != org:
+        if org_invitation.org.pk != kwargs["org_id"]:
             return Response(
                 {"error": "This invitation is not for this org."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -115,39 +131,3 @@ class OrgViewSet(viewsets.ModelViewSet):
         serializer = OrgInvitationSerializer(org_invitation)
 
         return Response(serializer.data)
-
-
-class OrgInvitationViewSet(viewsets.ModelViewSet):
-    lookup_field = "id"
-    lookup_url_kwarg = "org_invitation_id"
-
-    serializer_class = OrgInvitationSerializer
-
-    permission_classes = [permissions.IsAuthenticated, CanManageOrgInvitiation]
-
-    def get_queryset(self, *args, **kwargs):
-        return OrgInvitation.objects.filter(
-            org__in=self.request.user.org_relationships.all().values_list(
-                "org", flat=True
-            )
-        )
-
-    # Allow only admins to see all, create, or destory invitiations however
-    # any authenticated user can accept a pending invitation.
-    def get_permissions(self):
-        return [permission() for permission in self.permission_classes]
-
-    # when a new invitation is created check if the request user is an admin of the org
-    # if not, then the response is a 403 error.
-    def create(self, request, *args, **kwargs):
-        # if request org not in request user orgs, then return 403
-        if not request.user.org_relationships.filter(org=request.data["org"]).exists():
-            return Response(
-                {"error": "You are not an admin of this org."},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return super().create(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        serializer.save(invited_by=self.request.user)

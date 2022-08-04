@@ -177,7 +177,7 @@ class OrgInvitation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
-        return reverse("org-invitation-detail", kwargs={"org_invitation_id": self.pk})
+        return reverse("org-invitation-detail", kwargs={"org_id": self.org.pk, "org_invitation_id": self.pk})
 
     # Add the invited user to the org
     def accept(self, user):

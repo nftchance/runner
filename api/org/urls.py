@@ -4,6 +4,6 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'org', views.OrgViewSet, basename='org')
-router.register('org-invitation', views.OrgInvitationViewSet, basename='org-invitation')
+router.register(r'org/(?P<org_id>[^/.]+)/org-invitation', views.OrgInvitationViewSet, basename='org-invitation')
 
 urlpatterns = router.urls

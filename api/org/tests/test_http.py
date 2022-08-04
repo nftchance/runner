@@ -10,6 +10,7 @@ from org.models import Org, OrgInvitation
 from org.permission_constants import org_permissions
 from org.utils import Role, load_permissions
 
+
 class HttpTest(APITestCase):
     def setUp(self):
         self.user = create_user()
@@ -130,8 +131,7 @@ class HttpTest(APITestCase):
     def test_user_can_create_invitation_own_org(self):
         org = create_org(self.user, name="The Best of Times")
         response = self.client.post(
-            reverse("org-invitation-list"),
-            data={"org": org.id},
+            reverse("org-invitation-list", kwargs={"org_id": org.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
 
@@ -148,7 +148,8 @@ class HttpTest(APITestCase):
         ]
 
         response = self.client.get(
-            reverse("org-invitation-list"), HTTP_AUTHORIZATION=f"Bearer {self.access}"
+            reverse("org-invitation-list", kwargs={"org_id": org.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         exp_inv_ids = [str(invitation.id) for invitation in invitations]
@@ -189,8 +190,7 @@ class HttpTest(APITestCase):
         org = create_org(self.secondary_user, name="The Best of Times")
 
         response = self.client.post(
-            reverse("org-invitation-list"),
-            data={"org": org.id},
+            reverse("org-invitation-list", kwargs={"org_id": org.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
@@ -199,10 +199,10 @@ class HttpTest(APITestCase):
         org = create_org(self.secondary_user, name="The Best of Times")
         self.assertEqual(OrgInvitation.objects.count(), 0)
         response = self.client.get(
-            reverse("org-invitation-list"), HTTP_AUTHORIZATION=f"Bearer {self.access}"
+            reverse("org-invitation-list", kwargs={"org_id": org.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, [])
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_cannot_retrieve_other_invitations(self):
         org = create_org(self.secondary_user, name="The Best of Times")
@@ -210,8 +210,7 @@ class HttpTest(APITestCase):
         response = self.client.get(
             invitation.get_absolute_url(), HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-        self.assertEqual(response.data.get("id"), None)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_cannot_update_other_invitations(self):
         org = create_org(self.secondary_user, name="The Best of Times")
@@ -221,8 +220,7 @@ class HttpTest(APITestCase):
             data={"expires_at": "2020-01-01T00:00:00Z"},
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-        self.assertEqual(response.data.get("id"), None)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_cannot_delete_other_invitations(self):
         org = create_org(self.secondary_user, name="The Best of Times")
@@ -231,15 +229,13 @@ class HttpTest(APITestCase):
         response = self.client.delete(
             invitation.get_absolute_url(), HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
-        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
-        self.assertEqual(response.data.get("id"), None)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_cannot_create_invitation_for_other_org_with_wrong_token(self):
         org = create_org(self.secondary_user, name="The Best of Times")
 
         response = self.client.post(
-            reverse("org-invitation-list"),
-            data={"org": org.id},
+            reverse("org-invitation-list", kwargs={'org_id': org.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
@@ -249,7 +245,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user)
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -266,7 +262,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user, role="team")
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -283,7 +279,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user, role="manager")
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -300,7 +296,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user, role="admin")
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -317,7 +313,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user)
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -325,7 +321,7 @@ class HttpTest(APITestCase):
         invitation = create_invitation(org, self.user)
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -343,15 +339,12 @@ class HttpTest(APITestCase):
 
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": secondary_invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
         )
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            response.data.get("error"), "This invitation is not for this org."
-        )
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_cannot_use_invitation_twice(self):
         org = create_org(self.user, name="The Best of Times")
@@ -371,7 +364,7 @@ class HttpTest(APITestCase):
 
         response = self.client.post(
             reverse(
-                "org-use-invitation",
+                "org-invitation-accept",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.tertiary_access}",
@@ -383,7 +376,7 @@ class HttpTest(APITestCase):
             response.data.get("error"),
             "This invitation has already been used.",
         )
-    
+
     def test_user_can_revoke_invitation_of_own_org(self):
         org = create_org(self.user, name="The Best of Times")
         invitation = create_invitation(org, self.user)
@@ -394,7 +387,7 @@ class HttpTest(APITestCase):
         # revoke invitation
         response = self.client.post(
             reverse(
-                "org-revoke-invitation",
+                "org-invitation-revoke",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
@@ -413,7 +406,7 @@ class HttpTest(APITestCase):
         # revoke invitation
         response = self.client.post(
             reverse(
-                "org-revoke-invitation",
+                "org-invitation-revoke",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
@@ -430,7 +423,7 @@ class HttpTest(APITestCase):
         # revoke invitation
         response = self.client.post(
             reverse(
-                "org-revoke-invitation",
+                "org-invitation-revoke",
                 kwargs={"org_id": org.id, "org_invitation_id": 'CA9',}
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
@@ -448,13 +441,12 @@ class HttpTest(APITestCase):
         # revoke invitation
         response = self.client.post(
             reverse(
-                "org-revoke-invitation",
+                "org-invitation-revoke",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(response.data.get('error'), 'This invitation is not for this org.')
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_user_cannot_revoke_invitation_twice(self):
         org = create_org(self.user, name="The Best of Times")
@@ -463,10 +455,10 @@ class HttpTest(APITestCase):
         # accept invitation
         invitation.accept(self.secondary_user)
         invitation.revoke()
-        
+
         response = self.client.post(
             reverse(
-                "org-revoke-invitation",
+                "org-invitation-revoke",
                 kwargs={"org_id": org.id, "org_invitation_id": invitation.id},
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
@@ -476,5 +468,5 @@ class HttpTest(APITestCase):
             response.data.get("error"), "This invitation has already been revoked."
         )
 
-    # test for all the access related things related to permissions
-    # todo: add test to make sure that someone can change the role of user in an org.
+    # # test for all the access related things related to permissions
+    # # todo: add test to make sure that someone can change the role of user in an org.
