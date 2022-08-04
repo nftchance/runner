@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Org, OrgInvitation, OrgRelationship, OrgRole
 
+
 @admin.register(Org)
 class OrgAdmin(admin.ModelAdmin):
     fields = (
@@ -10,16 +11,9 @@ class OrgAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-    list_display = (
-        "id",
-        "name",
-        "updated_at"
-    )
-    readonly_fields = ( 
-        "id",
-        "created_at",
-        "updated_at"
-    )
+    list_display = ("id", "name", "updated_at")
+    readonly_fields = ("id", "created_at", "updated_at")
+
 
 @admin.register(OrgInvitation)
 class OrgInvitationAdmin(admin.ModelAdmin):
@@ -46,7 +40,7 @@ class OrgInvitationAdmin(admin.ModelAdmin):
         "revoked_at",
         "updated_at",
     )
-    readonly_fields = ( 
+    readonly_fields = (
         "id",
         "invited_by",
         "created_at",
@@ -54,6 +48,7 @@ class OrgInvitationAdmin(admin.ModelAdmin):
         "accepted_at",
         "revoked_at",
     )
+
 
 @admin.register(OrgRelationship)
 class OrgRelationshipAdmin(admin.ModelAdmin):
@@ -74,11 +69,12 @@ class OrgRelationshipAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-    readonly_fields = ( 
+    readonly_fields = (
         "id",
         "created_at",
         "updated_at",
     )
+
 
 @admin.register(OrgRole)
 class OrgRoleAdmin(admin.ModelAdmin):
@@ -91,6 +87,4 @@ class OrgRoleAdmin(admin.ModelAdmin):
         "id",
         "name",
     )
-    readonly_fields = ( 
-        "id",
-    )
+    readonly_fields = ("id",)
