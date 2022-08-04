@@ -142,3 +142,75 @@ class OrgTestCase(TestCase):
 
         # make sure user with admin role has admin permissions
         self.assertEqual(relationship.has_perms(['org.manage_org', 'org.manage_orgrole']), True)
+
+    def test_user_with_manager_role_has_revoked_perms_after_being_revoked(self):
+        org = create_org(self.user)
+        invitation = create_invitation(org, self.user, role=Role.MANAGER)
+        invitation.accept(self.secondary_user)
+
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        self.assertEqual(relationship.role.name, Role.MANAGER)
+
+        # make sure user with manager role has manager permissions
+        self.assertEqual(
+            relationship.get_all_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation'}
+        )
+        self.assertEqual(
+            relationship.get_role_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation'}
+        )
+        self.assertEqual(
+            relationship.get_user_permissions(),
+            set()
+        )
+
+        # revoke manager role
+        relationship.revoke()
+
+        # have to refresh from database to clear cached permissions
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        # make sure user with revoked role has no permissions at all
+        self.assertEqual(relationship.get_all_permissions(), set())
+
+    def test_user_with_admin_role_has_revoked_perms_after_being_revoked(self):
+        org = create_org(self.user)
+        invitation = create_invitation(org, self.user, role=Role.ADMIN)
+        invitation.accept(self.secondary_user)
+
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        self.assertEqual(relationship.role.name, Role.ADMIN)
+
+        # make sure user with admin role has admin permissions
+        self.assertEqual(
+            relationship.get_all_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation', 'org.manage_org'}
+        )
+        self.assertEqual(
+            relationship.get_role_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation', 'org.manage_org'}
+        )
+        self.assertEqual(
+            relationship.get_user_permissions(),
+            set()
+        )
+
+        # revoke admin role
+        relationship.revoke()
+
+        # have to refresh from database to clear cached permissions
+        relationship = OrgRelationship.objects.get(
+            org=org, related_user=self.secondary_user
+        )
+
+        # make sure user with revoked role has no permissions at all
+        self.assertEqual(relationship.get_all_permissions(), set())

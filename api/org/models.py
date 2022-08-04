@@ -78,7 +78,6 @@ class OrgRole(models.Model):
     class Meta:
         ordering = ["name"]
 
-
 def _get_role():
     return OrgRole.objects.get_or_create(name="revoked")[0]
 
@@ -138,6 +137,11 @@ class OrgRelationship(models.Model):
 
     def has_module_perms(self, app_label):
         return backends.user_has_module_perms(self, app_label)
+
+    def revoke(self):
+        self.role = _get_role()
+        self.permissions.clear()
+        self.save()
 
     class Meta:
         ordering = ["created_at"]
