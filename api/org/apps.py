@@ -10,5 +10,6 @@ class OrgConfig(AppConfig):
     name = "org"
 
     def ready(self):
-        # load the custom permission framework
-        load_permissions("org", org_permissions)
+        if os.environ.get("RUN_MAIN"):
+            # load the custom permission framework
+            load_permissions("org", org_permissions)

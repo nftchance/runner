@@ -98,13 +98,17 @@ class OrgTestCase(TestCase):
         self.assertEqual(relationship.role.name, Role.MANAGER)
 
         # make sure user with manager role has manager permissions
-        self.assertNotEqual(
-            relationship.get_all_permissions(),
-            set(),
-        )
         self.assertEqual(
             relationship.get_all_permissions(),
             {'org.manage_orgrole', 'org.manage_orginvitation'}
+        )
+        self.assertEqual(
+            relationship.get_role_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation'}
+        )
+        self.assertEqual(
+            relationship.get_user_permissions(),
+            set()
         )
 
     def test_user_with_admin_role_has_admin_permissions(self):
@@ -119,11 +123,15 @@ class OrgTestCase(TestCase):
         self.assertEqual(relationship.role.name, Role.ADMIN)
 
         # make sure user with admin role has admin permissions
-        self.assertNotEqual(
-            relationship.get_all_permissions(),
-            set(),
-        )
         self.assertEqual(
             relationship.get_all_permissions(),
             {'org.manage_orgrole', 'org.manage_orginvitation', 'org.manage_org'}
+        )
+        self.assertEqual(
+            relationship.get_role_permissions(),
+            {'org.manage_orgrole', 'org.manage_orginvitation', 'org.manage_org'}
+        )
+        self.assertEqual(
+            relationship.get_user_permissions(),
+            set()
         )
