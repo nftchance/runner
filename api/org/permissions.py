@@ -1,33 +1,41 @@
 from rest_framework import permissions
 
-from .utils import Role
+from .models import OrgInvitation
 
-class IsOrgAdmin(permissions.BasePermission):
+class CanManageOrg(permissions.BasePermission):
     """
-    Object-level permission to only allow owners of an object to edit it.
-    Assumes the model instance has an `admin` attribute.
-    """
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.org_relationships.get(org=obj).role.name == Role.ADMIN
-
-
-class IsOrgMember(permissions.BasePermission):
-    """
-    Object-level permission to only allow members of an organization to read 
-    the object.
+    Make sure that only the select few permitted can manage the top-level of an org.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Determine if user is admin of or in org being accessed
-        return obj.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)
+        relationship_obj = request.user.org_relationships.filter(org=obj).first()
+        if not relationship_obj:
+            return False
+        return relationship_obj.has_perm('org.manage_org')
 
-class IsOrgMemberForInvitation(permissions.BasePermission):
+
+class CanViewOrg(permissions.BasePermission):
     """
-    Object-level permission to only allow members of an organization to read 
-    the object.
+    Make sure that a user has the permission to view an organizations data.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Determine if user is admin of or in org being accessed
-        return obj.org.pk in request.user.org_relationships.all().values_list('org__pk', flat=True)
+        relationship_obj = request.user.org_relationships.filter(org=obj).first()
+        if not relationship_obj:
+            return False
+        return relationship_obj.has_perm('org.view_org')
+
+class CanManageOrgInvitiation(permissions.BasePermission):
+    """
+    Make sure that the requesting user has the ability to control invitations for an org.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if isinstance(obj, OrgInvitation):
+            relationship_obj = request.user.org_relationships.filter(org=obj.org).first()
+        else: 
+            relationship_obj = request.user.org_relationships.filter(org=obj).first()
+        
+        if not relationship_obj:
+            return False
+        return relationship_obj.has_perm('org.manage_orginvitation')

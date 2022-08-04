@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Org, OrgInvitation, OrgRelationship, OrgRole
-from .permissions import IsOrgAdmin, IsOrgMember, IsOrgMemberForInvitation
+from .permissions import CanManageOrg, CanViewOrg, CanManageOrgInvitiation
 from .serializers import OrgSerializer, OrgInvitationSerializer
 from .utils import Role
 
@@ -15,7 +15,7 @@ class OrgViewSet(viewsets.ModelViewSet):
 
     serializer_class = OrgSerializer
 
-    permission_classes = [permissions.IsAuthenticated, IsOrgMember]
+    permission_classes = [permissions.IsAuthenticated, CanViewOrg]
 
     def get_queryset(self, *args, **kwargs):
         if self.action == "use_invitation":
@@ -31,7 +31,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         admin_actions = ["update", "destroy"]
 
         if self.action in admin_actions:
-            self.permission_classes.append(IsOrgAdmin)
+            self.permission_classes.append(CanManageOrg)
 
         return [permission() for permission in self.permission_classes]
 
@@ -91,7 +91,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         detail=True,
         methods=["post"],
         url_path="revoke_invitation/(?P<org_invitation_id>[^/.]+)",
-        permission_classes=[permissions.IsAuthenticated, IsOrgAdmin],
+        permission_classes=[permissions.IsAuthenticated, CanManageOrgInvitiation],
     )
     def revoke_invitation(self, request, org_id=None, org_invitation_id=None):
         org_invitation = get_object_or_404(OrgInvitation, id=org_invitation_id)
@@ -123,7 +123,7 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
     serializer_class = OrgInvitationSerializer
 
-    permission_classes = [permissions.IsAuthenticated, IsOrgMemberForInvitation]
+    permission_classes = [permissions.IsAuthenticated, CanManageOrgInvitiation]
 
     def get_queryset(self, *args, **kwargs):
         return OrgInvitation.objects.filter(

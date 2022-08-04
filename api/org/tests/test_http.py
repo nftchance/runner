@@ -7,7 +7,8 @@ from utils.tests.org import create_org, create_invitation
 from utils.tests.user import PASSWORD, create_user
 
 from org.models import Org, OrgInvitation
-
+from org.permission_constants import org_permissions
+from org.utils import Role, load_permissions
 
 class HttpTest(APITestCase):
     def setUp(self):
@@ -34,6 +35,8 @@ class HttpTest(APITestCase):
 
         # Parse payload data from access token.
         self.secondary_access = response.data["access"]
+
+        load_permissions("org", org_permissions)
 
     def test_user_can_create_org(self):
         response = self.client.post(
