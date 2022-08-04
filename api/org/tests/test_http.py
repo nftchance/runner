@@ -45,7 +45,6 @@ class HttpTest(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(response.data["id"], org.id)
         self.assertEqual(response.data["name"], org.name)
-        self.assertEqual(response.data["admin"], org.admin.id)
 
     def test_user_can_list_own_orgs(self):
         orgs = [
@@ -475,4 +474,4 @@ class HttpTest(APITestCase):
         )
 
     # test for all the access related things related to permissions
-    
+    # todo: add test to make sure that someone can change the role of user in an org.

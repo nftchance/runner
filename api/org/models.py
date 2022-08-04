@@ -22,10 +22,6 @@ class Org(models.Model):
 
     name = models.CharField(max_length=256)
 
-    admin = models.ForeignKey(
-        "user.User", null=True, on_delete=models.CASCADE, related_name="admin"
-    )
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

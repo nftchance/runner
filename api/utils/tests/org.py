@@ -3,7 +3,7 @@ from org.utils import Role
 
 def create_org(admin, name="Simpler Times"):
     # create the org
-    org = Org.objects.create(name=name, admin=admin)
+    org = Org.objects.create(name=name)
     
     # get the admin role object
     role_obj = OrgRole.objects.get_or_create(name=Role.ADMIN)[0]

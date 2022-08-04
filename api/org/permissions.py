@@ -1,5 +1,7 @@
 from rest_framework import permissions
 
+from .utils import Role
+
 class IsOrgAdmin(permissions.BasePermission):
     """
     Object-level permission to only allow owners of an object to edit it.
@@ -7,7 +9,7 @@ class IsOrgAdmin(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        return obj.admin == request.user
+        return request.user.org_relationships.get(org=obj).role.name == Role.ADMIN
 
 
 class IsOrgMember(permissions.BasePermission):

@@ -37,7 +37,7 @@ class OrgViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         # save the new org into the database
-        obj = serializer.save(admin=self.request.user)
+        obj = serializer.save()
 
         # create admin relationship object
         relationship, created = OrgRelationship.objects.get_or_create(
