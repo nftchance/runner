@@ -1,5 +1,6 @@
 """
 Permissions managed:
+- View Org
 - Manage Org
 - Manage Org Roles
 - Manage Org Invitations

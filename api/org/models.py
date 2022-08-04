@@ -32,8 +32,6 @@ class Org(models.Model):
         ordering = ["created_at"]
         permissions = (
             ("manage_org", "Can manage organization"),
-            ("manage_orgrole", "Can manage organization roles of other users"),
-            ("manage_orginvitation", "Can manage organization invitations"),
         )
 
 
@@ -73,6 +71,9 @@ class OrgRole(models.Model):
 
     class Meta:
         ordering = ["name"]
+        permissions = (
+            ("manage_orgrole", "Can manage organization roles of other users"),
+        )
 
 def _get_role():
     return OrgRole.objects.get_or_create(name="revoked")[0]
@@ -215,3 +216,6 @@ class OrgInvitation(models.Model):
 
     class Meta:
         ordering = ["created_at"]
+        permissions = (
+            ("manage_orginvitation", "Can manage organization invitations"),
+        )

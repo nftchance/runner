@@ -80,9 +80,7 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
     def accept(self, request, **kwargs):
         org_invitation = self.get_object()
 
-        if org_invitation.org.pk in request.user.org_relationships.values_list(
-            "org__pk", flat=True
-        ):
+        if request.user.org_relationships.filter(org__pk=kwargs["org_id"]).exists():
             return Response(
                 {"error": "You are already a member of this org."},
                 status=status.HTTP_403_FORBIDDEN,

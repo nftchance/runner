@@ -344,7 +344,7 @@ class HttpTest(APITestCase):
             ),
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
         )
-        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_user_cannot_use_invitation_twice(self):
         org = create_org(self.user, name="The Best of Times")
