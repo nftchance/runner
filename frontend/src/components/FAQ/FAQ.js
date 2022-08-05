@@ -1,15 +1,15 @@
 import AccordionPanel from "@components/Accordion/AccordionPanel";
 import Page from "@components/Page/Page";
 
-import { FAQ_ITEMS } from "@components/Constants/constants";
+import { FAQ_ITEMS } from "@components/Constants/copy";
 import "./FAQ.css";
 
 const FAQ = () => {
     return (
         <Page>
-            <div className="faq-headline">
+            <div className="headline">
                 <h1>Join us in the run towards a better future <br />of service business management.</h1>
-                <h5>
+                <h5 className="subtitle">
                     Runner is an open source and community led service business automation tool. 
                     Modernize your business with automation, asynchronous task completion, 
                     customer onboarding forms and more.

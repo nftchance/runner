@@ -1,7 +1,11 @@
-☐ Tests for compilation
-☐ Helmet for each page
-☐ manifest
-☐ base.html set up
+General:
+    ☐ Tests for compilation
+    ☐ Helmet for each page
+    ☐ manifest
+    ☐ base.html set up
+    ☐ Responsivity of descriptions in cards
+        Not sure how to handle this just yet.
+        We need them to be the same height regardless of how many lines the description takes up
 
 Home:
 ☐ Hero img positioning responsiveness
@@ -27,11 +31,12 @@ Governance:
     ☐ Vote Status
 
     Proposals:
-
+    
 
 FAQ:
     ✔ Dropdown @done(22-08-05 10:12)
     ☐ Copywriting
+    ☐ Accordion on hover effects
 
 OTHER:
     ☐ Opengraph images

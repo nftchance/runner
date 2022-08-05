@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./SystemMessage.css"
 

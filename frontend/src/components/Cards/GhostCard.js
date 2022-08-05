@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TextButton from "@components/Buttons/TextButton";
-import "./GhostCard.css"
+import "./GhostCard.css";
 
 const GhostCard = (
     {

@@ -4,11 +4,16 @@
   --darkest: #1C1C1C;
   --dark: #272727;
   --dark-border: #3D3D3D;
+  --light-border: #707070;
   --yellow: #EFF855;
   --dark-yellow: #BEC729;
 
   --green: #55F855;
+  --dark-green: #29C72E;
+  --red: #F85555;
+  --dark-red: #C72929;
   --light-blue: #55F8ED;
+  --dark-blue: #29C2C7;
 
   --page-margins: 140px;
 }
@@ -98,6 +103,21 @@ p {
 
 .hidden {
   display: none;
+}
+
+.headline {
+  margin-top: 200px;
+  margin-bottom: 180px;
+}
+
+.headline > .subtitle {
+  width: 40%;
+  margin-top: 50px;
+  margin-bottom: 60px;
+}
+
+.headline > .btn-secondary {
+  height: 36px;
 }
 
 @media screen and (max-width: 600px) {

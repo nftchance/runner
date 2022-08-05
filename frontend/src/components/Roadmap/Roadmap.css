@@ -10,21 +10,6 @@
     margin-left: calc(-1 * var(--page-margins));
 }
 
-.roadmap-headline {
-    margin-top: 200px;
-    margin-bottom: 180px;
-}
-
-.roadmap-headline > h5 {
-    width: 40%;
-    margin-top: 50px;
-    margin-bottom: 60px;
-}
-
-.roadmap-headline > .btn-secondary {
-    height: 36px;
-}
-
 .version-subtitle {
     margin-bottom: 10px;
 }

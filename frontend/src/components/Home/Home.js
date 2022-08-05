@@ -14,23 +14,23 @@ import dashboard from "@images/landing/dashboard.svg";
 
 import { 
     LANDING_CATEGORIES, LANDING_MODULES, LANDING_DASHBOARD_TABS 
-} from "@components/Constants/constants";
+} from "@components/Constants/copy";
 
 import "./Home.css";
 
 const Home = () => {
     let navigate = useNavigate();
 
-    const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState('Join Waitlist');
-    const [ dashboardTab, setDashboardTab ] = useState('Maintenance');
+    const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState("Join Waitlist");
+    const [ dashboardTab, setDashboardTab ] = useState("Maintenance");
 
     const handleJoinWaitlist = () => {
         // validate email? or handle on backend
         var valid = true;
         if (!valid) 
-            setJoinWaitlistMsg('Invalid Email!');
+            setJoinWaitlistMsg("Invalid Email!");
         else
-            setJoinWaitlistMsg('✔️ Joined')
+            setJoinWaitlistMsg("✔️ Joined")
     }
 
     return (
@@ -39,7 +39,7 @@ const Home = () => {
                 <div className="hero-text">
                     <h1>Revolutionize your service business<br /> with</h1>
                     <h1 className="yellow"> automation tools of 2032.</h1>
-                    <div className="shadow-text">No we're not time travelers.</div>
+                    <div className="shadow-text">No we"re not time travelers.</div>
 
                     <h5>
                         Runner is an open source and community led service business automation tool. 
@@ -47,9 +47,9 @@ const Home = () => {
                         customer onboarding forms and more.
                     </h5>
 
-                    <div className='email-signup'>
+                    <div className="email-signup">
                         <TextFieldInline
-                            placeholder='Email address...'
+                            placeholder="Email address..."
                         />
                         <PrimaryButton
                             text={joinWaitlistMsg}
@@ -68,7 +68,7 @@ const Home = () => {
                                     title={category.title}
                                     description={category.description}
                                     icon={category.icon}
-                                    buttonText={'Learn more'}
+                                    buttonText={"Learn more"}
                                     buttonOnClick={() => navigate(category.link)}
                                 />
                             </div>
@@ -86,8 +86,8 @@ const Home = () => {
 
                     <div className="modules-btn">
                         <SecondaryButton
-                            text='View all features'
-                            onClick={() => navigate('/features')}
+                            text="View all features"
+                            onClick={() => navigate("/features")}
                         />
                     </div>
                 </div>
@@ -101,10 +101,10 @@ const Home = () => {
                                     description={mod.description}
                                     provider={mod.provider}
                                     providerLogo={mod.providerLogo}
-                                    primaryBtnText='Enable'
-                                    // primaryBtnOnClick={}
-                                    secondaryBtnText='Launch demo'
-                                    // secondaryBtnOnClick={}
+                                    primaryBtnText="Enable"
+                                    primaryBtnOnClick={() => navigate(mod.linkTo)}
+                                    secondaryBtnText="Launch demo"
+                                    secondaryBtnOnClick={() => navigate(mod.linkTo)}
                                 />
                             </div>
                         ))}
@@ -122,24 +122,24 @@ const Home = () => {
                             <div className="dashboard-tabs">
                                 <div className="dashboard-tab">
                                     <button 
-                                        className={dashboardTab === 'Organization' ? "active" : ""}
-                                        onClick={() => setDashboardTab('Organization')}
+                                        className={dashboardTab === "Organization" ? "active" : ""}
+                                        onClick={() => setDashboardTab("Organization")}
                                     >
                                         <p>Organization</p>
                                     </button>
                                 </div>
                                 <div className="dashboard-tab">
                                     <button 
-                                        className={dashboardTab === 'Services' ? "active" : ""}                                        
-                                        onClick={() => setDashboardTab('Services')}
+                                        className={dashboardTab === "Services" ? "active" : ""}                                        
+                                        onClick={() => setDashboardTab("Services")}
                                     >
                                         <p>Services</p>
                                     </button>
                                 </div>
                                 <div className="dashboard-tab">
                                     <button 
-                                        className={dashboardTab === 'Maintenance' ? "active" : ""}                                                                            
-                                        onClick={() => setDashboardTab('Maintenance')}
+                                        className={dashboardTab === "Maintenance" ? "active" : ""}                                                                            
+                                        onClick={() => setDashboardTab("Maintenance")}
                                     >
                                         <p>Maintenance</p>
                                     </button>
@@ -156,7 +156,7 @@ const Home = () => {
                                         description={tab.description}
                                         buttonText={tab.buttonText}
                                         buttonOnClick={() => navigate(tab.linkTo)}
-                                        titleStyle={{fontSize: '20px'}}
+                                        titleStyle={{fontSize: "20px"}}
                                         noIcon={true}
                                     />
                                 </div>
@@ -172,7 +172,7 @@ const Home = () => {
                     <div className="governance-headline">
                         <h3>Volume driven platform governance and influence</h3>
                         <p className="formula">
-                            {'$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 100000'}
+                            {"$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 100000"}
                         </p>
                     </div>
 
@@ -184,12 +184,12 @@ const Home = () => {
                         
                     <div className="btn-wrapper">
                         <PrimaryButton
-                            text='View Governance Portal'
-                            onClick={() => navigate('/roadmap')}
+                            text="View Governance Portal"
+                            onClick={() => navigate("/roadmap")}
                         />
                         <SecondaryButton
-                            text='Learn More'
-                            onClick={() => navigate('/governance')}
+                            text="Learn More"
+                            onClick={() => navigate("/governance")}
                         />
                     </div>
 
@@ -200,9 +200,9 @@ const Home = () => {
                     <h1>Prevent your business from withering.</h1>
                     <h1 className="yellow">Modernize it now.</h1>
 
-                    <div className='cta-email email-signup'>
+                    <div className="cta-email email-signup">
                         <TextFieldInline
-                            placeholder={'Email address...'}
+                            placeholder={"Email address..."}
                         />
                         <PrimaryButton
                             text={joinWaitlistMsg}

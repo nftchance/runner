@@ -1,7 +1,7 @@
 import PrimaryButton from "@components/Buttons/PrimaryButton";
 import SecondaryButton from "@components/Buttons/SecondaryButton";
 
-import "./ModuleCard.css"
+import "./ModuleCard.css";
 
 const ModuleCard = (
     {

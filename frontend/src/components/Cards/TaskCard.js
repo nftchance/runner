@@ -1,6 +1,6 @@
 import SecondaryButton from "@components/Buttons/SecondaryButton";
 
-import "./TaskCard.css"
+import "./TaskCard.css";
 
 // NOTE: Maybe try to find a way to break out taskCard to allow it to handle TaskCard usage.
 

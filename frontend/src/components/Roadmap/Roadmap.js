@@ -4,9 +4,11 @@ import Page from "@components/Page/Page";
 import PrimaryButton from "@components/Buttons/PrimaryButton";
 import SecondaryButton from "@components/Buttons/SecondaryButton";
 import TaskCard from "@components/Cards/TaskCard";
-
-import { URL_CONSTANTS, ROADMAP_TASKS } from "@components/Constants/constants";
 import RoadmapIndicator from "@images/roadmap-indicator.svg"
+
+import { ROADMAP_TASKS } from "@components/Constants/copy";
+import { URL_CONSTANTS } from "@components/Constants/constants";
+
 import "./Roadmap.css";
 
 const Roadmap = () => {
@@ -14,16 +16,16 @@ const Roadmap = () => {
 
     return (
         <Page>
-            <div className="roadmap-headline">
+            <div className="headline">
                 <h1>Join us in the run towards a better future <br />of service business management.</h1>
-                <h5>
+                <h5 className="subtitle">
                     Runner is an open source and community led service business automation tool. 
                     Modernize your business with automation, asynchronous task completion, 
                     customer onboarding forms and more.
                 </h5>
                 <SecondaryButton
-                    text={'View on Github'}
-                    onClick={() => window.open(URL_CONSTANTS.github, '_blank', 'noreferrer')}
+                    text={"View on Github"}
+                    onClick={() => window.open(URL_CONSTANTS.github, "_blank", "noreferrer")}
                 />
             </div>
             <div className="roadmap">
@@ -46,7 +48,7 @@ const Roadmap = () => {
                                     description={task.description}
                                     status={task.status}
                                     statusIndicatorColor={task.statusIndicatorColor}
-                                    buttonText='View task'
+                                    buttonText="View task"
                                     buttonOnClick={() => navigate(task.linkTo)}
                                 />
                             ))}
@@ -64,8 +66,8 @@ const Roadmap = () => {
                         section to vote on the direction of upcoming developments.
                     </h6>
                     <PrimaryButton
-                        text={'View Governance Portal'}
-                        onClick={() => navigate('/governance')}
+                        text={"View Governance Portal"}
+                        onClick={() => navigate("/governance")}
                     />
                 </div>
             </div>

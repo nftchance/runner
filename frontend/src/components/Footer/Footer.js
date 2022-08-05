@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-import { URL_CONSTANTS, FOOTER_ITEMS } from "@components/Constants/constants";
+import { URL_CONSTANTS } from "@components/Constants/constants";
+import { FOOTER_ITEMS } from "@components/Constants/copy";
 
 import "./Footer.css";
 
@@ -51,7 +52,7 @@ const Footer = () => {
                             {category.items.map((item, idx) => (
                                 <li key={`${item.title}-${idx}`}>
                                     {item.external ? 
-                                        <a href={item.link} className="footer-link" target='_blank' rel='noreferrer'>
+                                        <a href={item.link} className="footer-link" target="_blank" rel="noreferrer">
                                             <p>{item.title}</p>
                                         </a>
                                         :

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { URL_CONSTANTS } from "@components/Constants/constants";
 
@@ -40,7 +40,7 @@ const Navbar = () => {
                 <a className="nav-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
                     <div className="text-with-icon">
                         <div className="img-container">
-                            <FontAwesomeIcon icon={["fal", "star"]} style={{color: 'inherit'}} />
+                            <FontAwesomeIcon icon={["fal", "star"]} style={{color: "inherit"}} />
                         </div>
                         <span className="nav-item">Star on GitHub</span>
                     </div>
