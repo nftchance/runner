@@ -1,0 +1,14 @@
+.faq-headline {
+    margin-top: 200px;
+    margin-bottom: 100px;
+}
+
+.faq-headline > h5 {
+    width: 40%;
+    margin-top: 100px;
+    margin-bottom: 60px;
+}
+
+.faq-accordion {
+    margin-bottom: 180px;
+}

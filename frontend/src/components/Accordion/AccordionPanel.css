@@ -1,0 +1,26 @@
+.accordion {
+    background-color: transparent;
+    box-shadow: none;
+    margin: 0px;
+}
+
+.accordion::before {
+    position: inherit;
+}
+
+.accordion-summary {
+    height: 100px;
+    padding-left: 0px;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.accordion-details {
+    padding-left: 0px;
+    white-space: pre-wrap;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.expand-icon {
+    color: #FFFFFF;
+    opacity: 0.65;
+}

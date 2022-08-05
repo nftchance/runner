@@ -14,10 +14,10 @@ Home:
 ☐ Volume Earning Image in CSS not static svg
 
 Roadmap:
-☐ Dynamic versioning image on margin
-☐ Left aligned indicator
-☐ Cards
-☐ Status indicators
+✔ Dynamic versioning image on margin @done(22-08-05 10:12)
+☐ Left aligned indicator put into CSS
+✔ Cards @done(22-08-05 10:12)
+✔ Status indicators @done(22-08-05 10:12)
 
 Governance:
     ☐ Cards
@@ -30,7 +30,7 @@ Governance:
 
 
 FAQ:
-    ☐ Dropdown
+    ✔ Dropdown @done(22-08-05 10:12)
     ☐ Copywriting
 
 OTHER:
