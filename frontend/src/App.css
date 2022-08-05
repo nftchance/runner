@@ -7,6 +7,9 @@
   --yellow: #EFF855;
   --dark-yellow: #BEC729;
 
+  --green: #55F855;
+  --light-blue: #55F8ED;
+
   --page-margins: 140px;
 }
 
@@ -27,12 +30,14 @@ h1 {
   color: #FFFFFF;
   font-size: 48px;
   font-weight: 500;
+  line-height: 68px;
 }
 
 h3 {
   color: #FFFFFF;
   font-size: 24px;
   font-weight: 500;
+  line-height: 34px;
 }
 
 h4 {
@@ -46,6 +51,7 @@ h5 {
   font-size: 18px;
   opacity: 0.65;
   font-weight: 500;
+  line-height: 26px;
 }
 
 h6 {
@@ -53,6 +59,7 @@ h6 {
   font-size: 16px;
   opacity: 0.65;
   font-weight: 500;
+  line-height: 22px;
 }
 
 p {
@@ -60,6 +67,7 @@ p {
   opacity: 0.65;
   font-size: 14px;
   font-weight: 500;
+  line-height: 20px;
 }
 
 ::-webkit-scrollbar {

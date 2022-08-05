@@ -64,10 +64,10 @@
 }
 
 .modules-headline > .modules-desc {
-    width: 25vw;
+    width: 35%;
     margin: auto;
     margin-top: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
 }
 
 .modules-headline > .modules-btn {

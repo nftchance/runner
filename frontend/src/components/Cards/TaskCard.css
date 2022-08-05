@@ -12,15 +12,12 @@
 }
 
 .task-status {
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
-}
-
-.task-status > .status-icon {
-    display: flex;
-    border-radius: 50%;
+    vertical-align: sub;
+    margin-top: 20px;
 }
 
 .task-status > .status-text {
@@ -29,6 +26,21 @@
     font-weight: 500;
     align-items: center;
     padding-top: 1px;
+}
+
+.status-indicator {
+    display: flex;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.status-indicator.green {
+    background-color: var(--green);
+}
+
+.status-indicator.light-blue {
+    background-color: var(--light-blue);
 }
 
 .task-actions {

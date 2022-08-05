@@ -22,8 +22,7 @@ const TaskCard = (
 
                 <div className="task-status">
                     <div 
-                        className="status-icon" 
-                        style={{backgroundColor: statusIndicatorColor}}
+                        className={`status-indicator ${statusIndicatorColor}`}
                     />
                     <span className="status-text">{status}</span>
                 </div>

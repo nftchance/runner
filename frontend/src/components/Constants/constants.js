@@ -209,41 +209,113 @@ export const LANDING_DASHBOARD_TABS = [
     },
 ]
 
-const indicator_colors = {
-    green: '#55F855',
-    blue: '#55F8ED'
-}
 export const ROADMAP_TASKS = [
     {
         version: 'V0.1',
+        description: 'Focusing on foundational layers, v0.1 introduces the core function systems of the Runner system.',
         tasks: [
             {
                 title: 'Global Account Systems',
+                description: 'Implement the core of authentication, Runner is built on an open-user approach that allows quick transition through organizations.',
                 status: 'In Progress',
-                statusIndicatorColor: indicator_colors.green,
-                linkTo: ''
+                statusIndicatorColor: 'green',
+                linkTo: '/'
+            },
+            {
+                title: 'Asynchronous Feeds',
+                description: 'One of the least efficient aspects of service businesses are the sequential nature of task completion. Async operation redefines that.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Scheduled Instances',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Mobile-First Front-End',
+                description: 'With the majority of services being render in-field, the user-experience is key to securing the highest level of impact from the utilization of better tools.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Global Account Systems',
+                description: 'Implement the core of authentication, Runner is built on an open-user approach that allows quick transition through organizations.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Asynchronous Feeds',
+                description: 'One of the least efficient aspects of service businesses are the sequential nature of task completion. Async operation redefines that.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
             },
         ]
     },
     {
         version: 'V0.2',
+        description: 'In quick succession of releases, this version is planned to introduce the underlying automation framework.',
         tasks: [
             {
-                title: '',
-                status: '',
-                statusIndicatorColor: '',
-                linkTo: ''
+                title: 'Global Account Systems',
+                description: 'Implement the core of authentication, Runner is built on an open-user approach that allows quick transition through organizations.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Asynchronous Feeds',
+                description: 'One of the least efficient aspects of service businesses are the sequential nature of task completion. Async operation redefines that.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Scheduled Instances',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
             },
         ]
     },
     {
         version: 'V0.3',
+        description: 'With the skeleton of Runner in place, this update hones in on the automation of long-tail management mechanisms.',
         tasks: [
             {
-                title: '',
-                status: '',
-                statusIndicatorColor: '',
-                linkTo: ''
+                title: 'Payroll Streaming',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Team Scheduling',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Plug-In System',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
+            },
+            {
+                title: 'Platform Governance',
+                description: 'Compounding on top of atomic data, the seamless operation of time and state level triggers are key to custom workflows.',
+                status: 'Upcoming',
+                statusIndicatorColor: 'light-blue',
+                linkTo: '/'
             },
         ]
     },
