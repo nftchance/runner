@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Page from "../Page/Page";
-import PrimaryButton from "../Buttons/PrimaryButton";
-import SecondaryButton from "../Buttons/SecondaryButton";
-import TextFieldInline from "../TextFields/TextFieldInline";
-import ModuleCard from "../Cards/ModuleCard";
-import GhostCard from "../Cards/GhostCard";
+import Page from "@components/Page/Page";
+import PrimaryButton from "@components/Buttons/PrimaryButton";
+import SecondaryButton from "@components/Buttons/SecondaryButton";
+import TextFieldInline from "@components/TextFields/TextFieldInline";
+import ModuleCard from "@components/Cards/ModuleCard";
+import GhostCard from "@components/Cards/GhostCard";
 
-import hero from "../../images/landing/hero.svg";
-import volume from "../../images/landing/volume.svg";
-import dashboard from "../../images/landing/dashboard.svg";
+import hero from "@images/landing/hero.svg";
+import volume from "@images/landing/volume.svg";
+import dashboard from "@images/landing/dashboard.svg";
 
 import { 
     LANDING_CATEGORIES, LANDING_MODULES, LANDING_DASHBOARD_TABS 

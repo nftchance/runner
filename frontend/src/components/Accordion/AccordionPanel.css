@@ -15,7 +15,7 @@
 }
 
 .accordion-details {
-    padding-left: 0px;
+    padding: 35px 0px 50px 0px;
     white-space: pre-wrap;
     border-bottom: 1px solid var(--dark-border);
 }

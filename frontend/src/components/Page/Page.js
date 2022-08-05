@@ -1,8 +1,8 @@
 import "./Page.css";
 
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
-import SystemMessage from "../SystemMessage/SystemMessage";
+import Navbar from "@components/Navbar/Navbar";
+import Footer from "@components/Footer/Footer";
+import SystemMessage from "@components/SystemMessage/SystemMessage";
 
 const Page = ({children}) => {
     const message = "Runner is currently in Beta | Read the latest article";

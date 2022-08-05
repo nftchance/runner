@@ -1,16 +1,22 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Home from "../Home/Home"
-import Roadmap from "../Roadmap/Roadmap"
-import FAQ from "../FAQ/FAQ"
+import loadable from "@loadable/component";
+
+import Loading from "@components/Loading/Loading";
+
+const LoadableHome = loadable(() => import("@components/Home/Home"), { fallback: <Loading /> })
+const LoadableRoadmap = loadable(() => import("@components/Roadmap/Roadmap"), { fallback: <Loading /> })
+const LoadableGovernance = loadable(() => import("@components/Governance/Governance"), { fallback: <Loading /> })
+const LoadableFAQ = loadable(() => import("@components/FAQ/FAQ"), { fallback: <Loading /> })
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/roadmap" element={<Roadmap />} />
-                <Route path="/faq" element={<FAQ />} />
+                <Route exact path="/" element={<LoadableHome />} />
+                <Route path="/roadmap" element={<LoadableRoadmap />} />
+                <Route path="/governance" element={<LoadableGovernance />} />
+                <Route path="/faq" element={<LoadableFAQ />} />
             </Routes>
         </BrowserRouter>
     )

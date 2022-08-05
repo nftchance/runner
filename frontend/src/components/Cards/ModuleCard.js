@@ -1,5 +1,5 @@
-import PrimaryButton from "../Buttons/PrimaryButton";
-import SecondaryButton from "../Buttons/SecondaryButton";
+import PrimaryButton from "@components/Buttons/PrimaryButton";
+import SecondaryButton from "@components/Buttons/SecondaryButton";
 
 import "./ModuleCard.css"
 

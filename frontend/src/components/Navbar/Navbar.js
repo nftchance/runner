@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { URL_CONSTANTS } from "../Constants/constants";
+import { URL_CONSTANTS } from "@components/Constants/constants";
 
 import "./Navbar.css"
 

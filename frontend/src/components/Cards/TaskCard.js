@@ -1,4 +1,4 @@
-import SecondaryButton from "../Buttons/SecondaryButton";
+import SecondaryButton from "@components/Buttons/SecondaryButton";
 
 import "./TaskCard.css"
 

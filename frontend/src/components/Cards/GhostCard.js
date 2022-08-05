@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import TextButton from "../Buttons/TextButton";
+import TextButton from "@components/Buttons/TextButton";
 import "./GhostCard.css"
 
 const GhostCard = (
     {
         title, 
         description, 
-        icon, 
+        icon,
         buttonText, 
         buttonOnClick, 
         titleStyle, 

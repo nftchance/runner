@@ -12,12 +12,12 @@
 
 .roadmap-headline {
     margin-top: 200px;
-    margin-bottom: 100px;
+    margin-bottom: 180px;
 }
 
 .roadmap-headline > h5 {
     width: 40%;
-    margin-top: 100px;
+    margin-top: 50px;
     margin-bottom: 60px;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .version-subtext {
-    width: 40%;
+    width: 30%;
     margin-bottom: 50px;
 }
 
