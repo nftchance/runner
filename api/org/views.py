@@ -48,6 +48,10 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.org_relationships.add(relationship)
         self.request.user.save()
 
+# TODO: class OrgRoleViewSet(viewsets.ModelViewSet):
+#       This class will allow an organization manager and admin to update the role of any relationship in the org.
+# TODO: class OrgRelationshipViewSet(viewsets.ModelViewSet):
+#       This class will allow an organization manager and admin to update the status of any permission available to runner users.
 
 class OrgInvitationViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
