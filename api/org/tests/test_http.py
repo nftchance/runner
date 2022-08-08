@@ -610,7 +610,7 @@ class HttpTest(APITestCase):
     def test_user_with_customer_role_cannot_list_org_relationships_even_as_customer(self):
         org = create_org(self.user, name="The Best of Times")
         invitation = create_invitation(org, self.user, role=Role.CUSTOMER)
-
+        
         # accept invitation
         invitation.accept(self.secondary_user)
 
