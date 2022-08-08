@@ -160,7 +160,6 @@ class HttpTest(APITestCase):
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        print([obj.name for obj in Org.objects.all()])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(Org.objects.all().count(), 1)
  
@@ -178,30 +177,29 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("name"), "The Best of Times 2")
         self.assertEqual(Org.objects.all().count(), 1)
 
-    # def test_user_cannot_update_id_of_own_org_patch(self):
-    #     org = create_org(self.user, name="The Best of Times")
-    #     self.assertEqual(Org.objects.count(), 1)
-    #     response = self.client.patch(
-    #         org.get_absolute_url(),
-    #         data={"id": "123"},
-    #         HTTP_AUTHORIZATION=f"Bearer {self.access}",
-    #     )
-    #     self.assertEqual(Org.objects.all().count(), 1)
-    #     self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED, response.status_code)
+    def test_user_cannot_update_id_of_own_org_patch(self):
+        org = create_org(self.user, name="The Best of Times")
+        self.assertEqual(Org.objects.count(), 1)
+        response = self.client.patch(
+            org.get_absolute_url(),
+            data={"id": "123"},
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(Org.objects.all().count(), 1)
+        self.assertEqual(response.data.get('id'), str(org.id))
 
-    # def test_user_cannot_update_created_at_of_own_org(self):
-    #     org = create_org(self.user, name="The Best of Times")
-    #     # send request with ignored updated_at field to serializer
-    #     response = self.client.patch(
-    #         org.get_absolute_url(),
-    #         data={"created_at": "2020-01-01T00:00:00Z"},
-    #         HTTP_AUTHORIZATION=f"Bearer {self.access}",
-    #     )
-    #     # confirm that updated_at field is not updated
-    #     self.assertEqual(status.HTTP_200_OK, response.status_code)
-    #     self.assertEqual(response.data.get("name"), "The Best of Times")
-    #     self.assertEqual(Org.objects.all().count(), 1)
-    #     self.assertEqual(response.data.get("created_at"), f'{org.created_at}')
+    def test_user_cannot_update_created_at_of_own_org(self):
+        org = create_org(self.user, name="The Best of Times")
+        # send request with ignored updated_at field to serializer
+        response = self.client.patch(
+            org.get_absolute_url(),
+            data={"created_at": "2020-01-01T00:00:00Z"},
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        # confirm that updated_at field is not updated
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get("id"), str(org.id))
+        self.assertEqual(Org.objects.all().count(), 1)
 
     """
     Tests for organization invitation management.

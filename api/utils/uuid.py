@@ -10,8 +10,12 @@ class OrgIDMixin(models.Model):
         return ''.join(random.choice(chars) for _ in range(size))
 
     def save(self, *args, **kwargs):
-        while not self.id or self.__class__.objects.filter(id=self.id).exists():
-            self.id = self.id_generator()
+        if not self.id:
+            generated_id = self.id_generator()
+            while self.__class__.objects.filter(id=self.id).exists():
+                generated_id = self.id_generator()
+            
+            self.id = generated_id
 
         super().save(*args, **kwargs)
 
