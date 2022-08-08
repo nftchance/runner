@@ -12,7 +12,7 @@ class OrgIDMixin(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             generated_id = self.id_generator()
-            while self.__class__.objects.filter(id=self.id).exists():
+            while self.__class__.objects.filter(id=generated_id).exists():
                 generated_id = self.id_generator()
             
             self.id = generated_id
