@@ -1,13 +1,25 @@
+from django.http import JsonResponse
+
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Org, OrgInvitation, OrgRelationship, OrgRole
-from .permissions import CanManageOrg, CanViewOrg, CanManageOrgInvitiation
-from .serializers import OrgSerializer, OrgInvitationSerializer
+from .permissions import (
+    CanManageOrg,
+    CanViewOrg,
+    CanManageOrgRelationship,
+    CanManageOrgInvitiation,
+)
+from .serializers import (
+    OrgSerializer,
+    OrgRelationshipSerializer,
+    OrgInvitationSerializer,
+)
 from .utils import Role
 
 
+# TODO: make sure that they can't edit fields that we don't want them to be able to update.
 class OrgViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_id"
@@ -31,6 +43,19 @@ class OrgViewSet(viewsets.ModelViewSet):
 
         return [permission() for permission in self.permission_classes]
 
+    # def update(self, request, *args, **kwargs):
+    #     kwargs['partial'] = True
+    #     print('updated')
+    #     return super().update(request, *args, **kwargs)
+
+    # def put(self, request, *args, **kwargs):
+    #     print('put')
+    #     return self.update(request, *args, **kwargs)
+
+    # def patch(self, request, *args, **kwargs):
+    #     print('patch')
+    #     return self.update(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         # save the new org into the database
         obj = serializer.save()
@@ -48,11 +73,28 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.org_relationships.add(relationship)
         self.request.user.save()
 
-# TODO: class OrgRoleViewSet(viewsets.ModelViewSet):
-#       This class will allow an organization manager and admin to update the role of any relationship in the org.
-# TODO: class OrgRelationshipViewSet(viewsets.ModelViewSet):
-#       This class will allow an organization manager and admin to update the status of any permission available to runner users.
+# TODO: need to figure out how to enforce that they are only updating certain fields. Even a logged in admin user should not be able to change the User object that is associated to a relationship.
+# -- notes: maybe this is done by the serializer and not including all of the fields though because then even when it saves it is still using the serializer that is provided?
+# TODO: make sure that no one can directly create a relationship object.
+# TODO: make sure that those with permission can still only update fields that are not read-only.
+# TODO: POST and PUT are being properly handled however patch totally fucks things by creating a new object.
 
+
+class OrgRelationshipViewSet(viewsets.ModelViewSet):
+    lookup_field = "id"
+    lookup_url_kwarg = "org_relationship_id"
+
+    serializer_class = OrgRelationshipSerializer
+
+    permission_classes = [permissions.IsAuthenticated, CanManageOrgRelationship]
+
+    def get_queryset(self):
+        if "org_relationship_id" in self.kwargs:
+            return OrgRelationship.objects.filter(id=self.kwargs["org_relationship_id"])
+        return OrgRelationship.objects.filter(org=self.kwargs["org_id"])
+
+
+# TODO: need to make sure that the user cannot update fields of the model that we don't want them to be able to interface with.
 class OrgInvitationViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_invitation_id"

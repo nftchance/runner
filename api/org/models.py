@@ -64,9 +64,7 @@ class OrgRole(models.Model):
 
     class Meta:
         ordering = ["name"]
-        permissions = (
-            ("manage_orgrole", "Can manage organization roles of other users"),
-        )
+
 
 def _get_role():
     return OrgRole.objects.get_or_create(name="revoked")[0]
@@ -107,6 +105,9 @@ class OrgRelationship(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_absolute_url(self):
+        return reverse("org-relationship-detail", kwargs={"org_id": self.org.pk, "org_relationship_id": self.pk})
+
     def get_user_permissions(self, obj=None):
         return backends.user_get_permissions(self, obj, "user")
 
@@ -135,7 +136,9 @@ class OrgRelationship(models.Model):
 
     class Meta:
         ordering = ["created_at"]
-
+        permissions = (
+            ("manage_orgrelationship", "Can manage organization relationships of other users"),
+        )
 
 class OrgInvitation(OrgIDMixin, models.Model):
     org = models.ForeignKey(
