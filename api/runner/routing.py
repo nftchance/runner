@@ -6,13 +6,13 @@ from channels.routing import ProtocolTypeRouter, URLRouter # changed
 
 from runner.middleware import TokenAuthMiddlewareStack 
 
-from runner.consumers import RunnerConsumer
+from org.consumers import OrgConsumer
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': TokenAuthMiddlewareStack(
         URLRouter([
-            path('runner/', RunnerConsumer.as_asgi()),
+            path('org/', OrgConsumer.as_asgi()),
         ])
     ),
 })

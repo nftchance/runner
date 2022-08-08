@@ -4,7 +4,7 @@ from django.db import models
 from django.shortcuts import reverse
 
 from utils.time import seconds_until
-from utils.uuid import id_generator
+from utils.uuid import OrgIDMixin
 
 from org.models import Org
 from schedule.models import Schedule
@@ -23,13 +23,7 @@ class JobsManager(models.Manager):
         return self.get_queryset().jobs_for_org(org)
 
 
-class Job(models.Model):
-    def save(self, *args, **kwargs):
-        while not self.id or Job.objects.filter(id=self.id).exists():
-            self.id = id_generator()
-
-        super(Job, self).save(*args, **kwargs)
-
+class Job(OrgIDMixin, models.Model):
     REQUESTED = "REQUESTED"
     UPCOMING = "UPCOMING"
     IN_PROGRESS = "IN_PROGRESS"
@@ -43,7 +37,6 @@ class Job(models.Model):
 
     archived = models.BooleanField(default=False)
 
-    id = models.CharField(primary_key=True, max_length=256, blank=True, unique=True)
     org = models.ForeignKey(Org, blank=False, null=True, on_delete=models.CASCADE)
 
     draft = models.BooleanField(default=True)

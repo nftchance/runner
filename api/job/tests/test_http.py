@@ -9,7 +9,7 @@ from job.models import Job
 class HttpTest(APITestCase):
     def setUp(self):
         user = create_user()
-        response = self.client.post(reverse('log_in'), data={
+        response = self.client.post(reverse('log-in'), data={
             'username': user.username,
             'password': PASSWORD,
         })

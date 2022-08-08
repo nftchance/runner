@@ -1,8 +1,10 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
-urlpatterns = [
-    path('api/org/', views.OrgView.as_view({'get': 'list'}), name='org_list'),
-    path('api/org/<org_id>/', views.OrgView.as_view({'get': 'retrieve'}), name='org_detail'),  # new
-]
+router = DefaultRouter()
+router.register(r'org', views.OrgViewSet, basename='org')
+router.register(r'org/(?P<org_id>[^/.]+)/org-relationship', views.OrgRelationshipViewSet, basename='org-relationship')
+router.register(r'org/(?P<org_id>[^/.]+)/org-invitation', views.OrgInvitationViewSet, basename='org-invitation')
+
+urlpatterns = router.urls
