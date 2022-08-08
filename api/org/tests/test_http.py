@@ -547,6 +547,26 @@ class HttpTest(APITestCase):
             relationship_obj.id, response.data[0].get("id"), 
         )
 
+    def test_admin_can_retrieve_own_org_relationship(self):
+        org = create_org(self.user, name="The Best of Times")
+
+        relationship_obj = self.user.org_relationships.get(org=org)
+
+        response = self.client.get(
+            reverse(
+                "org-relationship-detail",
+                kwargs={"org_id": org.id, "org_relationship_id": relationship_obj.id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(
+            response.data.get("id"), relationship_obj.id, 
+        )
+        self.assertEqual(response.data.get("permissions"), [])
+        self.assertEqual(response.data.get("all_permissions"), {'org.view_org', 'org.manage_orgrelationship', 'org.manage_orginvitation', 'org.manage_org'})
+        self.assertEqual(response.data.get("role_permissions"), {'org.view_org', 'org.manage_orgrelationship', 'org.manage_orginvitation', 'org.manage_org'})
+
     def test_admin_cannot_create_relationship_directly(self):
         org = create_org(self.user, name="The Best of Times")
 

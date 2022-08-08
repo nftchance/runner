@@ -42,19 +42,6 @@ class OrgViewSet(viewsets.ModelViewSet):
 
         return [permission() for permission in self.permission_classes]
 
-    # def update(self, request, *args, **kwargs):
-    #     kwargs['partial'] = True
-    #     print('updated')
-    #     return super().update(request, *args, **kwargs)
-
-    # def put(self, request, *args, **kwargs):
-    #     print('put')
-    #     return self.update(request, *args, **kwargs)
-
-    # def patch(self, request, *args, **kwargs):
-    #     print('patch')
-    #     return self.update(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         # save the new org into the database
         obj = serializer.save()
