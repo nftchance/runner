@@ -15,7 +15,7 @@ class HttpTest(APITestCase):
     def setUp(self):
         self.user = create_user()
         response = self.client.post(
-            reverse("log_in"),
+            reverse("log-in"),
             data={
                 "username": self.user.username,
                 "password": PASSWORD,
@@ -27,7 +27,7 @@ class HttpTest(APITestCase):
 
         self.secondary_user = create_user(username="secondaryuser@example.com")
         response = self.client.post(
-            reverse("log_in"),
+            reverse("log-in"),
             data={
                 "username": self.secondary_user.username,
                 "password": PASSWORD,
@@ -416,7 +416,7 @@ class HttpTest(APITestCase):
         # create another user
         self.tertiary_user = create_user(username="tertiaryser@example.com")
         user_response = self.client.post(
-            reverse("log_in"),
+            reverse("log-in"),
             data={
                 "username": self.tertiary_user.username,
                 "password": PASSWORD,
