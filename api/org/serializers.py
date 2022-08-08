@@ -40,7 +40,6 @@ class OrgRelationshipSerializer(serializers.ModelSerializer):
         }
 
 
-# TODO: see what can be done about using a nested serializer for invited_user
 class OrgInvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgInvitation

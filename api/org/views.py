@@ -19,7 +19,6 @@ from .serializers import (
 from .utils import Role
 
 
-# TODO: make sure that they can't edit fields that we don't want them to be able to update.
 class OrgViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_id"

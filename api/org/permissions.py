@@ -24,6 +24,7 @@ class CanViewOrg(permissions.BasePermission):
             return False
         return relationship_obj.has_perm("org.view_org")
 
+
 class CanManageOrgRelationship(permissions.BasePermission):
     """
     Make sure that the requesting user has the ability to control the relationship permissions and roles within an org.
@@ -38,12 +39,6 @@ class CanManageOrgRelationship(permissions.BasePermission):
 
         return relationship_obj.has_perm("org.manage_orgrelationship")
 
-    # def has_object_permission(self, request, view, obj):
-    #     # TODO: This is an incorrect implementation of checking the permissions since this is checking the permission of the active relationship rather than the relationship that is being used to retrieve this dataset from the datbase.
-    #     relationship_obj = request.user.org_relationships.filter(org=obj.org).first()
-    #     if not relationship_obj:
-    #         return False
-    #     return relationship_obj.has_perm("org.manage_org_relationship")
 
 class CanManageOrgInvitiation(permissions.BasePermission):
     """
