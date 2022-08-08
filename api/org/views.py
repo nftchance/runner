@@ -73,12 +73,7 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.org_relationships.add(relationship)
         self.request.user.save()
 
-# TODO: need to figure out how to enforce that they are only updating certain fields. Even a logged in admin user should not be able to change the User object that is associated to a relationship.
-# -- notes: maybe this is done by the serializer and not including all of the fields though because then even when it saves it is still using the serializer that is provided?
 # TODO: make sure that no one can directly create a relationship object.
-# TODO: make sure that those with permission can still only update fields that are not read-only.
-# TODO: POST and PUT are being properly handled however patch totally fucks things by creating a new object.
-
 
 class OrgRelationshipViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
@@ -94,7 +89,6 @@ class OrgRelationshipViewSet(viewsets.ModelViewSet):
         return OrgRelationship.objects.filter(org=self.kwargs["org_id"])
 
 
-# TODO: need to make sure that the user cannot update fields of the model that we don't want them to be able to interface with.
 class OrgInvitationViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "org_invitation_id"

@@ -39,9 +39,6 @@ class HttpTest(APITestCase):
 
         load_permissions("org", org_permissions)
 
-    """
-    Tests for top level organization management.
-    """
     def test_user_can_create_org(self):
         response = self.client.post(
             reverse("org-list"),
@@ -122,14 +119,6 @@ class HttpTest(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
         self.assertEqual(response.data.get("id"), None)
  
-    """
-    A POST request creates a resource. The server assigns a URI for the new resource and returns that URI to the client. In the REST model, you frequently apply POST requests to collections. The new resource is added to the collection. A POST request can also be used to submit data for processing to an existing resource, without any new resource being created.
-
-    A PUT request creates a resource or updates an existing resource. The client specifies the URI for the resource. The request body contains a complete representation of the resource. If a resource with this URI already exists, it is replaced. Otherwise, a new resource is created, if the server supports doing so. PUT requests are most frequently applied to resources that are individual items, such as a specific customer, rather than collections. A server might support updates but not creation via PUT. Whether to support creation via PUT depends on whether the client can meaningfully assign a URI to a resource before it exists. If not, then use POST to create resources and PUT or PATCH to update.
-
-    A PATCH request performs a partial update to an existing resource. The client specifies the URI for the resource. The request body specifies a set of changes to apply to the resource. This can be more efficient than using PUT, because the client only sends the changes, not the entire representation of the resource. Technically PATCH can also create a new resource (by specifying a set of updates to a "null" resource), if the server supports this.
-    """
-
     def test_user_cannot_delete_other_orgs(self):
         org = create_org(self.secondary_user, name="The Best of Times")
         self.assertEqual(Org.objects.count(), 1)
@@ -201,9 +190,6 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data.get("id"), str(org.id))
         self.assertEqual(Org.objects.all().count(), 1)
 
-    """
-    Tests for organization invitation management.
-    """
     def test_user_can_create_invitation_own_org(self):
         org = create_org(self.user, name="The Best of Times")
         response = self.client.post(
@@ -544,9 +530,6 @@ class HttpTest(APITestCase):
             response.data.get("error"), "This invitation has already been revoked."
         )
     
-    """
-    Tests for organization relationships of the users within this organization.
-    """
     def test_admin_can_list_own_orgs_relationships(self):
         org = create_org(self.user, name="The Best of Times")
 
@@ -578,35 +561,18 @@ class HttpTest(APITestCase):
 
     #     self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    # def test_user_cannot_update_id_of_own_relationship(self):
-    #     org = create_org(self.user, name="The Best of Times")
-    #     relationship_obj = self.user.org_relationships.get(org=org)
+    def test_user_cannot_update_id_of_own_relationship(self):
+        org = create_org(self.user, name="The Best of Times")
+        relationship_obj = self.user.org_relationships.get(org=org)
 
-    #     self.assertEqual(Org.objects.count(), 1)
-    #     response = self.client.put(
-    #         relationship_obj.get_absolute_url(),
-    #         data={"id": "123"},
-    #         HTTP_AUTHORIZATION=f"Bearer {self.access}",
-    #     )
-    #     self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        # self.assertEqual(response.data.get("id"), None)
-
-    # def test_admin_cannot_update_readonly_field_of_relationship(self):
-    #     org = create_org(self.user, name="The Best of Times")
-
-    #     relationship_obj = self.user.org_relationships.get(org=org)
-
-    #     response = self.client.patch(
-    #         reverse(
-    #             "org-relationship-detail",
-    #             kwargs={"org_id": org.id, "org_relationship_id": relationship_obj.id},
-    #         ),
-    #         data={'id': '123'},
-    #         HTTP_AUTHORIZATION=f"Bearer {self.access}",
-    #     )
-
-    #     self.assertEqual(response.data['id'], org.id)
-        # self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(Org.objects.count(), 1)
+        response = self.client.put(
+            relationship_obj.get_absolute_url(),
+            data={"id": "123"},
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data.get('id'), relationship_obj.id)
 
     def test_user_with_customer_role_cannot_list_org_relationships_even_as_customer(self):
         org = create_org(self.user, name="The Best of Times")

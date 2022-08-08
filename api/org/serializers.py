@@ -45,12 +45,12 @@ class OrgInvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrgInvitation
         fields = "__all__"
-        read_only_fields = (
-            "id",
-            "org",
-            "invited_by",
-            "accepted_at",
-            "revoked_at",
-            "created_at",
-            "updated_at",
-        )
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "org": {"read_only": True},
+            "invited_by": {"read_only": True},
+            "accepted_at": {"read_only": True},
+            "revoked_at": {"read_only": True},
+            "created_at": {"read_only": True},
+            "updated_at": {"read_only": True},
+        }
