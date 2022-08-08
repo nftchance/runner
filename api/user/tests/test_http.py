@@ -222,3 +222,31 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         # self.assertEqual(response.data["username"]["username"], "A user with that username already exists.")
         self.assertEqual(response.data["email"]['email'], "This email is already in use.")
+
+    def test_user_can_log_out_all(self):
+        user = create_user()
+        response = self.client.post(
+            reverse("log_in"),
+            data={
+                "username": user.username,
+                "password": PASSWORD,
+            },
+        )
+
+        access = response.data["access"]
+        header, payload, signature = access.split(".")
+        decoded_payload = base64.b64decode(f"{payload}==")
+        payload_data = json.loads(decoded_payload)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(payload_data["id"], user.id)
+        self.assertEqual(payload_data["username"], user.username)
+        self.assertEqual(payload_data["first_name"], user.first_name)
+        self.assertEqual(payload_data["last_name"], user.last_name)
+
+        response = self.client.post(
+            reverse("logout_all"),
+            HTTP_AUTHORIZATION=f"Bearer {access}",
+        )
+        self.assertEqual(status.HTTP_205_RESET_CONTENT, response.status_code)

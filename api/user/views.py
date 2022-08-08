@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -59,3 +60,14 @@ class LogOutView(views.APIView):
         except Exception as e:
             print("exception", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutAllView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        tokens = OutstandingToken.objects.filter(user_id=request.user.id)
+        for token in tokens:
+            t, _ = BlacklistedToken.objects.get_or_create(token=token)
+
+        return Response(status=status.HTTP_205_RESET_CONTENT)
