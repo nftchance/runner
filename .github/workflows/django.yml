@@ -19,7 +19,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        db: [postgres]
+        db: [runner]
         python-version: [3.10.2]
         include:
           - db: postgres
@@ -29,7 +29,6 @@ jobs:
       postgres:
         image: postgres:10
         env:
-          PGDATABASE: postgres
           PGUSER: postgres
           PGPASSWORD: hunter2
         options: >-
