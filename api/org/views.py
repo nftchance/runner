@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from rest_framework import permissions, status, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -73,9 +73,12 @@ class OrgViewSet(viewsets.ModelViewSet):
         self.request.user.org_relationships.add(relationship)
         self.request.user.save()
 
-# TODO: make sure that no one can directly create a relationship object.
-
-class OrgRelationshipViewSet(viewsets.ModelViewSet):
+class OrgRelationshipViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
     lookup_field = "id"
     lookup_url_kwarg = "org_relationship_id"
 

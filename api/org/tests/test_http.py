@@ -547,19 +547,32 @@ class HttpTest(APITestCase):
             relationship_obj.id, response.data[0].get("id"), 
         )
 
-    # def test_admin_cannot_create_relationship_directly(self):
-    #     org = create_org(self.user, name="The Best of Times")
+    def test_admin_cannot_create_relationship_directly(self):
+        org = create_org(self.user, name="The Best of Times")
 
-    #     response = self.client.post(
-    #         reverse(
-    #             "org-relationship-list",
-    #             kwargs={"org_id": org.id},
-    #         ),
-    #         data={'org': org.id, 'related_user': self.secondary_user},
-    #         HTTP_AUTHORIZATION=f"Bearer {self.access}",
-    #     )
+        response = self.client.post(
+            reverse(
+                "org-relationship-list",
+                kwargs={"org_id": org.id},
+            ),
+            data={'org': org.id, 'related_user': self.secondary_user},
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
 
-    #     self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED, response.status_code)
+
+    def test_admin_cannot_delete_relationship_directly(self):
+        org = create_org(self.user, name="The Best of Times")
+
+        response = self.client.delete(
+            reverse(
+                "org-relationship-detail",
+                kwargs={"org_id": org.id, "org_relationship_id": self.user.org_relationships.get(org=org).id},
+            ),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+
+        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED, response.status_code)
 
     def test_user_cannot_update_id_of_own_relationship(self):
         org = create_org(self.user, name="The Best of Times")
