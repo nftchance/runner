@@ -1,11 +1,9 @@
-from django.shortcuts import reverse
 from django.test import TestCase
 
 from utils.tests.org import create_org, create_invitation
-from utils.tests.user import PASSWORD, create_user
+from utils.tests.user import create_user
 
-from org.apps import OrgConfig
-from org.models import OrgRelationship, OrgRole
+from org.models import OrgRelationship
 from org.permission_constants import org_permissions
 from org.utils import Role, load_permissions
 
