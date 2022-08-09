@@ -1,0 +1,13 @@
+.menu-btn {
+    opacity: 0.65;
+}
+
+.menu-icon {
+    color: #FFFFFF;
+}
+
+.menu-btn:hover,
+.menu-btn:focus,
+.menu-btn:active {
+    opacity: 1;
+}

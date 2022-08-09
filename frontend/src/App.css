@@ -120,6 +120,46 @@ p {
   height: 36px;
 }
 
+.status-indicator {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-indicator.green {
+  background-color: var(--green);
+  border: 1px solid var(--dark-green);
+}
+
+.status-indicator.light-blue {
+  background-color: var(--light-blue);
+  border: 1px solid var(--dark-blue);
+}
+
+.MuiSelect-standard {
+  padding-right: 20px !important;
+}
+
+.MuiPopover-root > .MuiPaper-root {
+  background-color: var(--dark-border);
+  font-family: inherit;
+  color: #FFFFFF;
+}
+
+.MuiList-root > .MuiButtonBase-root {
+  opacity: 0.65;
+}
+
+.MuiList-root > .MuiButtonBase-root:hover,
+.MuiList-root > .MuiButtonBase-root:active,
+.MuiList-root > .MuiButtonBase-root:focus,
+.MuiList-root > .MuiButtonBase-root.Mui-selected,
+.MuiList-root > .MuiButtonBase-root.Mui-selected:hover {
+  opacity: 1;
+  background-color: rgba(255,255,255,0.1);
+}
+
 @media screen and (max-width: 600px) {
   :root {
     --page-margins: 20px;

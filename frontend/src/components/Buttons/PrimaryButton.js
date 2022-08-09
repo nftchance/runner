@@ -10,7 +10,7 @@ const PrimaryButton = ({text, onClick, disabled, style}) => {
                 className="btn-primary"
                 onClick={onClick}
                 disabled={disabled ? true : false}
-                sx={{style}}
+                sx={style}
             >
                 <span className="text">{text}</span>
             </Button>

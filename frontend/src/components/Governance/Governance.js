@@ -13,28 +13,28 @@ const Governance = () => {
     let navigate = useNavigate();
 
     const [ filterTab, setFilterTab ] = useState("In Progress");
-    const [ sorting, setSorting ] = useState('Sort By');
+    const [ sorting, setSorting ] = useState("");
     // Using placeholder data before API integration
     const [ proposalData, setProposalData ] = useState(PROPOSAL_DATA);
 
     // These are just placeholder, not sure what sort methods we want to provide or what the field will actually be.
     const sortingMethods = [
         {
+            title: 'Oldest',
+            method: '-created_at',
+        },
+        {
             title: 'Newest',
             method: 'created_at',
         },
         {
-            title: 'Oldest',
-            method: '-created_at',
+            title: 'Least Support',
+            method: '-votes',
         },
         {
             title: 'Most Support',
             method: 'votes',
         },
-        {
-            title: 'Least Support',
-            method: '-votes',
-        }
     ]
 
     const filterMethods = [
@@ -98,13 +98,6 @@ const Governance = () => {
                                 onChange={handleSortChange}
                             />
                         </div>
-                        {/* <div className="sort-tab">
-                            <p>Sort By</p>
-                            <FontAwesomeIcon
-                                className="expand-icon" 
-                                icon={["fal", "angle-down"]}
-                            />
-                        </div> */}
                     </div>
                 </div>
 

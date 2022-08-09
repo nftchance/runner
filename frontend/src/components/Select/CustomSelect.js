@@ -14,8 +14,9 @@ const CustomSelect = ({selected, placeholder, options, onChange}) => {
                     value={selected}
                     onChange={onChange}
                     IconComponent={KeyboardArrowDown}
-                    renderValue={(selected, placeholder) => {
-                        if (selected === placeholder) return <p className="option-text">{placeholder}</p>
+                    displayEmpty
+                    renderValue={(selected) => {
+                        if (!selected) return <p className="option-text">{placeholder}</p>
                         else return <p className="option-text">{selected}</p>
                     }}
                 >
@@ -29,15 +30,6 @@ const CustomSelect = ({selected, placeholder, options, onChange}) => {
                         </MenuItem>
                     ))}
                 </Select>
-                {/* <select name="blah blah" className="custom-select" onChange={onChange}>
-                    {options.map((option) => (
-                        <option key={option.title} value={option.title}>{option.title}</option>
-                    ))}
-                </select>
-                <FontAwesomeIcon
-                    className="expand-icon" 
-                    icon={["fal", "angle-down"]}
-                /> */}
             </div>
         
         </StyledEngineProvider>

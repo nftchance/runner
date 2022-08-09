@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import "./SystemMessage.css"
 
-const SystemMessage = ({message, directTo}) => {
+const SystemMessage = ({message, linkTo}) => {
     const [ closed, setClosed ] = useState(false);
 
     const handleClose = () => {
@@ -17,7 +17,7 @@ const SystemMessage = ({message, directTo}) => {
             {!closed &&
                 <div className="system-msg-container">
                     <div className="system-msg-link">
-                        <a target="_blank" rel="noreferrer" href={directTo}>
+                        <a target="_blank" rel="noreferrer" href={linkTo}>
                             <p className="system-msg">
                                 {message}
                             </p>

@@ -27,9 +27,16 @@ const ProposalCard = (
             </div>
 
             <div className="votes-bar">
-                <div className="yes-votes" style={{width: `${votingPercents[0]}%`}}/>
-                <div className="no-votes" style={{width: `${votingPercents[1]}%`}}/>
-                <div className="missing-votes" />
+                <div 
+                    className={`yes-votes ${votingPercents[0] === 0 ? 'hidden' : ''}`}
+                    style={{width: `${votingPercents[0]}%`}}/>
+                <div 
+                    className={`no-votes ${votingPercents[1] === 0 ? 'hidden' : ''}`}
+                    style={{width: `${votingPercents[1]}%`}}
+                />
+                <div
+                    className={`missing-votes ${votingPercents[0] + votingPercents[1] === 100 ? 'hidden' : ''}`} 
+                />
             </div>
 
             <div className="proposal-actions">

@@ -1,5 +1,10 @@
 import { URL_CONSTANTS } from "./constants"
 
+export const SYSTEM_MESSAGE = {
+    message: 'Runner is currently in Beta | Read the latest article',
+    linkTo: 'https://www.medium.com'
+}
+
 export const LANDING_CATEGORIES = [
     {
         title: 'Jobs', 
@@ -369,7 +374,7 @@ export const PROPOSAL_DATA = [
             'Financials',
             'Taxes'
         ], 
-        votingPercents: [92, 1],
+        votingPercents: [92, 0],
         linkTo: '/'
     },
     {

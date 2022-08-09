@@ -4,13 +4,15 @@ import Navbar from "@components/Navbar/Navbar";
 import Footer from "@components/Footer/Footer";
 import SystemMessage from "@components/SystemMessage/SystemMessage";
 
-const Page = ({children}) => {
-    const message = "Runner is currently in Beta | Read the latest article";
-    const directTo = "https://www.medium.com"
+import { SYSTEM_MESSAGE } from "@components/Constants/copy";
 
+const Page = ({children}) => {
     return (
         <>
-            <SystemMessage message={message} directTo={directTo} />
+            <SystemMessage 
+                message={SYSTEM_MESSAGE.message} 
+                linkTo={SYSTEM_MESSAGE.linkTo} 
+            />
 
             <Navbar />
 

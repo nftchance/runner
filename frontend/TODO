@@ -1,6 +1,3 @@
-Quick runthrough with Chance:
-    ☐ Buttons on roadmap card is too wide
-
 General:
     ☐ Tests for compilation
     ☐ Helmet for each page
@@ -15,16 +12,14 @@ General:
         Ellipsis? Fade out?
 
 Home:
-☐ Hero img positioning responsiveness
-☐ Email input text styling
-    ☐ Placeholder too opaque
-    ☐ Input opacity is fucky
-☐ Email error message display
+☐ Email error message display and email valid checker
     Put this in the button? (The only error would be Invalid Email)
 ☐ Break out the hero and bottom CTA button messages?
 ☐ Volume Earning Image in CSS not static svg
 ☐ Static image handling pattern (provider logos)
 ☐ Pass email ref from appropriate field to the handle function
+☐ Post email to backend
+☐ Select Icon and the Close Icon in SysMessage are MUI not FA
 
 Roadmap:
 ✔ Dynamic versioning image on margin @done(22-08-05 10:12)
@@ -39,7 +34,10 @@ Governance:
         This was being an absolute bitch to size and position, went with the
         MUI version for better compatability.
     Proposals:
-        ☐ Proposal Page
+        ✔ Proposal Page @done(22-08-09 16:23)
+        ☐ Finalize Ellipsis Menu Items and their functions
+        ☐ API integration
+        ☐ Voting Button
 
 FAQ:
     ✔ Dropdown @done(22-08-05 10:12)
@@ -47,10 +45,17 @@ FAQ:
     ☐ Accordion on hover effects
         Note: right now just the icon lights up to white
 
+DASHBOARDS:
+    
+
 OTHER:
     ☐ Opengraph images
 
 ARCHIVE:
+    ✔ Email input text styling @done(22-08-09 16:24)
+    ✔ Placeholder too opaque @done(22-08-09 16:24)
+    ✔ Input opacity is fucky @done(22-08-09 16:24)
+    ✔ Buttons on roadmap card is too wide @done(22-08-09 16:26)
     ✔ Governance @done(22-08-03 15:49)
         ✔ Cards @done(22-08-08 15:10)
         ✔ Tags @done(22-08-08 15:10)
