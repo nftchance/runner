@@ -102,3 +102,12 @@ class GovernanceTestCase(TestCase):
             self.assertEqual(str(e.exception), "Proposal already closed")
 
         self.assertEqual(proposal.votes.count(), 1)
+
+    def test_str_is_title(self):
+        proposal = Proposal.objects.create(
+            proposed_by=self.user,
+            title="Test Proposal",
+            description="This is a test proposal",
+        )
+
+        self.assertEqual(str(proposal), f"[RP{proposal.id}] Test proposal")

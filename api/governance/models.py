@@ -26,7 +26,7 @@ class ProposalVote(models.Model):
 
 class Proposal(models.Model):
     def save(self, *args, **kwargs):
-        if self.proposed_by.balance < PROPOSAL_SUBMISSION_BALANCE_MINIMUM:
+        if not self.proposed_by.is_superuser and self.proposed_by.balance < PROPOSAL_SUBMISSION_BALANCE_MINIMUM:
             raise ValueError("Insufficient balance")
 
         if not self.closed_at:
@@ -47,7 +47,7 @@ class Proposal(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"[RP{self.id}]"
+        return f"[RP{self.id}] {self.title.lower().capitalize()}"
 
     def vote(self, voter, vote):
         if django.utils.timezone.now() > self.closed_at:
