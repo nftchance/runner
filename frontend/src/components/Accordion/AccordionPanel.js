@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import "./AccordionPanel.css";
 
-const AccordionPanel = ({title, detail, index}) => {
-  const [expanded, setExpanded] = useState(false);
+const AccordionPanel = ({title, detail, index, open}) => {
+  const [expanded, setExpanded] = useState(open ? `panel-${index}` : false);
 
   const handleOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

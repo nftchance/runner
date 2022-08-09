@@ -1,0 +1,57 @@
+.custom-select {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+.custom-select::after,
+.custom-select::before,
+.custom-select:hover::before,
+.custom-select:hover::after {
+    display: none;
+}
+
+.custom-select > div {
+    padding-bottom: 10px;
+}
+
+.custom-select > svg {
+    color: #FFFFFF;
+    height: 16px;
+}
+
+.option-text {
+    opacity: 1;
+    font-family: franklin-gothic-urw, serif;
+    font-weight: 700;
+    line-height: 20px;
+    font-size: 14px;
+}
+
+.MuiSelect-standard {
+    padding-right: 20px !important;
+}
+
+/* .MuiSvgIcon-root {
+    display: flex;
+    align-self: baseline;
+    position: inherit;
+} */
+
+.MuiPopover-root > .MuiPaper-root {
+    background-color: var(--dark-border);
+    font-family: inherit;
+    color: #FFFFFF;
+}
+
+.MuiList-root > .MuiButtonBase-root {
+    opacity: 0.65;
+}
+
+.MuiList-root > .MuiButtonBase-root:hover,
+.MuiList-root > .MuiButtonBase-root:active,
+.MuiList-root > .MuiButtonBase-root:focus,
+.MuiList-root > .MuiButtonBase-root.Mui-selected,
+.MuiList-root > .MuiButtonBase-root.Mui-selected:hover {
+    opacity: 1;
+    background-color: rgba(255,255,255,0.1);
+}

@@ -51,7 +51,7 @@
 
 .sort-tabs {
     display: inline-flex;
-    padding-left: 10%;
+    padding-left: 200px;
     padding-right: 20px;
     margin-left: auto;
     float: right;
@@ -59,12 +59,9 @@
 }
 
 .sort-tab {
-    display: flex;
-    flex-direction: row;
-    padding-right: 5px;
-    padding-left: 5px;
+    display: inline;
     color:#FFFFFF;
-    vertical-align: sub;
+    opacity: 0.65;
 }
 
 .expand-icon {
@@ -76,18 +73,7 @@
 .sort-tab:active {
     opacity: 1;
     border-bottom: 1px solid #FFFFFF;
-}
-
-.sort-tab:hover .expand-icon,
-.sort-tab:focus .expand-icon,
-.sort-tab:active .expand-icon {
-    opacity: 1;
-}
-
-.sort-tab:hover > p,
-.sort-tab:focus > p,
-.sort-tab:active > p {
-    opacity: 1;
+    margin-bottom: -1px;
 }
 
 .governance-proposals {

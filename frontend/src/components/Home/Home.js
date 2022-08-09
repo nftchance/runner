@@ -39,7 +39,7 @@ const Home = () => {
                 <div className="hero-text">
                     <h1>Revolutionize your service business<br /> with</h1>
                     <h1 className="yellow"> automation tools of 2032.</h1>
-                    <div className="shadow-text">No we"re not time travelers.</div>
+                    <div className="shadow-text">No we're not time travelers.</div>
 
                     <h5>
                         Runner is an open source and community led service business automation tool. 

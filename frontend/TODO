@@ -1,3 +1,6 @@
+Quick runthrough with Chance:
+    ☐ Buttons on roadmap card is too wide
+
 General:
     ☐ Tests for compilation
     ☐ Helmet for each page
@@ -6,6 +9,10 @@ General:
     ☐ Responsivity of descriptions in cards
         Not sure how to handle this just yet.
         We need them to be the same height regardless of how many lines the description takes up
+        Give them a predefined height and text-overflow: ellipsis
+        webkit line clamp may be an option but need to check the support for it
+        Ok webkit line clamp is widely supported now. The question is what do we want the overflow to look like?
+        Ellipsis? Fade out?
 
 Home:
 ☐ Hero img positioning responsiveness
@@ -16,6 +23,8 @@ Home:
     Put this in the button? (The only error would be Invalid Email)
 ☐ Break out the hero and bottom CTA button messages?
 ☐ Volume Earning Image in CSS not static svg
+☐ Static image handling pattern (provider logos)
+☐ Pass email ref from appropriate field to the handle function
 
 Roadmap:
 ✔ Dynamic versioning image on margin @done(22-08-05 10:12)
@@ -24,25 +33,30 @@ Roadmap:
 ✔ Status indicators @done(22-08-05 10:12)
 
 Governance:
-    ☐ Cards
-    ☐ Tags
-    ☐ Pending/In Progress/Concluded Filter
-    ☐ Sorting
-    ☐ Vote Status
-
+    ☐ This goddamn select box is going to be the death of me
+    ☐ Resizing text causes the bottom border to be resized.
+    ☐ Should probably replace the select icon with the font awesome equivalent
+        This was being an absolute bitch to size and position, went with the
+        MUI version for better compatability.
     Proposals:
-    
+        ☐ Proposal Page
 
 FAQ:
     ✔ Dropdown @done(22-08-05 10:12)
     ☐ Copywriting
     ☐ Accordion on hover effects
+        Note: right now just the icon lights up to white
 
 OTHER:
     ☐ Opengraph images
 
 ARCHIVE:
     ✔ Governance @done(22-08-03 15:49)
+        ✔ Cards @done(22-08-08 15:10)
+        ✔ Tags @done(22-08-08 15:10)
+        ✔ Pending/In Progress/Concluded Filter @done(22-08-08 15:10)
+        ✔ Sorting @done(22-08-08 15:10)
+        ✔ Vote Status @done(22-08-08 15:10)
     ✔ Formula positioning @done(22-08-03 13:22)
     ✔ Input text is white @done(22-08-03 15:23)
     ✔ CTA @done(22-08-03 15:19)

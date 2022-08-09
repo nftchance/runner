@@ -39,6 +39,14 @@
     margin-top: 60px;
 }
 
+.email-signup > .btn-primary {
+    width: 105px;
+}
+
+.email-signup > .text-field-inline {
+    width: 180px;
+}
+
 #hero-img {
     margin-left: calc(-1 * var(--page-margins));
     margin-right: calc(-1 * var(--page-margins));

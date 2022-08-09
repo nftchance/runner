@@ -25,6 +25,7 @@
     border-radius: 4px 4px 0px 0px;
     padding: 20px 17px 30px 17px;
 }
+
 .proposal-actions {
     background-color: var(--dark);
     border-radius: 0px 0px 4px 4px;
@@ -36,6 +37,10 @@
     flex-direction: row;
     height: 32px;
     gap: 10px;
+}
+
+.proposal-actions > .action-btns > .btn-secondary {
+    width: 105px;
 }
 
 .votes-bar {

@@ -2,8 +2,6 @@ import SecondaryButton from "@components/Buttons/SecondaryButton";
 
 import "./ProposalCard.css";
 
-
-
 const ProposalCard = (
     {
         title,
@@ -19,7 +17,7 @@ const ProposalCard = (
             <div className="proposal-info">
                 <div className="proposal-tags">
                     {tags.map((tag) => (
-                        <div className="tag">
+                        <div className="tag" key={`tag${tag}`}>
                             <p className="tag-text">{tag}</p>
                         </div>
                     ))}

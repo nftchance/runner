@@ -1,0 +1,63 @@
+.proposal-details {
+    margin-bottom: 250px;
+}
+
+.proposal-details > h5 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.proposal-details > .proposal-tags {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.proposal-details > .proposal-tags > .tag {
+    width: auto;
+    border: 1px solid var(--light-border);
+    border-radius: 4px;
+    padding: 3px 8px 3px 8px;
+}
+
+.proposal-details > .proposal-tags > .tag > .tag-text {
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.proposal-details > .proposal-provider {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.proposal-details > .proposal-provider > .provider-icon-container {
+    display: flex;
+    border: 1px solid #FFFFFF65;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    padding-bottom: 1px;
+}
+
+
+.proposal-provider > .provider-icon-container > img {
+    width: 60%;
+    height: 60%;
+    align-self: center;
+}
+.proposal-provider > .provider-name {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    align-items: center;
+    padding-top: 1px;
+}
