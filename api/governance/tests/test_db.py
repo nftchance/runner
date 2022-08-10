@@ -85,3 +85,24 @@ class GovernanceTestCase(TestCase):
         )
 
         self.assertEqual(str(proposal), f"[RP{proposal.id}] Test proposal")
+
+    def test_summary_is_added_to_proposal_through_description(self):
+        proposal = Proposal.objects.create(
+            proposed_by=self.user,
+            title="Test Proposal",
+            description="This is a test proposal",
+            approved=True
+        )
+
+        self.assertEqual(proposal.summary, "This is a test proposal")
+
+    def test_summary_can_be_manually_defined_on_proposal(self):
+        proposal = Proposal.objects.create(
+            proposed_by=self.user,
+            title="Test Proposal",
+            description="This is a test proposal",
+            summary="This is a test proposal summary",
+            approved=True
+        )
+
+        self.assertEqual(proposal.summary, "This is a test proposal summary")
