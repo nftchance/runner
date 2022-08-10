@@ -24,11 +24,35 @@ class ProposalVote(models.Model):
         max_length=255, choices=VOTES, default=Vote.ABSTAIN)
     amount = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
+    released_at = models.DateTimeField(null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.voter} - {self.vote} - {self.amount}"
 
+    def deposit(self, amount):
+        # move the coin into the proposal pool
+        coin = Coin.objects.all().first()
+        coin.deposit(self.voter, amount)
+
+
+        self.save() 
+
+    def vote_lock_reward(self):
+        return self.amount * Decimal(0.1)
+
+    def voter_balance(self):
+        return self.amount + self.vote_lock_reward()
+
+    def release(self):
+        # move the coin into the voter account
+        coin = Coin.objects.all().first()
+        coin.withdraw(self.voter, self.voter_balance()) 
+
+        self.released_at = datetime.datetime.now()
+        self.save()
 
 class Proposal(models.Model):
     def save(self, *args, **kwargs):
@@ -88,34 +112,19 @@ class Proposal(models.Model):
             vote=_vote,
             amount=amount
         )
-        
-        # move the coin into the proposal pool
-        coin = Coin.objects.all().first()
-        coin.deposit(voter, amount)
+        vote_obj.deposit(amount) 
 
         self.votes.add(vote_obj)
 
         self.save()
 
-    def vote_lock_reward(self, voter):
-        if not self.votes.filter(voter=voter).exists():
-            return 0
-
-        vote_amount = self.votes.filter(voter=voter).first().amount
-
-        return vote_amount * Decimal(0.1)
-
-    def voter_balance(self, voter):
-        return self.votes.filter(voter=voter).first().amount + self.vote_lock_reward(voter)
-
     def release(self, voter):
-        # move the coin into the voter account
-        coin = Coin.objects.all().first()
-        coin.withdraw(voter, self.voter_balance(voter)) 
+        if self.votes.filter(voter=voter).exists():
+            self.votes.filter(voter=voter).first().release()
 
     def release_all(self):
         for vote in self.votes.all():
-            self.release(vote.voter)
+            vote.release()
 
     class Meta:
         ordering = ['-created_at']
