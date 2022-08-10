@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import django
 
 from django.db import models
@@ -96,10 +97,21 @@ class Proposal(models.Model):
 
         self.save()
 
+    def vote_lock_reward(self, voter):
+        if not self.votes.filter(voter=voter).exists():
+            return 0
+
+        vote_amount = self.votes.filter(voter=voter).first().amount
+
+        return vote_amount * Decimal(0.1)
+
+    def voter_balance(self, voter):
+        return self.votes.filter(voter=voter).first().amount + self.vote_lock_reward(voter)
+
     def release(self, voter):
         # move the coin into the voter account
         coin = Coin.objects.all().first()
-        coin.withdraw(voter, self.votes.filter(voter=voter).first().amount) 
+        coin.withdraw(voter, self.voter_balance(voter)) 
 
     def release_all(self):
         for vote in self.votes.all():
