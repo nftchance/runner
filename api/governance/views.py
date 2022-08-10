@@ -15,7 +15,6 @@ class ProposalVoteView(views.APIView):
             return Response(status=status.HTTP_404_NOT_FOUND, data={"error": "Proposal does not exist"})
 
         proposal = proposals.first()
-
         user = request.user
 
         if not proposal.approved:

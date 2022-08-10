@@ -20,6 +20,7 @@ class Transfer(models.Model):
             if self.from_user:
                 self.from_user.balance -= self.amount
                 self.from_user.save()
+                print('from_user.balance', self.from_user.balance)
 
 
             if self.to_user:
@@ -29,11 +30,11 @@ class Transfer(models.Model):
         super(Transfer, self).save(*args, **kwargs)
 
     LABELS = (
-        ('mint', 'Mint'),
-        ('transfer', 'Transfer'),
-        ('burn', 'Burn'),
-        ('deposit', 'Deposit'),
-        ('withdraw', 'Withdraw'),
+        (Label.MINT, 'Mint'),
+        (Label.TRANSFER, 'Transfer'),
+        (Label.BURN, 'Burn'),
+        (Label.DEPOSIT, 'Deposit'),
+        (Label.WITHDRAW, 'Withdraw'),
     )
 
     label = models.CharField(max_length=255, blank=True,
