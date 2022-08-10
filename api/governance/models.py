@@ -2,9 +2,10 @@ import datetime
 import django
 
 from django.db import models
+from django.db.models import Sum
 from django.shortcuts import reverse
 
-from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM, PROPOSAL_DURATION_DAYS, Vote
+from .utils import PROPOSAL_DURATION_DAYS, Vote
 
 
 class ProposalVote(models.Model):
@@ -61,8 +62,11 @@ class Proposal(models.Model):
 
         return "Open"
 
+    def _get_votes_sum(self, votes):
+        return votes.aggregate(Sum('amount'))['amount__sum'] or 0
+
     def _get_votes(self, vote):
-        return self.votes.filter(vote=vote).count()
+        return self._get_votes_sum(self.votes.filter(vote=vote))
 
     def get_votes_for(self):
         return self._get_votes(Vote.FOR)
@@ -74,7 +78,7 @@ class Proposal(models.Model):
         return self._get_votes(Vote.ABSTAIN)
 
     def get_votes_total(self):
-        return self.votes.all().count()
+        return self._get_votes_sum(self.votes.all())
 
     def vote(self, voter, vote):
         vote = ProposalVote.objects.create(

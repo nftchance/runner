@@ -158,6 +158,10 @@ class HttpTest(APITestCase):
         proposal = Proposal.objects.get(id=proposal.id)
 
         self.assertEqual(proposal.votes.count(), 1)
+        self.assertEqual(response.data["votes_for"], self.user.balance)
+        self.assertEqual(response.data["votes_against"], 0)
+        self.assertEqual(response.data["votes_abstain"], 0)
+        self.assertEqual(response.data["votes_total"], self.user.balance)
 
     def test_cannot_vote_after_proposal_closed(self):
         proposal = Proposal.objects.create(
