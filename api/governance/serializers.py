@@ -10,6 +10,12 @@ class ProposalVoteSerializer(serializers.Serializer):
     class Meta:
         model = ProposalVote
         fields = ('id', 'voter', 'vote', 'created_at')
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'voter': {'read_only': True},
+            'vote': {'read_only': True},
+            'created_at': {'read_only': True},
+        }
 
 
 class ProposalSerializer(serializers.ModelSerializer):

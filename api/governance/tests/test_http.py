@@ -9,11 +9,10 @@ from utils.tests.user import PASSWORD, create_user
 
 from coin.models import Coin
 
-from org.models import Org
 from org.permission_constants import org_permissions
 from org.utils import load_permissions
 
-from governance.models import Proposal, ProposalVote
+from governance.models import Proposal
 from governance.utils import Vote
 
 
@@ -290,3 +289,22 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(f"{response.data['error']}", "Proposal not approved")
+    
+    def test_cannot_vote_with_invalid_response(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": "INVALID",
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(f"{response.data['error']}", "Invalid vote")

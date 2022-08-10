@@ -2,6 +2,6 @@ PROPOSAL_SUBMISSION_BALANCE_MINIMUM = 100000
 PROPOSAL_DURATION_DAYS = 30
 
 class Vote:
-    FOR = True
-    AGAINST = False
-    ABSTAIN = None
+    FOR = 'for'
+    AGAINST = 'against'
+    ABSTAIN = 'abstain'

@@ -33,8 +33,11 @@ class ProposalVoteView(views.APIView):
         if proposal.votes.filter(voter=user).exists():
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})        
 
+        if request.data['vote'].lower() not in ['for', 'against', 'abstain']:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Invalid vote'})
+
         try:
-            obj = proposal.vote(user, request.data['vote'])
+            obj = proposal.vote(user, request.data['vote'].lower())
 
             serializer = ProposalVoteSerializer(obj)
 
