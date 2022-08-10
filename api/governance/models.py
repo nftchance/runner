@@ -5,6 +5,7 @@ import django
 from django.db import models
 from django.db.models import Sum
 from django.shortcuts import reverse
+from django.contrib.postgres.fields import ArrayField
 
 from coin.models import Coin, Transfer
 
