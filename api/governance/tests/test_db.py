@@ -106,3 +106,24 @@ class GovernanceTestCase(TestCase):
         )
 
         self.assertEqual(proposal.summary, "This is a test proposal summary")
+    
+    def test_cannot_create_proposal_with_invalid_tags(self):
+        with self.assertRaises(ValueError):
+            Proposal.objects.create(
+                proposed_by=self.user,
+                title="Test Proposal",
+                description="This is a test proposal",
+                tags=["test", "test", "test"],
+                approved=True
+            )
+
+    def test_can_create_proposal_with_valid_tags(self):
+        proposal = Proposal.objects.create(
+            proposed_by=self.user,
+            title="Test Proposal",
+            description="This is a test proposal",
+            tags=["ux"],
+            approved=True
+        )
+
+        self.assertEqual(proposal.tags, ["ux"])
