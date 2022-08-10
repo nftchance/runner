@@ -36,9 +36,8 @@ class ProposalVote(models.Model):
         # move the coin into the proposal pool
         coin = Coin.objects.all().first()
         coin.deposit(self.voter, amount)
-
-
-        self.save() 
+        
+        self.save()
 
     def vote_lock_reward(self):
         return self.amount * Decimal(0.1)
@@ -49,10 +48,11 @@ class ProposalVote(models.Model):
     def release(self):
         # move the coin into the voter account
         coin = Coin.objects.all().first()
-        coin.withdraw(self.voter, self.voter_balance()) 
+        coin.withdraw(self.voter, self.voter_balance())
 
         self.released_at = django.utils.timezone.now()
         self.save()
+
 
 class Proposal(models.Model):
     def save(self, *args, **kwargs):
@@ -69,7 +69,7 @@ class Proposal(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
 
-    votes = models.ManyToManyField(ProposalVote, blank=True, null=True)
+    votes = models.ManyToManyField(ProposalVote, blank=True)
 
     closed_at = models.DateTimeField(null=True, blank=True)
 
@@ -112,7 +112,7 @@ class Proposal(models.Model):
             vote=_vote,
             amount=amount
         )
-        vote_obj.deposit(amount) 
+        vote_obj.deposit(amount)
 
         self.votes.add(vote_obj)
 
