@@ -9,9 +9,6 @@ from .utils import PROPOSAL_DURATION_DAYS, Vote
 
 
 class ProposalVote(models.Model):
-    """
-    A vote on a proposal.
-    """
     VOTES = (
         (Vote.FOR, 'For'),
         (Vote.AGAINST, 'Against'),

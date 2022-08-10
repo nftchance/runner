@@ -1,7 +1,15 @@
+import django
+
 from rest_framework import serializers
 
-from .models import Proposal
-from .utils import Vote, PROPOSAL_SUBMISSION_BALANCE_MINIMUM
+from .models import Proposal, ProposalVote
+from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM
+
+
+class ProposalVoteSerializer(serializers.Serializer):
+    class Meta:
+        model = ProposalVote
+        fields = ('id', 'voter', 'vote', 'created_at')
 
 
 class ProposalSerializer(serializers.ModelSerializer):

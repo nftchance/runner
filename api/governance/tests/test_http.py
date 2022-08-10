@@ -157,11 +157,18 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         proposal = Proposal.objects.get(id=proposal.id)
 
         self.assertEqual(proposal.votes.count(), 1)
+        
+        # retrieve proposal
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
         self.assertEqual(response.data["votes_for"], self.user.balance)
         self.assertEqual(response.data["votes_against"], 0)
         self.assertEqual(response.data["votes_abstain"], 0)
@@ -203,7 +210,7 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         response = self.client.post(
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),

@@ -1,16 +1,51 @@
 import django
 
-from rest_framework import mixins, permissions, status, viewsets
-from rest_framework.decorators import action
+from rest_framework import mixins, permissions, status, views, viewsets
 from rest_framework.response import Response
 
 from .models import Proposal
-from .serializers import ProposalSerializer
+from .serializers import ProposalSerializer, ProposalVoteSerializer
+
+class ProposalVoteView(views.APIView):
+    def post(self, request, *args, **kwargs):
+        proposals = Proposal.objects.filter(id=self.kwargs['proposal_id'])
+
+        if not proposals.exists():
+            return Response(status=status.HTTP_404_NOT_FOUND, data={"error": "Proposal does not exist"})
+
+        proposal = proposals.first()
+
+        user = request.user
+
+        if not proposal.approved:
+            return Response(
+                {'error': 'Proposal not approved'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if django.utils.timezone.now() > proposal.closed_at:
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                            data={'error': 'Proposal is closed'})
+
+        if 1 > user.balance:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Insufficient balance'})
+
+        if proposal.votes.filter(voter=user).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})        
+
+        try:
+            obj = proposal.vote(user, request.data['vote'])
+
+            serializer = ProposalVoteSerializer(obj)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ProposalViewSet(
     mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin, 
-    mixins.ListModelMixin, 
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
     lookup_field = "id"
@@ -22,28 +57,3 @@ class ProposalViewSet(
 
     def perform_create(self, serializer):
         serializer.save(proposed_by=self.request.user)
-
-    @action(detail=True, methods=['post'])
-    def vote(self, request, *args, **kwargs):
-        proposal = self.get_object()
-
-        if not proposal.approved:
-            return Response(
-                {'error': 'Proposal not approved'},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if django.utils.timezone.now() > proposal.closed_at:
-            return Response(status=status.HTTP_400_BAD_REQUEST,
-                           data={'error': 'Proposal is closed'})
-
-        print('request user balance', request.user.balance)
-        if 1 > request.user.balance:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Insufficient balance'})
-
-        if proposal.votes.filter(voter=request.user).exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})
-
-        proposal.vote(request.user, request.data['vote'])
-        serializer = ProposalSerializer(proposal)
-        return Response(serializer.data)
