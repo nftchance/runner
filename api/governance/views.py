@@ -27,6 +27,12 @@ class ProposalViewSet(
     def vote(self, request, *args, **kwargs):
         proposal = self.get_object()
 
+        if not proposal.approved:
+            return Response(
+                {'error': 'Proposal not approved'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         if django.utils.timezone.now() > proposal.closed_at:
             return Response(status=status.HTTP_400_BAD_REQUEST,
                            data={'error': 'Proposal is closed'})

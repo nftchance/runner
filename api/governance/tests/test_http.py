@@ -92,11 +92,13 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
+                approved=True
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
+                approved=True
             )
         ]
 
@@ -115,6 +117,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
+            approved=True
         )
 
         response = self.client.get(
@@ -143,6 +146,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.secondary_user,
+            approved=True
         )
 
         response = self.client.post(
@@ -168,6 +172,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
+            approved=True,
             closed_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
@@ -187,6 +192,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.secondary_user,
+            approved=True,
         )
 
         response = self.client.post(
@@ -215,6 +221,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
+            approved=True,
         )
 
         response = self.client.post(
@@ -244,6 +251,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
+            approved=True
         )
 
         response = self.client.put(
@@ -257,4 +265,21 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED, response.status_code)
 
-    
+
+    def test_cannot_vote_on_proposal_not_approved(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.secondary_user,
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(f"{response.data['error']}", "Proposal not approved")

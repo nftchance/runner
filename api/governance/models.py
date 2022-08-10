@@ -38,6 +38,8 @@ class Proposal(models.Model):
 
         super(Proposal, self).save(*args, **kwargs)
 
+    approved = models.BooleanField(default=False)
+
     proposed_by = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)

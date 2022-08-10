@@ -29,6 +29,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
+            approved=True
         )
 
         self.assertEqual(proposal.title, "Test Proposal")
@@ -39,6 +40,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
+            approved=True
         )
 
         proposal.vote(self.user, Vote.FOR)
@@ -50,6 +52,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
+            approved=True
         )
 
         self.assertEqual(str(proposal), f"[RP{proposal.id}] Test proposal")
