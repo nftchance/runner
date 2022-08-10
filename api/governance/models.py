@@ -69,6 +69,8 @@ class Proposal(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
+summary = models.TextField(max_length=255)
+category_tags = ArrayField(models.CharField())
 
     votes = models.ManyToManyField(ProposalVote, blank=True)
 
