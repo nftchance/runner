@@ -9,11 +9,12 @@ from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM
 class ProposalVoteSerializer(serializers.Serializer):
     class Meta:
         model = ProposalVote
-        fields = ('id', 'voter', 'vote', 'created_at')
+        fields = ('id', 'voter', 'vote', 'amount', 'created_at')
         extra_kwargs = {
             'id': {'read_only': True},
             'voter': {'read_only': True},
             'vote': {'read_only': True},
+            'amount': {'read_only': True},
             'created_at': {'read_only': True},
         }
 

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Proposal
 from .serializers import ProposalSerializer, ProposalVoteSerializer
 
+
 class ProposalVoteView(views.APIView):
     def post(self, request, *args, **kwargs):
         proposals = Proposal.objects.filter(id=self.kwargs['proposal_id'])
@@ -27,23 +28,30 @@ class ProposalVoteView(views.APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data={'error': 'Proposal is closed'})
 
-        if 1 > user.balance:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Insufficient balance'})
-
-        if proposal.votes.filter(voter=user).exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})        
+        amount = float(request.data.get('amount', 0))
 
         if request.data['vote'].lower() not in ['for', 'against', 'abstain']:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Invalid vote'})
 
+        if not amount or amount < 1:
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                            data={'error': 'Amount must be greater than 0'})
+
+        if 1 > user.balance:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Insufficient balance'})
+
+        if proposal.votes.filter(voter=user).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})
+
         try:
-            obj = proposal.vote(user, request.data['vote'].lower())
+            obj = proposal.vote(user, request.data['vote'].lower(), request.data['amount'])
 
             serializer = ProposalVoteSerializer(obj)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': str(e)})
+
 
 class ProposalViewSet(
     mixins.CreateModelMixin,

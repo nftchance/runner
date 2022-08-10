@@ -152,6 +152,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
@@ -161,17 +162,17 @@ class HttpTest(APITestCase):
         proposal = Proposal.objects.get(id=proposal.id)
 
         self.assertEqual(proposal.votes.count(), 1)
-        
+
         # retrieve proposal
         response = self.client.get(
             reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
-        self.assertEqual(response.data["votes_for"], self.user.balance)
+        self.assertEqual(response.data["votes_for"], 100)
         self.assertEqual(response.data["votes_against"], 0)
         self.assertEqual(response.data["votes_abstain"], 0)
-        self.assertEqual(response.data["votes_total"], self.user.balance)
+        self.assertEqual(response.data["votes_total"], 100)
 
     def test_cannot_vote_after_proposal_closed(self):
         proposal = Proposal.objects.create(
@@ -186,6 +187,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
         )
@@ -205,6 +207,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
@@ -215,6 +218,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
@@ -234,6 +238,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.tertiary_access}"
         )
@@ -246,6 +251,7 @@ class HttpTest(APITestCase):
             reverse("proposal-vote", kwargs={"proposal_id": 1}),
             data={
                 "vote": Vote.FOR,
+                'amount': 100,
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
@@ -269,8 +275,8 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
         )
 
-        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED, response.status_code)
-
+        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED,
+                         response.status_code)
 
     def test_cannot_vote_on_proposal_not_approved(self):
         proposal = Proposal.objects.create(
@@ -289,7 +295,7 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual(f"{response.data['error']}", "Proposal not approved")
-    
+
     def test_cannot_vote_with_invalid_response(self):
         proposal = Proposal.objects.create(
             title="Test Proposal",
@@ -308,3 +314,68 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(f"{response.data['error']}", "Invalid vote")
+
+    def test_cannot_vote_with_amount_larger_than_balance(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+                'amount': 100,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.tertiary_access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(f"{response.data['error']}", "Insufficient balance")
+
+    def test_users_balance_decreases_after_voting(self):
+        starting_balance = self.user.balance
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+                'amount': 100,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        # refresh user object
+        self.user.refresh_from_db()
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(self.user.balance, starting_balance - 100)
+
+    def test_user_cannot_vote_with_zero_amount(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+                'amount': 0,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(f"{response.data['error']}", "Amount must be greater than 0")

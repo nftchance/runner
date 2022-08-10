@@ -1,6 +1,9 @@
+from decimal import Decimal
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+
+from .utils import Label
 
 
 class Transfer(models.Model):
@@ -9,6 +12,8 @@ class Transfer(models.Model):
             if self.from_user == self.to_user:
                 raise ValueError('Cannot transfer coin to self.')
 
+            self.amount = Decimal(self.amount)
+
             if not self.mint and self.from_user.balance < self.amount:
                 raise ValueError("Exceeds balance.")
 
@@ -16,11 +21,23 @@ class Transfer(models.Model):
                 self.from_user.balance -= self.amount
                 self.from_user.save()
 
+
             if self.to_user:
                 self.to_user.balance += self.amount
                 self.to_user.save()
 
         super(Transfer, self).save(*args, **kwargs)
+
+    LABELS = (
+        ('mint', 'Mint'),
+        ('transfer', 'Transfer'),
+        ('burn', 'Burn'),
+        ('deposit', 'Deposit'),
+        ('withdraw', 'Withdraw'),
+    )
+
+    label = models.CharField(max_length=255, blank=True,
+                             null=True, choices=LABELS, default=Label.TRANSFER)
 
     from_user = models.ForeignKey(
         'user.User', blank=True, null=True, on_delete=models.CASCADE, related_name='from_user')
@@ -42,6 +59,7 @@ class Transfer(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+
 class Coin(models.Model):
     name = models.CharField(max_length=255)
     symbol = models.CharField(max_length=255)
@@ -52,20 +70,26 @@ class Coin(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-    def mint(self, to_user, amount):
+    def mint(self, to_user, amount, label=Label.MINT):
         transfer = Transfer.objects.create(
-            to_user=to_user, amount=amount, mint=True)
+            to_user=to_user, amount=amount, mint=True, label=label)
         return transfer
 
-    def burn(self, from_user, amount):
+    def burn(self, from_user, amount, label=Label.BURN):
         transfer = Transfer.objects.create(
-            from_user=from_user, amount=amount, mint=True)
+            from_user=from_user, amount=amount, label=label)
         return transfer
 
-    def transfer(self, from_user, to_user, amount):
+    def transfer(self, from_user, to_user, amount, label=Label.TRANSFER):
         transfer = Transfer.objects.create(
-            from_user=from_user, to_user=to_user, amount=amount)
+            from_user=from_user, to_user=to_user, amount=amount, label=label)
         return transfer
+
+    def deposit(self, from_user, amount):
+        return self.burn(from_user, amount, Label.DEPOSIT)
+
+    def withdraw(self, to_user, amount):
+        return self.mint(to_user, amount, Label.WITHDRAW)
 
     class Meta:
         ordering = ['-created_at']

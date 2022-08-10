@@ -43,7 +43,7 @@ class GovernanceTestCase(TestCase):
             approved=True
         )
 
-        proposal.vote(self.user, Vote.FOR)
+        proposal.vote(self.user, Vote.FOR, 1)
 
         self.assertEqual(proposal.votes.count(), 1)
 

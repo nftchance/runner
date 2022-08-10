@@ -5,6 +5,8 @@ from django.db import models
 from django.db.models import Sum
 from django.shortcuts import reverse
 
+from coin.models import Coin, Transfer
+
 from .utils import PROPOSAL_DURATION_DAYS, Vote
 
 
@@ -24,7 +26,7 @@ class ProposalVote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.proposal} - {self.voter} - {self.vote}'
+        return f"{self.voter} - {self.vote} - {self.amount}"
 
 
 class Proposal(models.Model):
@@ -79,14 +81,29 @@ class Proposal(models.Model):
     def get_votes_total(self):
         return self._get_votes_sum(self.votes.all())
 
-    def vote(self, voter, vote):
-        vote = ProposalVote.objects.create(
+    def vote(self, voter, _vote, amount):
+        vote_obj = ProposalVote.objects.create(
             voter=voter,
-            vote=vote,
-            amount=voter.balance
+            vote=_vote,
+            amount=amount
         )
+        
+        # move the coin into the proposal pool
+        coin = Coin.objects.all().first()
+        coin.deposit(voter, amount)
 
-        self.votes.add(vote)
+        self.votes.add(vote_obj)
+
+        self.save()
+
+    def release(self, voter):
+        # move the coin into the voter account
+        coin = Coin.objects.all().first()
+        coin.withdraw(voter, self.votes.filter(voter=voter).first().amount) 
+
+    def release_all(self):
+        for vote in self.votes.all():
+            self.release(vote.voter)
 
     class Meta:
         ordering = ['-created_at']
