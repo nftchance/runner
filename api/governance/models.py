@@ -51,7 +51,7 @@ class ProposalVote(models.Model):
         coin = Coin.objects.all().first()
         coin.withdraw(self.voter, self.voter_balance()) 
 
-        self.released_at = datetime.datetime.now()
+        self.released_at = django.utils.timezone.now()
         self.save()
 
 class Proposal(models.Model):

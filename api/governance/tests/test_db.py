@@ -1,4 +1,5 @@
 import datetime
+import django
 
 from django.test import TestCase
 
@@ -63,7 +64,7 @@ class GovernanceTestCase(TestCase):
         self.assertEqual(self.user.balance, 10000000000000 - 1)
         self.assertEqual(proposal.votes.count(), 1)
 
-        proposal.closed_at = "2020-01-01T00:00:00Z"
+        proposal.closed_at = django.utils.timezone.now() - datetime.timedelta(days=90)
         proposal.save()
 
         self.assertEqual(proposal.votes.count(), 1)
