@@ -34,29 +34,6 @@ class GovernanceTestCase(TestCase):
         self.assertEqual(proposal.title, "Test Proposal")
         self.assertEqual(proposal.description, "This is a test proposal")
 
-    def test_cannot_create_proposal_with_insufficient_balance(self):
-        with self.assertRaises(ValueError) as e:
-            print(e)
-            Proposal.objects.create(
-                proposed_by=self.secondary_user,
-                title="Test Proposal",
-                description="This is a test proposal",
-            )
-
-            self.assertEqual(str(e.exception), "Insufficient balance")
-
-    def test_cannot_vote_with_insufficient_balance(self):
-        proposal = Proposal.objects.create(
-            proposed_by=self.user,
-            title="Test Proposal",
-            description="This is a test proposal",
-        )
-
-        with self.assertRaises(ValueError) as e:
-            proposal.vote(self.tertiary_user, Vote.FOR)
-
-            self.assertEqual(str(e.exception), "Insufficient balance")
-
     def test_can_vote(self):
         proposal = Proposal.objects.create(
             proposed_by=self.user,
@@ -65,41 +42,6 @@ class GovernanceTestCase(TestCase):
         )
 
         proposal.vote(self.user, Vote.FOR)
-
-        self.assertEqual(proposal.votes.count(), 1)
-    
-    def test_cannot_vote_twice_on_same_proposal(self):
-        proposal = Proposal.objects.create(
-            proposed_by=self.user,
-            title="Test Proposal",
-            description="This is a test proposal",
-        )
-
-        proposal.vote(self.user, Vote.FOR)
-
-        with self.assertRaises(ValueError) as e:
-            proposal.vote(self.user, Vote.FOR)
-
-            self.assertEqual(str(e.exception), "Already voted")
-
-        self.assertEqual(proposal.votes.count(), 1)
-
-    def test_cannot_vote_after_proposal_expires(self):
-        proposal = Proposal.objects.create(
-            proposed_by=self.user,
-            title="Test Proposal",
-            description="This is a test proposal",
-        )
-
-        proposal.vote(self.user, Vote.FOR)
-
-        proposal.closed_at = proposal.created_at - datetime.timedelta(days=2)
-        proposal.save()
-
-        with self.assertRaises(ValueError) as e:
-            proposal.vote(self.user, Vote.FOR)
-
-            self.assertEqual(str(e.exception), "Proposal already closed")
 
         self.assertEqual(proposal.votes.count(), 1)
 

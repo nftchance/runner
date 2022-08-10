@@ -50,7 +50,6 @@ class LogOutView(views.APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        print("in post")
         try:
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)

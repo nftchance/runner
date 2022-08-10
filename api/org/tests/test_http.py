@@ -45,6 +45,7 @@ class HttpTest(APITestCase):
             data={"name": "The Best of Times"},
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
+        
         org = Org.objects.get(name="The Best of Times")
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(response.data["id"], org.id)

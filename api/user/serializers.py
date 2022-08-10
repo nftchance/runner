@@ -35,7 +35,8 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
         )
-        extra_kwargs = {"id": {"read_only": True}, "password": {"write_only": True}}
+        extra_kwargs = {"id": {"read_only": True},
+                        "password": {"write_only": True}}
 
 
 class LogInSerializer(TokenObtainPairSerializer):
@@ -81,7 +82,8 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+            raise serializers.ValidationError(
+                {"authorize": "You dont have permission for this user."})
 
         instance.set_password(validated_data["password1"])
         instance.save()
@@ -91,14 +93,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = ("username", "first_name", "last_name", "email")
-        extra_kwargs = {
-            "first_name": {"required": True},
-            "last_name": {"required": True},
-        }
 
     def validate_email(self, value):
         user = self.context["request"].user
@@ -112,8 +106,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
-        
+            raise serializers.ValidationError(
+                {"authorize": "You dont have permission for this user."})
+
         instance.first_name = validated_data["first_name"]
         instance.last_name = validated_data["last_name"]
         instance.email = validated_data["email"]
@@ -122,3 +117,11 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")
+        extra_kwargs = {
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+        }
