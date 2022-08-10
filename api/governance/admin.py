@@ -6,7 +6,7 @@ from .models import Proposal, ProposalVote
 @admin.register(Proposal)
 class ProposalAdmin(admin.ModelAdmin):
     fields = ('proposed_by', 'votes', 'title', 'description', 'summary',
-              'category_tags', 'closed_at', 'created_at', 'updated_at')
+              'tags', 'closed_at', 'created_at', 'updated_at')
     readonly_fields = ('closed_at', 'created_at', 'updated_at')
 
 

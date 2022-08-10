@@ -7,22 +7,16 @@ from django.db.models import Sum
 from django.shortcuts import reverse
 from django.contrib.postgres.fields import ArrayField
 
-from coin.models import Coin, Transfer
+from coin.models import Coin
 
-from .utils import PROPOSAL_DURATION_DAYS, Vote
+from .utils import PROPOSAL_DURATION_DAYS, Vote, Tag
 
 
 class ProposalVote(models.Model):
-    VOTES = (
-        (Vote.FOR, 'For'),
-        (Vote.AGAINST, 'Against'),
-        (Vote.ABSTAIN, 'Abstain'),
-    )
-
     voter = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
     vote = models.CharField(
-        max_length=255, choices=VOTES, default=Vote.ABSTAIN)
+        max_length=255, choices=Vote.VOTES, default=Vote.ABSTAIN)
     amount = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
     released_at = models.DateTimeField(null=True)
@@ -37,7 +31,7 @@ class ProposalVote(models.Model):
         # move the coin into the proposal pool
         coin = Coin.objects.all().first()
         coin.deposit(self.voter, amount)
-        
+
         self.save()
 
     def vote_lock_reward(self):
@@ -60,6 +54,9 @@ class Proposal(models.Model):
         if not self.closed_at:
             self.closed_at = django.utils.timezone.now(
             ) + datetime.timedelta(days=PROPOSAL_DURATION_DAYS)
+        
+        if not self.summary:
+            self.summary = self.description[:100]
 
         super(Proposal, self).save(*args, **kwargs)
 
@@ -69,8 +66,11 @@ class Proposal(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
-summary = models.TextField(max_length=255)
-category_tags = ArrayField(models.CharField())
+
+    summary = models.TextField(blank=True)
+
+    tags = ArrayField(models.CharField(
+        max_length=255, choices=Tag.TAGS), blank=True)
 
     votes = models.ManyToManyField(ProposalVote, blank=True)
 

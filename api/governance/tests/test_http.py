@@ -72,6 +72,7 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
+        print(response.data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         proposal = Proposal.objects.get(title="Test Proposal")
@@ -379,3 +380,49 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(f"{response.data['error']}", "Amount must be greater than 0")
+    
+    def test_can_create_proposal_with_tags(self):
+        response = self.client.post(
+            reverse("proposal-list"),
+            data={
+                "title": "Test Proposal",
+                "description": "Test proposal",
+                "tags": ["ux"],
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(response.data['tags'], ["ux"])
+
+        proposal = Proposal.objects.get(id=response.data['id'])
+
+        self.assertEqual(len(proposal.tags), 1)
+
+    def test_cannot_create_proposal_with_partially_invalid_tags(self):
+        response = self.client.post(
+            reverse("proposal-list"),
+            data={
+                "title": "Test Proposal",
+                "description": "Test proposal",
+                "tags": ["ux", "invalid"],
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(f"{response.data['error']}", "Invalid tags")
+
+    def test_cannot_create_proposal_with_invalid_tags(self):
+        response = self.client.post(
+            reverse("proposal-list"),
+            data={
+                "title": "Test Proposal",
+                "description": "Test proposal",
+                "tags": ["tag1", "tag2"],
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data['error'], "Invalid tags")

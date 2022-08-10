@@ -3,7 +3,7 @@ import django
 from rest_framework import serializers
 
 from .models import Proposal, ProposalVote
-from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM
+from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM, Tag
 
 
 class ProposalVoteSerializer(serializers.Serializer):
@@ -20,6 +20,9 @@ class ProposalVoteSerializer(serializers.Serializer):
 
 
 class ProposalSerializer(serializers.ModelSerializer):
+    tags = serializers.ListField(child=serializers.CharField(
+        max_length=256), allow_empty=True, required=False)
+
     status = serializers.SerializerMethodField()
 
     votes_for = serializers.SerializerMethodField()
@@ -46,6 +49,10 @@ class ProposalSerializer(serializers.ModelSerializer):
         if self.context['request'].user.balance < PROPOSAL_SUBMISSION_BALANCE_MINIMUM:
             raise serializers.ValidationError(
                 {'error': 'Insufficient balance'})
+
+        if 'tags' in self.validated_data and not all(tag in dict(Tag.TAGS) for tag in self.validated_data['tags']):
+            raise serializers.ValidationError(
+                {'error': 'Invalid tags'})
 
         return super(ProposalSerializer, self).create(*args, **kwargs)
 
