@@ -2,6 +2,7 @@
     background-color: var(--dark-border);
     border-radius: 4px 4px 0px 0px;
     padding: 20px 17px 20px 17px;
+    height: 160px;
 }
 
 .module-info > .module-desc {
@@ -20,6 +21,15 @@
 
 .module-provider > .provider-icon-container {
     display: flex;
+    border: 1px solid var(--dark);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    padding-bottom: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
 }
 
 .module-provider > .provider-name {
@@ -27,7 +37,6 @@
     font-size: 14px;
     font-weight: 500;
     align-items: center;
-    padding-top: 1px;
 }
 
 .module-actions {

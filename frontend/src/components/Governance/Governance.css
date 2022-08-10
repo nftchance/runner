@@ -60,18 +60,15 @@
 
 .sort-tab {
     display: inline;
-    color:#FFFFFF;
-    opacity: 0.65;
+    color: #FFFFFF;
+    width: 150px;
+    padding-left: auto;
+    text-align: right;
 }
 
-.expand-icon {
-    opacity: 0.65;
-}
-
-.sort-tab:hover,
-.sort-tab:focus,
-.sort-tab:active {
-    opacity: 1;
+.sort-tab > div:hover,
+.sort-tab > div:focus,
+.sort-tab > div:active {
     border-bottom: 1px solid #FFFFFF;
     margin-bottom: -1px;
 }

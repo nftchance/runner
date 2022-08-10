@@ -137,10 +137,7 @@ p {
   border: 1px solid var(--dark-blue);
 }
 
-.MuiSelect-standard {
-  padding-right: 20px !important;
-}
-
+/* Menus */
 .MuiPopover-root > .MuiPaper-root {
   background-color: var(--dark-border);
   font-family: inherit;
@@ -151,9 +148,12 @@ p {
   opacity: 0.65;
 }
 
+.MuiButtonBase-root[aria-expanded="true"] {
+  opacity: 1;
+}
+
 .MuiList-root > .MuiButtonBase-root:hover,
 .MuiList-root > .MuiButtonBase-root:active,
-.MuiList-root > .MuiButtonBase-root:focus,
 .MuiList-root > .MuiButtonBase-root.Mui-selected,
 .MuiList-root > .MuiButtonBase-root.Mui-selected:hover {
   opacity: 1;

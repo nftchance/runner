@@ -21,16 +21,19 @@ import "./Home.css";
 const Home = () => {
     let navigate = useNavigate();
 
+    const [ emailField, setEmailField ] = useState("")
     const [ joinWaitlistMsg, setJoinWaitlistMsg ] = useState("Join Waitlist");
     const [ dashboardTab, setDashboardTab ] = useState("Maintenance");
 
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+    }
+
     const handleJoinWaitlist = () => {
-        // validate email? or handle on backend
-        var valid = true;
-        if (!valid) 
-            setJoinWaitlistMsg("Invalid Email!");
+        if (!isValidEmail(emailField))
+            setJoinWaitlistMsg("Invalid Email");
         else
-            setJoinWaitlistMsg("✔️ Joined")
+            setJoinWaitlistMsg("✓ Joined")
     }
 
     return (
@@ -50,6 +53,8 @@ const Home = () => {
                     <div className="email-signup">
                         <TextFieldInline
                             placeholder="Email address..."
+                            value={emailField}
+                            onChange={(event) => setEmailField(event.target.value)}
                         />
                         <PrimaryButton
                             text={joinWaitlistMsg}
@@ -203,6 +208,8 @@ const Home = () => {
                     <div className="cta-email email-signup">
                         <TextFieldInline
                             placeholder={"Email address..."}
+                            value={emailField}
+                            onChange={(event) => setEmailField(event.target.value)}
                         />
                         <PrimaryButton
                             text={joinWaitlistMsg}

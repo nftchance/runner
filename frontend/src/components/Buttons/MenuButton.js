@@ -19,6 +19,7 @@ const MenuButton = ({icon, menuItems, handleMenu}) => {
                 aria-haspopup="true"
                 aria-expanded={open ? true : undefined}
                 onClick={(event) => setAnchorEl(event.currentTarget)}
+                disableRipple
             >
                 <FontAwesomeIcon 
                     className="menu-icon" 

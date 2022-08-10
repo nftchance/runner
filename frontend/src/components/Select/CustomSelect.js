@@ -1,10 +1,19 @@
 import { Select, MenuItem } from "@mui/material";
 import { StyledEngineProvider } from '@mui/material/styles';
-import { KeyboardArrowDown } from '@mui/icons-material';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./CustomSelect.css";
 
 const CustomSelect = ({selected, placeholder, options, onChange}) => {
+
+    const dropdownIcon = () => (
+        <FontAwesomeIcon 
+            className="chevron" 
+            icon={["fal", "angle-down"]} 
+            style={{color: 'inherit'}}
+        />
+    )
+
     return (
         <StyledEngineProvider injectFirst>
             <div className="select-container">
@@ -13,7 +22,7 @@ const CustomSelect = ({selected, placeholder, options, onChange}) => {
                     variant="standard"
                     value={selected}
                     onChange={onChange}
-                    IconComponent={KeyboardArrowDown}
+                    IconComponent={dropdownIcon}
                     displayEmpty
                     renderValue={(selected) => {
                         if (!selected) return <p className="option-text">{placeholder}</p>

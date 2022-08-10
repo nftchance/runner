@@ -1,13 +1,12 @@
-.custom-select {
-    display: flex;
-    height: 100%;
-    width: 100%;
+.select-container {
+    display: inline-block;
 }
-.custom-select::after,
-.custom-select::before,
-.custom-select:hover::before,
-.custom-select:hover::after {
-    display: none;
+
+.custom-select {
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
 }
 
 .custom-select > div {
@@ -16,7 +15,12 @@
 
 .custom-select > svg {
     color: #FFFFFF;
-    height: 16px;
+    height: 20px;
+    margin: auto;
+    position: absolute;
+    top: 0; bottom: 8px; right: 0;
+    z-index: -1;
+    opacity: 0.65;
 }
 
 .option-text {
@@ -25,4 +29,23 @@
     font-weight: 700;
     line-height: 20px;
     font-size: 14px;
+}
+
+.MuiInput-root::before,
+.MuiInput-root::after {
+  display: none;
+}
+
+.custom-select > .MuiSelect-select {
+    opacity: 0.65;
+}
+
+/* Holy shit */
+.custom-select > .MuiSelect-select:hover,
+.custom-select > .MuiSelect-select:active,
+.custom-select > .MuiSelect-select:hover + input + svg,
+.custom-select > .MuiSelect-select:active + input + svg,
+.custom-select > .MuiSelect-select[aria-expanded="true"],
+.custom-select > .MuiSelect-select[aria-expanded="true"] + input + svg {
+    opacity: 1;
 }

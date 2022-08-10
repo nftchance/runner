@@ -1,7 +1,8 @@
 import { useState } from "react"
 
 import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import CloseIcon from "@mui/icons-material/Close";
 
 import "./SystemMessage.css"
 
@@ -26,7 +27,11 @@ const SystemMessage = ({message, linkTo}) => {
 
                     <div className="close">
                         <IconButton className="close-btn" size="small" onClick={handleClose}>
-                            <CloseIcon fontSize="inherit"/>
+                            {/* <CloseIcon fontSize="inherit"/> */}
+                            <FontAwesomeIcon
+                                className="close-icon"
+                                icon={["fal", "fa-x"]}
+                            />
                         </IconButton>
                     </div>
                 </div>

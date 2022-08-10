@@ -6,7 +6,7 @@ const Loading = () => {
     return (
         <Page>
             <div className="loading-container">
-
+                
             </div>
         </Page>
     )

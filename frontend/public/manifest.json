@@ -1,6 +1,6 @@
 {
-  "short_name": "RUNNER",
-  "name": "RUNNER",
+  "short_name": "runner",
+  "name": "runner",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#EFF855",
+  "background_color": "#1C1C1C"
 }

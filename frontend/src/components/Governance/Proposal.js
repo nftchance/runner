@@ -1,33 +1,72 @@
-// import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 
 import Page from "@components/Page/Page";
 import AccordionPanel from "@components/Accordion/AccordionPanel";
 import PrimaryButton from "@components/Buttons/PrimaryButton";
 import MenuButton from "@components/Buttons/MenuButton";
 
+import badge from "@images/badge.png";
 import "./Proposal.css";
+// import { URL_CONSTANTS } from "@components/Constants/constants";
 
 const Proposal = () => {
-    // TODO: Fetch proposal info
-    // const params = useParams();
-    const proposalActions = ["Do Something", "Do Something Else"]
+    const params = useParams();
+    const [ proposalData, setProposalData ] = useState();
 
-    const proposalData = {
-        title: '[RP1] Mobile-First Front-End Design',
-        description: "With the majority of services being render in-field, the user-experience is key to securing the highest level of impact from the utilization of better tools.",
-        detail: "TL/DR: To get Lil Nouns a wardrobe across all metaverse and social platforms.\n\nTo be able to Lil Nounify yourself in every medium should be our number one goal. While the below plan does involve some rarity in its distribution mechanics, the main goal is to have as many Lil Noun “wearables”; whether in Metaverse, Office meeting settings?, Tik-Tok, Snap Chat, Instagram, etc, etc. I believe this aspect DIRECTLY falls under PROLIFERATION tenant.\n\nHaving FashionVerse Fashion House push out a major Collection like this will essentially blitz all socials over the next 2 Months. It will also allow us to tweak our future plans as we see how this unfolds and who steps up to participate because of this.\n\nI think the value proposition can be summed up in the article below by Zeneca_33\n\nImpossible Expectations\n\nIf you haven’t read this latest piece from Zeneca_33, it discusses a lot about how to manage, or not manage, impossible expectations. This wearable schedule is an attempt to bridge some of this expectations gap held among different participants in the NFT space. AND have some FUN while we are doing it!A little bit of rarity for lower numbers.",
-        tags: [
-            'Dashboard',
-            'UX'
-        ], 
-        votingPercents: [60.25, 25.79, 0],
-        status: 'In Progress',
-        statusIndicatorColor: 'green',
-        quorom: '421k $RUNNER',
-        startDate: 'Jul 27, 2022, 3:56 PM',
-        endDate: 'Aug 1, 2022, 3:56 PM',
-        votingSystem: 'Basic Voting'
+    const proposalActions = ["Do Something", "Do Something Else"]
+    const proposalIndicatorColors = {
+        'Open': 'green',
     }
+
+    const votePercentages = [
+        (proposalData?.votes_for / proposalData?.votes_total * 100).toFixed(2),
+        (proposalData?.votes_against / proposalData?.votes_total * 100).toFixed(2),
+        (proposalData?.votes_abstain / proposalData?.votes_total * 100).toFixed(2)
+    ]
+
+
+    useEffect(() => {
+        // TODO: fetch from API
+        // const url = `${URL_CONSTANTS.api}/proposal/${params.id}`
+        // const request = new Request(url, {
+        //     method: 'GET',
+        //     cache: 'default'
+        // })
+        // fetch(request)
+        //     .then((response) => response.json())
+        //     .then((response) => {
+        //         // setProposalData(response)
+        //     })
+        //     .catch((error) => {
+        //         console.log('Error getting proposal data', error)
+        //     })
+        
+        
+        // Using dummy data prior to merging backend and frontend, 
+        // also applying a delay to see how the component renders without data.
+        setTimeout(() => {
+            setProposalData(
+                {
+                    "id": 1,
+                    "status": "Open",
+                    "votes_for": 39,
+                    "votes_against": 59,
+                    "votes_abstain": 3,
+                    "votes_total": 500,
+                    "approved": false,
+                    "title": "My First Proposal",
+                    "description": "This is my first proposal. I hope you like it.\r\n\r\nPS: Postgres kicked my ass tonight",
+                    "closed_at": "2022-09-09T06:40:28.645222Z",
+                    "created_at": "2022-08-10T06:40:28.646132Z",
+                    "updated_at": "2022-08-10T06:40:28.646160Z",
+                    "proposed_by": 1,
+                    "votes": []
+                }
+            )
+        }, 2000)
+    }, [params])
 
     const handleMenuAction = (action) => {
         console.log('Menu Action: ', action)
@@ -38,142 +77,162 @@ const Proposal = () => {
     }
 
     return (
-        <Page>
-            <div className="proposal-grid">
-                <div className="proposal-details">
-                    <div className="proposal-tags">
-                        {proposalData.tags.map((tag) => (
-                            <div className="tag" key={`tag${tag}`}>
-                                <p className="tag-text">{tag}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="proposal-title">
-                        <h1>{ proposalData.title }</h1>
-                        <div className="proposal-menu-btn">
-                            <MenuButton
-                                icon={["fal", "fa-ellipsis"]}
-                                menuItems={proposalActions}
-                                handleMenu={handleMenuAction}
-                            />
-                        </div>
-                    </div>
-                    <h5>{ proposalData.description }</h5>
+        <>
+            <HelmetProvider>
+                <Helmet>
+                    <title>{`runner | [RP${params.id}] ${proposalData?.title ? proposalData.title : ''}`}</title>
+                    <meta name="og:title" content={`runner | [RP${params.id}]`} />
+                    <meta name="og:description" content={`runner | [RP${params.id}]`} />
 
-                    <div className="proposal-provider">
-                        <div className="provider-icon-container">
-                            <img src={'/badge.svg'} alt='Runner' />
-                        </div>
-                        <span className="provider-name">runner</span>
-                    </div>
+                    {/* TODO: Figure out if the description is general or the summary proposal
                     
-                    <AccordionPanel
-                        title={"Details of this proposal"}
-                        detail={proposalData.detail}
-                        index={0}
-                        open={true}
-                    />
-                </div>
-                <div className="voting">
-                    <div className="voting-info">
-                        <h4>Information</h4>
+                    <meta name="description" content={SEO_CONSTANTS.roadmap.description} />
+                    <meta name="og:description" content={SEO_CONSTANTS.roadmap.description} />
+                    <meta name="twitter:description" content={SEO_CONSTANTS.roadmap.description} /> 
+                    */}
 
-                        <div className="voting-detail">
-                            <p>Status</p>
-                            <div className="voting-detail-info">
-                                <div 
-                                    className={`status-indicator ${proposalData.statusIndicatorColor}`}
+                    <meta property="og:url" content={`${window.location.href}`} />
+                </Helmet>
+            </HelmetProvider>
+
+            <Page>
+                <div className="proposal-grid">
+                    <div className="proposal-details">
+                        <div className="proposal-tags">
+                            {proposalData?.tags?.map((tag) => (
+                                <div className="tag" key={`tag${tag}`}>
+                                    <p className="tag-text">{tag}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="proposal-title">
+                            <h1>{`[RP${params.id}] ${proposalData?.title}`}</h1>
+                            <div className="proposal-menu-btn">
+                                <MenuButton
+                                    icon={["fal", "fa-ellipsis"]}
+                                    menuItems={proposalActions}
+                                    handleMenu={handleMenuAction}
                                 />
-                                <p>{proposalData.status}</p>
                             </div>
+                        </div>
+                        <h5>{ proposalData?.summary }</h5>
+
+                        <div className="proposal-provider">
+                            <div 
+                                className="provider-icon-container"
+                                style={{backgroundImage: `url(${badge})`}}
+                            />
+                            <span className="provider-name">runner</span>
                         </div>
                         
-                        <div className="voting-detail">
-                            <p>Quorom</p>
-                            <div className="voting-detail-info">
-                                <p>{proposalData.quorom}</p>
-                            </div>
-                        </div>
-
-                        <div className="voting-detail">
-                            <p>Start Date</p>
-                            <div className="voting-detail-info">
-                                <p>{proposalData.startDate}</p>
-                            </div>
-                        </div>
-
-                        <div className="voting-detail">
-                            <p>End Date</p>
-                            <div className="voting-detail-info">
-                                <p>{proposalData.endDate}</p>
-                            </div>
-                        </div>
-
-                        <div className="voting-detail">
-                            <p>Voting System</p>
-                            <div className="voting-detail-info">
-                                <p>{proposalData.votingSystem}</p>
-                            </div>
-                        </div>
+                        <AccordionPanel
+                            title={"Details of this proposal"}
+                            detail={proposalData?.description}
+                            index={0}
+                            open={true}
+                        />
                     </div>
+                    <div className="voting">
+                        <div className="voting-info">
+                            <h4>Information</h4>
 
-                    <div className="voting-results">
-                        <h4>Current Results</h4>
+                            <div className="voting-detail">
+                                <p>Status</p>
+                                <div className="voting-detail-info">
+                                    <div 
+                                        className={`status-indicator ${proposalIndicatorColors[proposalData?.status]}`}
+                                    />
+                                    <p>{proposalData?.status}</p>
+                                </div>
+                            </div>
+                            
+                            {/* <div className="voting-detail">
+                                <p>Quorom</p>
+                                <div className="voting-detail-info">
+                                    <p>{proposalData?.quorom}</p>
+                                </div>
+                            </div> */}
 
-                        <div className="voting-bar-header">
-                            <p>For</p>
-                            <p className="voting-percentage">
-                                {proposalData.votingPercents[0]}%
-                            </p>
-                        </div>
-                        <div className="voting-bar">
-                            <div 
-                                className={`voting-progress ${proposalData.votingPercents[0] === 0 ? 'hidden' : ''}`} 
-                                style={{width: `${proposalData.votingPercents[0]}%`}} 
-                            />
-                            <div className="voting-progress-remaining" />
+                            <div className="voting-detail">
+                                <p>Start Date</p>
+                                <div className="voting-detail-info">
+                                    <p>{proposalData?.created_at}</p>
+                                </div>
+                            </div>
+
+                            <div className="voting-detail">
+                                <p>End Date</p>
+                                <div className="voting-detail-info">
+                                    <p>{proposalData?.closed_at}</p>
+                                </div>
+                            </div>
+
+                            <div className="voting-detail">
+                                <p>Voting System</p>
+                                <div className="voting-detail-info">
+                                    <p>Basic Voting</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="voting-bar-header">
-                            <p>Against</p>
-                            <p className="voting-percentage">
-                                {proposalData.votingPercents[1]}%
-                            </p>
-                        </div>
-                        <div className="voting-bar">
-                            <div 
-                                className={`voting-progress ${proposalData.votingPercents[1] === 0 ? 'hidden' : ''}`} 
-                                style={{width: `${proposalData.votingPercents[1]}%`}} 
-                            />
-                            <div className="voting-progress-remaining" />
-                        </div>
+                        <div className="voting-results">
+                            <h4>Current Results</h4>
 
-                        <div className="voting-bar-header">
-                            <p>Abstain</p>
-                            <p className="voting-percentage">
-                                {0}%
-                            </p>
+                            <div className="voting-bar-header">
+                                <p>For</p>
+                                <p className="voting-percentage">
+                                    {votePercentages[0]}%
+                                </p>
+                            </div>
+                            <div className="voting-bar">
+                                <div 
+                                    className={`voting-progress ${proposalData?.votes_for === 0 ? 'hidden' : ''}`} 
+                                    style={{width: `${votePercentages[0]}%`}} 
+                                />
+                                <div className="voting-progress-remaining" />
+                            </div>
+
+                            <div className="voting-bar-header">
+                                <p>Against</p>
+                                <p className="voting-percentage">
+                                    {votePercentages[1]}%
+                                </p>
+                            </div>
+                            <div className="voting-bar">
+                                <div 
+                                    className={`voting-progress ${proposalData?.votes_against === 0 ? 'hidden' : ''}`} 
+                                    style={{width: `${votePercentages[1]}%`}} 
+                                />
+                                <div className="voting-progress-remaining" />
+                            </div>
+
+                            <div className="voting-bar-header">
+                                <p>Abstain</p>
+                                <p className="voting-percentage">
+                                    {votePercentages[2]}%
+                                </p>
+                            </div>
+                            <div className="voting-bar">
+                                <div 
+                                    className={`voting-progress ${proposalData?.votes_abstain === 0 ? 'hidden' : ''}`} 
+                                    style={{width: `${votePercentages[2]}%`}}
+                                />
+                                <div className="voting-progress-remaining" />
+                            </div>
                         </div>
-                        <div className="voting-bar">
-                            <div 
-                                className={`voting-progress ${proposalData.votingPercents[2] === 0 ? 'hidden' : ''}`} 
-                                style={{width: `${proposalData.votingPercents[2]}%`}}
-                            />
-                            <div className="voting-progress-remaining" />
-                        </div>
-                    </div>
-                    <div className="voting-action">
-                        <div className="voting-buttons">
-                            <PrimaryButton
-                                text="Submit Vote"
-                                onClick={handleVote}
-                                style={{width: '105px'}}
-                            />
+                        <div className="voting-action">
+                            <div className="voting-buttons">
+                                <PrimaryButton
+                                    text="Submit Vote"
+                                    onClick={handleVote}
+                                    style={{width: '105px'}}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </Page>
+            </Page>
+        </>
     )
 }
 

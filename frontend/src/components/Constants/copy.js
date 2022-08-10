@@ -1,5 +1,11 @@
 import { URL_CONSTANTS } from "./constants"
 
+import badge from "@images/badge.png"
+import quickbooks from "@images/providers/quickbooks.png"
+import twilio from "@images/providers/twilio.svg"
+import mandrill from "@images/providers/mandrill.png"
+import google from "@images/providers/google.png"
+
 export const SYSTEM_MESSAGE = {
     message: 'Runner is currently in Beta | Read the latest article',
     linkTo: 'https://www.medium.com'
@@ -37,42 +43,42 @@ export const LANDING_MODULES = [
         title: 'Managed Team Scheduling',
         description: 'Stay ahead of the curve by utilizing historical data to predict the future. Enabling more efficient team dispatching, your business can do more in less time.',
         provider: 'runner',
-        providerLogo: '/badge.svg',
+        providerLogo: badge,
         linkTo: '/'
     },
     {
         title: 'Payroll Streaming',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'QuickBooks',
-        providerLogo: '/badge.svg',
+        providerLogo: quickbooks,
         linkTo: '/'
     },
     {
         title: 'Real-Time KP Reports',
         description: 'Gain access to the key stats of your service business without the need to do any tracking or math yourself. Import, export, analyze and plan. All in one place.',
         provider: 'runner',
-        providerLogo: '/badge.svg',
+        providerLogo: badge,
         linkTo: '/'
     },
     {
         title: 'Job Notifications',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Twilio',
-        providerLogo: '/badge.svg',
+        providerLogo: twilio,
         linkTo: '/'
     },
     {
         title: 'Transactional Emails',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Mandrill',
-        providerLogo: '/badge.svg',
+        providerLogo: mandrill,
         linkTo: '/'
     },
     {
         title: 'Mileage Tracking',
         description: 'The all-in-one notification kit for all Job updates. Instantly update the client, the team assigned, and management without a single manual action.',
         provider: 'Google',
-        providerLogo: '/badge.svg',
+        providerLogo: google,
         linkTo: '/'
     },
 ]

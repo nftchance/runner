@@ -63,13 +63,18 @@
     height: 30px;
     justify-content: center;
     padding-bottom: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
 }
 
 
 .proposal-provider > .provider-icon-container > img {
-    width: 60%;
+    /* width: 60%;
     height: 60%;
-    align-self: center;
+    align-self: center; */
+    position: absolute;
+    top: 0; bottom: 0; right: 0; left: 0;
 }
 .proposal-provider > .provider-name {
     color: #FFFFFF;
