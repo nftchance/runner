@@ -62,18 +62,6 @@ class Proposal(models.Model):
 
         super(Proposal, self).save(*args, **kwargs)
 
-    TAGS = (
-        (Tag.DASHBOARD, "Dashboard"),
-        (Tag.FEES, "Fees"),
-        (Tag.FINANCIALS, "Financials"),
-        (Tag.GOVERNANCE, "Governance"),
-        (Tag.INTEGRATIONS, "Integrations"),
-        (Tag.PAYMENTS, "Payments"),
-        (Tag.REVIEWS, "Reviews"),
-        (Tag.TAXES, "Taxes"),
-        (Tag.UX, "UX"),
-    )
-
     approved = models.BooleanField(default=False)
 
     proposed_by = models.ForeignKey('user.User', on_delete=models.CASCADE)
@@ -84,7 +72,7 @@ class Proposal(models.Model):
     summary = models.TextField(blank=True)
 
     tags = ArrayField(base_field=models.CharField(
-        max_length=255, choices=TAGS), blank=True, null=True)
+        max_length=255, choices=Tag.TAGS), blank=True, null=True)
 
     votes = models.ManyToManyField(ProposalVote, blank=True)
 
