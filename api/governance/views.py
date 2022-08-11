@@ -77,6 +77,7 @@ class ProposalViewSet(
     def get_queryset(self):
         if self.request.query_params.get('status'):
             status = self.request.query_params.get('status')
+            print('status', status)
             if status == 'in_progress':
                 return self.queryset.filter(approved=True)
             elif status == 'pending':

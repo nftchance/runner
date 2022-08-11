@@ -240,6 +240,36 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data[0]["id"], proposals[0].id)
         self.assertEqual(len(response.data), 1)
 
+    def test_can_list_proposals_by_status_closed(self):
+        proposals = [
+            Proposal.objects.create(
+                title="Test Proposal",
+                description="Test proposal",
+                proposed_by=self.user,
+                approved=True
+            ),
+            Proposal.objects.create(
+                title="Secondary Proposal",
+                description="Secondary proposal",
+                proposed_by=self.user,
+                approved=False
+            )
+        ]
+
+        # close a proposal
+        proposals[0].closed_at = django.utils.timezone.now() - datetime.timedelta(days=5)
+        proposals[0].save()
+
+        response = self.client.get(
+            f'{reverse("proposal-list")}?status=closed',
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # confirm we only got back the approved proposal
+        self.assertEqual(len(response.data), 1)
+
     def test_can_retrieve_proposal(self):
         proposal = Proposal.objects.create(
             title="Test Proposal",
