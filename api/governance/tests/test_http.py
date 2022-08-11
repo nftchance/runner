@@ -558,6 +558,23 @@ class HttpTest(APITestCase):
 
         self.assertEqual(len(proposal.tags), 1)
 
+    def test_can_list_proposal_with_tags(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True,
+            tags=['ux']
+        )
+
+        response = self.client.get(
+            f'{reverse("proposal-list")}?tag=ux',
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(len(response.data), 1)
+
     def test_cannot_create_proposal_with_partially_invalid_tags(self):
         response = self.client.post(
             reverse("proposal-list"),

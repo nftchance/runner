@@ -85,6 +85,10 @@ class ProposalViewSet(
             elif status == 'closed':
                 return self.queryset.filter(closed_at__lt=django.utils.timezone.now())
 
+        if self.request.query_params.get('tag'):
+            tag = self.request.query_params.get('tag')
+            return self.queryset.filter(tags__contains=[tag,])
+
         return self.queryset.all()
 
     def perform_create(self, serializer):
