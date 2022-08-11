@@ -7,5 +7,6 @@ urlpatterns = [
     path('', include('governance.urls')),
     path('', include('job.urls')),
     path('', include('user.urls')),
-    path('', include('org.urls'))
+    path('', include('org.urls')),
+    path('', include('system.urls'))
 ]

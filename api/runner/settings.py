@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "job",
     "org",
     "schedule",
+    "system",
     "user",
     "utils",
 ]
