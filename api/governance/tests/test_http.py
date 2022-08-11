@@ -112,43 +112,6 @@ class HttpTest(APITestCase):
         act_proposal_ids = [proposal.get("id") for proposal in response.data]
         self.assertCountEqual(exp_proposal_ids, act_proposal_ids)
 
-    def test_can_list_proposals_by_votes_total(self):
-        proposals = [
-            Proposal.objects.create(
-                title="Test Proposal",
-                description="Test proposal",
-                proposed_by=self.user,
-                approved=True
-            ),
-            Proposal.objects.create(
-                title="Secondary Proposal",
-                description="Secondary proposal",
-                proposed_by=self.user,
-                approved=True
-            )
-        ]
-
-        # vote on first proposal
-        self.client.post(
-            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}?order_by=votes_total',
-            data={
-                "vote": Vote.FOR,
-                'amount': 100,
-            },
-            HTTP_AUTHORIZATION=f"Bearer {self.access}"
-        )
-
-        # get proposal list sorted by votes_total
-        response = self.client.get(
-            reverse("proposal-list"),
-            HTTP_AUTHORIZATION=f"Bearer {self.access}"
-        )
-
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        # confirm the second proposal is the first in the list
-        self.assertEqual(response.data[0]["id"], proposals[1].id)
-
     def test_can_list_proposals_by_first_created(self):
         proposals = [
             Proposal.objects.create(
@@ -167,7 +130,7 @@ class HttpTest(APITestCase):
 
         # vote on first proposal
         self.client.post(
-            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}?order_by=-created_at',
+            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}',
             data={
                 "vote": Vote.FOR,
                 'amount': 100,
@@ -177,7 +140,7 @@ class HttpTest(APITestCase):
 
         # get proposal list sorted by votes_total
         response = self.client.get(
-            reverse("proposal-list"),
+            f'{reverse("proposal-list")}?ordering=created_at',
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
@@ -204,7 +167,7 @@ class HttpTest(APITestCase):
 
         # vote on first proposal
         self.client.post(
-            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}?order_by=created_at',
+            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}',
             data={
                 "vote": Vote.FOR,
                 'amount': 100,
@@ -214,7 +177,7 @@ class HttpTest(APITestCase):
 
         # get proposal list sorted by votes_total
         response = self.client.get(
-            reverse("proposal-list"),
+            f'{reverse("proposal-list")}?ordering=-created_at',
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
@@ -222,6 +185,33 @@ class HttpTest(APITestCase):
 
         # confirm the second proposal is the first in the list
         self.assertEqual(response.data[0]["id"], proposals[1].id)
+
+    def test_can_list_proposals_filtered_by_approved(self):
+        proposals = [
+            Proposal.objects.create(
+                title="Test Proposal",
+                description="Test proposal",
+                proposed_by=self.user,
+                approved=True
+            ),
+            Proposal.objects.create(
+                title="Secondary Proposal",
+                description="Secondary proposal",
+                proposed_by=self.user,
+                approved=False
+            )
+        ]
+
+        response = self.client.get(
+            f'{reverse("proposal-list")}?approved=true',
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # confirm we only got back the approved proposal
+        # self.assertEqual(response.data[0]["id"], proposals[0].id)
+        self.assertEqual(len(response.data), 1)
 
     def test_can_retrieve_proposal(self):
         proposal = Proposal.objects.create(
@@ -490,8 +480,9 @@ class HttpTest(APITestCase):
         )
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(f"{response.data['error']}", "Amount must be greater than 0")
-    
+        self.assertEqual(
+            f"{response.data['error']}", "Amount must be greater than 0")
+
     def test_can_create_proposal_with_tags(self):
         response = self.client.post(
             reverse("proposal-list"),

@@ -1,6 +1,6 @@
 import django
 
-from rest_framework import mixins, permissions, status, views, viewsets, filters
+from rest_framework import mixins, permissions, status, views, viewsets, filters, generics
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -68,9 +68,11 @@ class ProposalViewSet(
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,)
 
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    ordering_fields = ('created_at', 'votes_total')
-    ordering = ('-created_at',)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
+    
+    ordering_fields = '__all__'
+    search_fields = ('title', 'description')
+    filterset_fields = ('id', 'title', 'description', 'approved')
 
     def perform_create(self, serializer):
         serializer.save(proposed_by=self.request.user)

@@ -89,6 +89,9 @@ class Proposal(models.Model):
         return reverse("proposal-detail", kwargs={"proposal_id": self.pk})
 
     def get_status(self):
+        if not self.approved:
+            return "Pending"
+            
         if django.utils.timezone.now() > self.closed_at:
             return "Closed"
 
