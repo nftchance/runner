@@ -75,7 +75,6 @@ class ProposalViewSet(
     filterset_fields = ('id', 'title', 'description', 'approved')
 
     def get_queryset(self):
-        # if the request has the kwarg of status, check the get_status() value and make sure that it is equal to the value of the query param. then return the queryset
         if self.request.query_params.get('status'):
             status = self.request.query_params.get('status')
             if status == 'in_progress':
