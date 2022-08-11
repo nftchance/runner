@@ -1,7 +1,8 @@
 import django
 
-from rest_framework import mixins, permissions, status, views, viewsets
+from rest_framework import mixins, permissions, status, views, viewsets, filters
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Proposal
 from .serializers import ProposalSerializer, ProposalVoteSerializer
@@ -43,7 +44,8 @@ class ProposalVoteView(views.APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})
 
         try:
-            obj = proposal.vote(user, request.data['vote'].lower(), request.data['amount'])
+            obj = proposal.vote(
+                user, request.data['vote'].lower(), request.data['amount'])
 
             serializer = ProposalVoteSerializer(obj)
 
@@ -60,10 +62,15 @@ class ProposalViewSet(
 ):
     lookup_field = "id"
     lookup_url_kwarg = "proposal_id"
-    
+
     queryset = Proposal.objects.all()
     serializer_class = ProposalSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,)
+
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    ordering_fields = ('created_at', 'votes_total')
+    ordering = ('-created_at',)
 
     def perform_create(self, serializer):
         serializer.save(proposed_by=self.request.user)
