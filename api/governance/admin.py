@@ -12,5 +12,5 @@ class ProposalAdmin(admin.ModelAdmin):
 
 @admin.register(ProposalVote)
 class ProposalVoteAdmin(admin.ModelAdmin):
-    fields = ('voter', 'vote', 'created_at')
+    fields = ('voter', 'vote', 'amount', 'created_at')
     readonly_fields = ('created_at',)
