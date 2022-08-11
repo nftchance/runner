@@ -61,9 +61,6 @@ class Proposal(models.Model):
         if not self.summary:
             self.summary = self.description[:100]
 
-        # print('cleared the votes cache')
-        # self._votes_cache = {}
-
         super(Proposal, self).save(*args, **kwargs)
 
     approved = models.BooleanField(default=False)
@@ -84,8 +81,6 @@ class Proposal(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    # _votes_cache = {}
 
     def __str__(self):
         return f"[RP{self.id}] {self.title.lower().capitalize()}"
