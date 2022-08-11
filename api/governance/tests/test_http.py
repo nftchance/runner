@@ -426,3 +426,30 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data['error'], "Invalid tags")
+
+    def test_can_vote_and_get_proper_vote_percentages(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+                'amount': 100,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['vote_percentages']['for'], 100)

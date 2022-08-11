@@ -48,6 +48,7 @@ class ProposalVote(models.Model):
         self.released_at = django.utils.timezone.now()
         self.save()
 
+
 class Proposal(models.Model):
     def save(self, *args, **kwargs):
         if self.tags and not all(tag in dict(Tag.TAGS) for tag in self.tags):
@@ -56,9 +57,12 @@ class Proposal(models.Model):
         if not self.closed_at:
             self.closed_at = django.utils.timezone.now(
             ) + datetime.timedelta(days=PROPOSAL_DURATION_DAYS)
-        
+
         if not self.summary:
             self.summary = self.description[:100]
+
+        # print('cleared the votes cache')
+        # self._votes_cache = {}
 
         super(Proposal, self).save(*args, **kwargs)
 
@@ -81,6 +85,8 @@ class Proposal(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # _votes_cache = {}
+
     def __str__(self):
         return f"[RP{self.id}] {self.title.lower().capitalize()}"
 
@@ -97,7 +103,12 @@ class Proposal(models.Model):
         return votes.aggregate(Sum('amount'))['amount__sum'] or 0
 
     def _get_votes(self, vote):
-        return self._get_votes_sum(self.votes.filter(vote=vote))
+        votes_cache_name = f"_{vote}_votes_cache"
+        if not hasattr(self, votes_cache_name):
+            setattr(self, votes_cache_name, self.votes.filter(
+                vote=vote).aggregate(Sum('amount'))['amount__sum'] or 0)
+
+        return getattr(self, votes_cache_name)
 
     def get_votes_for(self):
         return self._get_votes(Vote.FOR)
@@ -110,6 +121,21 @@ class Proposal(models.Model):
 
     def get_votes_total(self):
         return self._get_votes_sum(self.votes.all())
+
+    def get_vote_percentages(self):
+        total = self.get_votes_total() / 100
+        if total == 0:
+            return {
+                Vote.FOR: 0,
+                Vote.AGAINST: 0,
+                Vote.ABSTAIN: 0
+            }
+
+        return {
+            Vote.FOR: self.get_votes_for() / total,
+            Vote.AGAINST: self.get_votes_against() / total,
+            Vote.ABSTAIN: self.get_votes_abstain() / total
+        }
 
     def vote(self, voter, _vote, amount):
         vote_obj = ProposalVote.objects.create(
