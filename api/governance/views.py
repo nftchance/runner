@@ -74,5 +74,18 @@ class ProposalViewSet(
     search_fields = ('title', 'description')
     filterset_fields = ('id', 'title', 'description', 'approved')
 
+    def get_queryset(self):
+        # if the request has the kwarg of status, check the get_status() value and make sure that it is equal to the value of the query param. then return the queryset
+        if self.request.query_params.get('status'):
+            status = self.request.query_params.get('status')
+            if status == 'in_progress':
+                return self.queryset.filter(approved=True)
+            elif status == 'pending':
+                return self.queryset.filter(approved=False)
+            elif status == 'closed':
+                return self.queryset.filter(closed_at__lt=django.utils.timezone.now())
+
+        return self.queryset.all()
+
     def perform_create(self, serializer):
         serializer.save(proposed_by=self.request.user)

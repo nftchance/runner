@@ -91,11 +91,11 @@ class Proposal(models.Model):
     def get_status(self):
         if not self.approved:
             return "Pending"
-            
+
         if django.utils.timezone.now() > self.closed_at:
             return "Closed"
 
-        return "Open"
+        return "In Progress"
 
     def _get_votes_sum(self, votes):
         return votes.aggregate(Sum('amount'))['amount__sum'] or 0
