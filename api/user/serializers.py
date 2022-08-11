@@ -34,9 +34,13 @@ class UserSerializer(serializers.ModelSerializer):
             "password2",
             "first_name",
             "last_name",
+            "balance",
         )
-        extra_kwargs = {"id": {"read_only": True},
-                        "password": {"write_only": True}}
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "password": {"write_only": True},
+            "balance": {"read_only": True}
+        }
 
 
 class LogInSerializer(TokenObtainPairSerializer):

@@ -1,4 +1,5 @@
 import base64
+from decimal import Decimal
 import json  
 
 from django.contrib.auth import get_user_model
@@ -206,6 +207,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(payload_data["username"], user2.username)
         self.assertEqual(payload_data["first_name"], user2.first_name)
         self.assertEqual(payload_data["last_name"], user2.last_name)
+        self.assertEqual(float(payload_data['balance']), user2.balance)
 
         # try and use duplicate username
         response = self.client.put(
