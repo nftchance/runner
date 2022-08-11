@@ -31,6 +31,8 @@ class ProposalSerializer(serializers.ModelSerializer):
     votes_total = serializers.SerializerMethodField()
     vote_percentages = serializers.SerializerMethodField()
 
+    has_voted = serializers.SerializerMethodField()
+
     def get_status(self, obj):
         return obj.get_status()
 
@@ -48,6 +50,9 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     def get_vote_percentages(self, obj):
         return obj.get_vote_percentages()
+
+    def get_has_voted(self, obj):
+        return obj.has_voted(self.context['request'].user)
 
     def create(self, *args, **kwargs):
         if self.context['request'].user.balance < PROPOSAL_SUBMISSION_BALANCE_MINIMUM:

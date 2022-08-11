@@ -132,6 +132,11 @@ class Proposal(models.Model):
             Vote.ABSTAIN: self.get_votes_abstain() / total
         }
 
+    def has_voted(self, voter):
+        if voter.is_anonymous:
+            return False
+        return self.votes.filter(voter=voter).exists()
+
     def vote(self, voter, _vote, amount):
         vote_obj = ProposalVote.objects.create(
             voter=voter,

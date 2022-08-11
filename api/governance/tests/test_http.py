@@ -453,3 +453,61 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['vote_percentages']['for'], 100)
+
+    def test_has_voted_is_false_for_nonauthenticated_user(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['has_voted'], False)
+
+    def test_has_voted_is_false_for_user_that_hasnt_voted(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['has_voted'], False)
+
+    def test_has_voted_is_true_for_user_that_has_voted(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        )
+
+        response = self.client.post(
+            reverse("proposal-vote", kwargs={"proposal_id": proposal.id}),
+            data={
+                "vote": Vote.FOR,
+                'amount': 100,
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['has_voted'], True)

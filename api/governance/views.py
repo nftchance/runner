@@ -60,7 +60,7 @@ class ProposalViewSet(
 ):
     lookup_field = "id"
     lookup_url_kwarg = "proposal_id"
-
+    
     queryset = Proposal.objects.all()
     serializer_class = ProposalSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
