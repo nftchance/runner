@@ -1,5 +1,6 @@
 import datetime
 import django
+import time
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -150,29 +151,19 @@ class HttpTest(APITestCase):
         self.assertEqual(response.data[0]["id"], proposals[0].id)
 
     def test_can_list_proposals_by_last_created(self):
-        proposals = [
-            Proposal.objects.create(
-                title="Test Proposal",
-                description="Test proposal",
-                proposed_by=self.user,
-                approved=True
-            ),
-            Proposal.objects.create(
-                title="Secondary Proposal",
-                description="Secondary proposal",
-                proposed_by=self.user,
-                approved=True
-            )
-        ]
+        Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True
+        ),
 
-        # vote on first proposal
-        self.client.post(
-            f'{reverse("proposal-vote", kwargs={"proposal_id": proposals[1].id})}',
-            data={
-                "vote": Vote.FOR,
-                'amount': 100,
-            },
-            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        time.sleep(0.1)
+        proposal = Proposal.objects.create(
+            title="Secondary Proposal",
+            description="Secondary proposal",
+            proposed_by=self.user,
+            approved=True
         )
 
         # get proposal list sorted by votes_total
@@ -184,7 +175,7 @@ class HttpTest(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # confirm the second proposal is the first in the list
-        self.assertEqual(response.data[0]["id"], proposals[1].id)
+        self.assertEqual(response.data[0]["id"], proposal.id)
 
     def test_can_list_proposals_filtered_by_approved(self):
         proposals = [
@@ -257,7 +248,8 @@ class HttpTest(APITestCase):
         ]
 
         # close a proposal
-        proposals[0].closed_at = django.utils.timezone.now() - datetime.timedelta(days=5)
+        proposals[0].closed_at = django.utils.timezone.now() - \
+            datetime.timedelta(days=5)
         proposals[0].save()
 
         response = self.client.get(

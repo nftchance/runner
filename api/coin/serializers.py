@@ -1,8 +1,13 @@
 from rest_framework import serializers
 
+from user.serializers import UserSerializer
+
 from .models import Transfer
 
 class TransferSerializer(serializers.ModelSerializer):
+    from_user = UserSerializer(read_only=True)
+    to_user = UserSerializer(read_only=True)
+
     class Meta:
         model = Transfer
         fields = '__all__'
