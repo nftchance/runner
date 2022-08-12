@@ -11,7 +11,7 @@ class BroadcastAdmin(admin.ModelAdmin):
 
 @admin.register(WaitlistEntry)
 class WhitelistAdmin(admin.ModelAdmin):
-    list_display = ('email', 'created_at', 'updated_at')
-    list_filter = ('created_at', 'updated_at')
+    list_display = ('email', 'invited_at', 'accepted_at', 'created_at', 'updated_at')
+    list_filter = ('invited_at', 'accepted_at', 'created_at', 'updated_at')
     search_fields = ('email',)
-    read_only_fields = ('created_at', 'updated_at')
+    read_only_fields = ('created_at', 'updated_at', 'accepted_at')
