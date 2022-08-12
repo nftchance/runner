@@ -38,6 +38,16 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "moduleNameMapper": {
+      "@components/(.*)$": [
+        "<rootDir>/src/components/$1"
+      ],
+      "@images/(.*)$": [
+        "<rootDir>/src/images/$1"
+      ]
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
