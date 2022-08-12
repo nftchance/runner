@@ -1,19 +1,26 @@
 @import url("https://use.typekit.net/evr1bsi.css");
 
 :root {
-  --darkest: #1C1C1C;
-  --dark: #272727;
-  --dark-border: #3D3D3D;
-  --light-border: #707070;
-  --yellow: #EFF855;
-  --dark-yellow: #BEC729;
+  --darkest: rgb(28, 28, 28);
+  --darkest-65: rgba(28, 28, 28, 0.65);
+  --dark: rgb(39, 39, 39);
+  --dark-border: rgb(61, 61, 61);
 
-  --green: #55F855;
-  --dark-green: #29C72E;
-  --red: #F85555;
-  --dark-red: #C72929;
-  --light-blue: #55F8ED;
-  --dark-blue: #29C2C7;
+  --light-border: rgb(112, 112, 112);
+  --light-border-65: rgba(112, 112, 112, 0.65);
+
+  --white: rgb(255, 255, 255);
+  --white-65: rgba(255, 255, 255, 0.65);
+
+  --yellow: rgb(239, 248, 85);
+  --dark-yellow: rgb(190, 199, 41);
+
+  --green: rgb(85, 248, 85);
+  --dark-green: rgb(41, 199, 46);
+  --red: rgb(248, 85, 85);
+  --dark-red: rgb(199, 41, 41);
+  --light-blue: rgb(85, 248, 237);
+  --dark-blue: rgb(41, 194, 199);
 
   --page-margins: 140px;
 }
@@ -32,44 +39,41 @@ body {
 }
 
 h1 {
-  color: #FFFFFF;
+  color: var(--white);
   font-size: 48px;
   font-weight: 500;
   line-height: 68px;
 }
 
 h3 {
-  color: #FFFFFF;
+  color: var(--white);
   font-size: 24px;
   font-weight: 500;
   line-height: 34px;
 }
 
 h4 {
-  color: #FFFFFF;
+  color: var(--white);
   font-size: 16px;
   font-weight: 500;
 }
 
 h5 {
-  color: #FFFFFF;
+  color: var(--white-65);
   font-size: 18px;
-  opacity: 0.65;
   font-weight: 500;
   line-height: 26px;
 }
 
 h6 {
-  color: #FFFFFF;
+  color: var(--white-65);
   font-size: 16px;
-  opacity: 0.65;
   font-weight: 500;
   line-height: 22px;
 }
 
 p {
-  color: #FFFFFF;
-  opacity: 0.65;
+  color: var(--white-65);
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
@@ -91,6 +95,10 @@ p {
 
 ::-webkit-scrollbar-thumb:hover {
   background: white;
+}
+
+::selection {
+  background-color: var(--light-border);
 }
 
 .yellow {
@@ -145,24 +153,26 @@ p {
 }
 
 .MuiList-root > .MuiButtonBase-root {
-  opacity: 0.65;
+  color: var(--white-65);
 }
 
 .MuiButtonBase-root[aria-expanded="true"] {
-  opacity: 1;
+  color: var(--white);
 }
 
 .MuiList-root > .MuiButtonBase-root:hover,
 .MuiList-root > .MuiButtonBase-root:active,
+.MuiList-root > .MuiButtonBase-root:focus,
 .MuiList-root > .MuiButtonBase-root.Mui-selected,
-.MuiList-root > .MuiButtonBase-root.Mui-selected:hover {
-  opacity: 1;
+.MuiList-root > .MuiButtonBase-root.Mui-selected:hover,
+.MuiList-root > .MuiButtonBase-root.Mui-selected:focus {
+  color: var(--white);
   background-color: rgba(255,255,255,0.1);
 }
 
 @media screen and (max-width: 600px) {
   :root {
-    --page-margins: 20px;
+    --page-margins: 30px;
   }
 }
 

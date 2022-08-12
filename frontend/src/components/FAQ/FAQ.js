@@ -15,11 +15,9 @@ const FAQ = () => {
                 <Helmet>
                     <title>{SEO_CONSTANTS.faq.title}</title>
                     <meta name="og:title" content={SEO_CONSTANTS.faq.title} />
-                    <meta name="og:description" content={SEO_CONSTANTS.faq.title} />
 
                     <meta name="description" content={SEO_CONSTANTS.faq.description} />
                     <meta name="og:description" content={SEO_CONSTANTS.faq.description} />
-                    <meta name="twitter:description" content={SEO_CONSTANTS.faq.description} />
 
                     <meta property="og:url" content={`${window.location.href}`} />
                 </Helmet>

@@ -40,11 +40,10 @@
 }
 
 .proposal-details > .proposal-tags > .tag > .tag-text {
-    color: #FFFFFF;
+    color: var(--white);
     font-size: 16px;
     line-height: 20px;
     font-weight: 500;
-    opacity: 1;
 }
 
 .proposal-details > .proposal-provider {

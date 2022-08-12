@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import { StyledEngineProvider } from '@mui/material/styles';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./MenuButton.css";
@@ -11,13 +10,13 @@ const MenuButton = ({icon, menuItems, handleMenu}) => {
     const open = anchorEl ? true : false;
 
     return (
-        <StyledEngineProvider injectFirst>
+        <>
             <IconButton 
                 className="menu-btn"
                 id="menu-btn"
-                aria-controls={open ? "menu" : undefined}
+                aria-controls={open && "menu"}
                 aria-haspopup="true"
-                aria-expanded={open ? true : undefined}
+                aria-expanded={open && true}
                 onClick={(event) => setAnchorEl(event.currentTarget)}
                 disableRipple
             >
@@ -46,8 +45,8 @@ const MenuButton = ({icon, menuItems, handleMenu}) => {
                     </MenuItem>
                 ))}
             </Menu>
-        </StyledEngineProvider>
+        </>
     )
 }
 
-export default MenuButton;
+export default memo(MenuButton);

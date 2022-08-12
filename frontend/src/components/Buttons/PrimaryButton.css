@@ -5,6 +5,7 @@
     border: 1px solid var(--dark-yellow);
     height: 100%;
     padding: 8px 0px;
+    color: var(--darkest-65);
 }
 
 .btn-primary:hover,
@@ -13,8 +14,7 @@
 }
 
 .btn-primary > .text {
-    color: var(--darkest);
-    opacity: 0.65;
+    color: inherit;
     font-size: 14px;
     font-weight: 700;
     padding-left: 10px;

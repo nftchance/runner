@@ -1,12 +1,8 @@
-.menu-btn {
-    opacity: 0.65;
-}
-
 .menu-icon {
-    color: #FFFFFF;
+    color: var(--white-65);
 }
 
-.menu-btn:hover,
-.menu-btn:active {
-    opacity: 1;
+.menu-icon:hover,
+.menu-icon:active {
+    color: var(--white);
 }

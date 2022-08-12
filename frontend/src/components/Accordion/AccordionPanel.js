@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { 
     Accordion, AccordionDetails, AccordionSummary 
 } from "@mui/material";
-import { StyledEngineProvider } from '@mui/material/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import "./AccordionPanel.css";
@@ -22,27 +21,25 @@ const AccordionPanel = ({title, detail, index, open}) => {
   )
 
   return (
-        <StyledEngineProvider injectFirst>
-            <Accordion
-                className="accordion"
-                expanded={expanded === `panel-${index}`}
-                onChange={handleOpen(`panel-${index}`)}
-                disableGutters
+        <Accordion
+            className="accordion"
+            expanded={expanded === `panel-${index}`}
+            onChange={handleOpen(`panel-${index}`)}
+            disableGutters
+        >
+            <AccordionSummary
+                className="accordion-summary"
+                expandIcon={ expandIcon }
             >
-                <AccordionSummary
-                    className="accordion-summary"
-                    expandIcon={ expandIcon }
-                >
-                    <h3>{title}</h3>
-                </AccordionSummary>
-                <AccordionDetails
-                    className="accordion-details"
-                >
-                    <h6>{detail}</h6>
-                </AccordionDetails>
-            </Accordion>
-        </StyledEngineProvider>
+                <h3>{title}</h3>
+            </AccordionSummary>
+            <AccordionDetails
+                className="accordion-details"
+            >
+                <h6>{detail}</h6>
+            </AccordionDetails>
+        </Accordion>
   );
 }
 
-export default AccordionPanel;
+export default memo(AccordionPanel);

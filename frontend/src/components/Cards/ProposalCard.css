@@ -13,11 +13,10 @@
 }
 
 .tag > .tag-text {
-    color: #FFFFFF;
+    color: var(--white);
     font-size: 12px;
     line-height: 16px;
     font-weight: 500;
-    opacity: 1;
 }
 
 .proposal-info {

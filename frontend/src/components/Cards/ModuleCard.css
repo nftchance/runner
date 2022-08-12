@@ -8,8 +8,7 @@
 .module-info > .module-desc {
     margin-top: 10px;
     margin-bottom: 10px;
-    color: #FFFFFF;
-    opacity: 0.65;
+    color: var(--white-65);
 }
 
 .module-provider {

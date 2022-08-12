@@ -23,21 +23,13 @@ nav > li {
 }
 
 .nav-item {
+    color: inherit;
     font-size: 14px;
     font-weight: 500;
 }
-.nav-item:hover,
-.nav-item:focus,
-.nav-item:active {
-    opacity: 1;
-}
-
-.nav-link.opaque {
-    opacity: 0.65;
-}
 
 .nav-link {
-    color: #FFFFFF;
+    color: var(--white-65);
     flex: 1;
     text-decoration: none;
     height: 100%;
@@ -47,7 +39,7 @@ nav > li {
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active {
-    opacity: 1;
+    color: var(--white);
     border-bottom: 1px solid #FFFFFF;
 }
 

@@ -24,7 +24,6 @@
     font-size: 14px;
     font-weight: 700;
     display: inline-block;
-    opacity: 1;
 }
 
 .system-msg-container  > .close {
@@ -45,7 +44,6 @@
 }
 
 .close-btn > svg > path {
-    stroke-width: 25px;
+    stroke-width: 10px;
     stroke: var(--dark);
-    opacity: 0.65;
 }

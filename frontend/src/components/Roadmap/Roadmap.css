@@ -1,3 +1,7 @@
+.headline > .btn-secondary > .text {
+    font-size: 14px;
+}
+
 .roadmap {
     margin-bottom: 200px;
 }

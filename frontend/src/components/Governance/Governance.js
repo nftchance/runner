@@ -14,7 +14,7 @@ import "./Governance.css"
 const Governance = () => {
     let navigate = useNavigate();
 
-    const [ filterTab, setFilterTab ] = useState("In Progress");
+    const [ filtering, setFiltering ] = useState("In Progress");
     const [ sorting, setSorting ] = useState("");
     const [ proposalData, setProposalData ] = useState();
 
@@ -29,11 +29,11 @@ const Governance = () => {
             method: 'created_at',
         },
         {
-            title: 'Least Support',
+            title: 'Least Time Remaining',
             method: '-votes',
         },
         {
-            title: 'Most Support',
+            title: 'Most Time Remaining',
             method: 'votes',
         },
     ]
@@ -50,33 +50,21 @@ const Governance = () => {
         }
     ]
 
-    const handleFilterTabChange = (tab) => {
-        setFilterTab(tab);
-        
-        // TODO: API get current proposals with selected filter
-        // setProposalData(PROPOSAL_DATA)
-    }
-
-    const handleSortChange = (event) => {
-        setSorting(event.target.value)
-    }
-
     useEffect(() => {
         // TODO: fetch from backend
         setProposalData(PROPOSAL_DATA);
-    }, [])
+        console.log(sorting, filtering)
+    }, [sorting, filtering])
 
     return (
         <>
             <HelmetProvider>
                 <Helmet>
-                    <title>{SEO_CONSTANTS.governance.title}</title>
-                    <meta name="og:title" content={SEO_CONSTANTS.governance.title} />
-                    <meta name="og:description" content={SEO_CONSTANTS.governance.title} />
+                    <title>{SEO_CONSTANTS.governance?.title}</title>
+                    <meta name="og:title" content={SEO_CONSTANTS.governance?.title} />
 
-                    <meta name="description" content={SEO_CONSTANTS.governance.description} />
-                    <meta name="og:description" content={SEO_CONSTANTS.governance.description} />
-                    <meta name="twitter:description" content={SEO_CONSTANTS.governance.description} />
+                    <meta name="description" content={SEO_CONSTANTS.governance?.description} />
+                    <meta name="og:description" content={SEO_CONSTANTS.governance?.description} />
 
                     <meta property="og:url" content={`${window.location.href}`} />
                 </Helmet>
@@ -101,8 +89,8 @@ const Governance = () => {
                             {filterMethods.map((method) => (
                                 <div className="filter-tab" key={method.title}>
                                     <button
-                                        className={filterTab === method.title ? "active" : ""}                                        
-                                        onClick={() => handleFilterTabChange(method.title)}
+                                        className={filtering === method.title ? "active" : ""}                                        
+                                        onClick={() => setFiltering(method.title)}
                                     >
                                         <p>{method.title}</p>
                                     </button>
@@ -116,7 +104,7 @@ const Governance = () => {
                                     selected={sorting}
                                     placeholder="Sort By"
                                     options={sortingMethods}
-                                    onChange={handleSortChange}
+                                    onChange={(event) => setSorting(event.target.value)}
                                 />
                             </div>
                         </div>

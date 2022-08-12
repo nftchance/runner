@@ -20,13 +20,6 @@ const Proposal = () => {
         'Open': 'green',
     }
 
-    const votePercentages = [
-        (proposalData?.votes_for / proposalData?.votes_total * 100).toFixed(2),
-        (proposalData?.votes_against / proposalData?.votes_total * 100).toFixed(2),
-        (proposalData?.votes_abstain / proposalData?.votes_total * 100).toFixed(2)
-    ]
-
-
     useEffect(() => {
         // TODO: fetch from API
         // const url = `${URL_CONSTANTS.api}/proposal/${params.id}`
@@ -43,7 +36,6 @@ const Proposal = () => {
         //         console.log('Error getting proposal data', error)
         //     })
         
-        
         // Using dummy data prior to merging backend and frontend, 
         // also applying a delay to see how the component renders without data.
         setTimeout(() => {
@@ -55,9 +47,12 @@ const Proposal = () => {
                     "votes_against": 59,
                     "votes_abstain": 3,
                     "votes_total": 500,
+                    "vote_percentages": {'for': 12, 'against': 5, 'abstain': 2},
                     "approved": false,
                     "title": "My First Proposal",
                     "description": "This is my first proposal. I hope you like it.\r\n\r\nPS: Postgres kicked my ass tonight",
+                    "summary": "This is a summary of the first proposal.",
+                    "tags": ["UX", "Payments"],
                     "closed_at": "2022-09-09T06:40:28.645222Z",
                     "created_at": "2022-08-10T06:40:28.646132Z",
                     "updated_at": "2022-08-10T06:40:28.646160Z",
@@ -82,14 +77,9 @@ const Proposal = () => {
                 <Helmet>
                     <title>{`runner | [RP${params.id}] ${proposalData?.title ? proposalData.title : ''}`}</title>
                     <meta name="og:title" content={`runner | [RP${params.id}]`} />
-                    <meta name="og:description" content={`runner | [RP${params.id}]`} />
-
-                    {/* TODO: Figure out if the description is general or the summary proposal
                     
-                    <meta name="description" content={SEO_CONSTANTS.roadmap.description} />
-                    <meta name="og:description" content={SEO_CONSTANTS.roadmap.description} />
-                    <meta name="twitter:description" content={SEO_CONSTANTS.roadmap.description} /> 
-                    */}
+                    <meta name="description" content={proposalData?.summary} />
+                    <meta name="og:description" content={proposalData?.summary} />
 
                     <meta property="og:url" content={`${window.location.href}`} />
                 </Helmet>
@@ -106,7 +96,7 @@ const Proposal = () => {
                             ))}
                         </div>
                         <div className="proposal-title">
-                            <h1>{`[RP${params.id}] ${proposalData?.title}`}</h1>
+                            <h1>{proposalData?.title && `[RP${params.id}] ${proposalData.title}`}</h1>
                             <div className="proposal-menu-btn">
                                 <MenuButton
                                     icon={["fal", "fa-ellipsis"]}
@@ -145,13 +135,6 @@ const Proposal = () => {
                                     <p>{proposalData?.status}</p>
                                 </div>
                             </div>
-                            
-                            {/* <div className="voting-detail">
-                                <p>Quorom</p>
-                                <div className="voting-detail-info">
-                                    <p>{proposalData?.quorom}</p>
-                                </div>
-                            </div> */}
 
                             <div className="voting-detail">
                                 <p>Start Date</p>
@@ -181,13 +164,13 @@ const Proposal = () => {
                             <div className="voting-bar-header">
                                 <p>For</p>
                                 <p className="voting-percentage">
-                                    {votePercentages[0]}%
+                                    {proposalData?.vote_percentages['for']}%
                                 </p>
                             </div>
                             <div className="voting-bar">
                                 <div 
-                                    className={`voting-progress ${proposalData?.votes_for === 0 ? 'hidden' : ''}`} 
-                                    style={{width: `${votePercentages[0]}%`}} 
+                                    className={`voting-progress ${!proposalData?.votes_for && 'hidden'}`} 
+                                    style={{width: `${proposalData?.vote_percentages['for']}%`}} 
                                 />
                                 <div className="voting-progress-remaining" />
                             </div>
@@ -195,13 +178,13 @@ const Proposal = () => {
                             <div className="voting-bar-header">
                                 <p>Against</p>
                                 <p className="voting-percentage">
-                                    {votePercentages[1]}%
+                                    {proposalData?.vote_percentages['against']}%
                                 </p>
                             </div>
                             <div className="voting-bar">
                                 <div 
-                                    className={`voting-progress ${proposalData?.votes_against === 0 ? 'hidden' : ''}`} 
-                                    style={{width: `${votePercentages[1]}%`}} 
+                                    className={`voting-progress ${!proposalData?.votes_against && 'hidden'}`} 
+                                    style={{width: `${proposalData?.vote_percentages['against']}%`}} 
                                 />
                                 <div className="voting-progress-remaining" />
                             </div>
@@ -209,13 +192,13 @@ const Proposal = () => {
                             <div className="voting-bar-header">
                                 <p>Abstain</p>
                                 <p className="voting-percentage">
-                                    {votePercentages[2]}%
+                                    {proposalData?.vote_percentages['abstain']}%
                                 </p>
                             </div>
                             <div className="voting-bar">
                                 <div 
-                                    className={`voting-progress ${proposalData?.votes_abstain === 0 ? 'hidden' : ''}`} 
-                                    style={{width: `${votePercentages[2]}%`}}
+                                    className={`voting-progress ${!proposalData?.votes_abstain && 'hidden'}`} 
+                                    style={{width: `${proposalData?.vote_percentages['abstain']}%`}}
                                 />
                                 <div className="voting-progress-remaining" />
                             </div>

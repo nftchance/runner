@@ -21,11 +21,10 @@
 }
 
 .shadow-text {
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.15);
     font-size: 48px;
     font-weight: 500;
     font-style: italic;
-    opacity: 0.15;
     margin-top: -25px;
     margin-left: 5vw;
 }
@@ -122,7 +121,7 @@
 .dashboard-tab > button {
     background-color: transparent;
     border: none;
-    opacity: 0.65;
+    color: var(--white-65);
     cursor: pointer;
     padding-bottom: 10px;
 }
@@ -130,13 +129,13 @@
 .dashboard-tab > button:hover,
 .dashboard-tab > button:focus,
 .dashboard-tab > button.active {
-    opacity: 1;
+    color: var(--white);
     border-bottom: 1px solid #FFFFFF;
 }
 
 .dashboard-tab > button > p {
+    color: inherit;
     font-weight: 700;
-    opacity: 1;
 }
 
 .tab-info > .ghost-card > .title-line > h4 {
@@ -190,6 +189,5 @@
 }
 
 .cta-email.email-signup {
-    width: 30%;
     justify-content: center;
 }

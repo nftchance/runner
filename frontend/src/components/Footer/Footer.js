@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
@@ -22,19 +23,19 @@ const Footer = () => {
                         </Link>
 
                         <div className="footer-icons-social">
-                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.twitter}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-twitter"]} />
                                 </div>
                             </a>
 
-                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.discord}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-discord"]} />
                                 </div>
                             </a>
 
-                            <a className="footer-link opaque" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
+                            <a className="footer-link" target="_blank" rel="noreferrer" href={URL_CONSTANTS.github}>
                                 <div className="img-container">
                                     <FontAwesomeIcon icon={["fa-brands", "fa-github"]} />
                                 </div>
@@ -44,7 +45,7 @@ const Footer = () => {
                 </div>
 
                 {FOOTER_ITEMS.map((category, index) => (
-                    <div className="footer-items opaque" key={category.name} style={{gridArea: `item-${index}`}}>
+                    <div className="footer-items" key={category.name} style={{gridArea: `item-${index}`}}>
                         <ul>
                             <li>
                                 <h4>{category.name}</h4>
@@ -74,4 +75,4 @@ const Footer = () => {
     )
 }
 
-export default Footer;
+export default memo(Footer);

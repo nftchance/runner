@@ -16,9 +16,7 @@ const GhostCard = (
     return (
         <div className="ghost-card">
             <div className="title-line">
-                {noIcon ?
-                    <></>
-                    :
+                {!noIcon &&
                     <div className="icon-container">
                         <FontAwesomeIcon
                             className="ghost-icon"

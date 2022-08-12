@@ -1,68 +1,56 @@
+TODO moved to github issue :)
+
 ☐ Mobile Responsiveness
     ☐ Home
     ☐ Roadmap
     ☐ Governance
     ☐ FAQ
     ☐ Proposal
-
+    ☐ Responsivity of descriptions in cards
+    The standard CSS way of doing it would be to make all cards inherit 
+    the row height and then make it just use auto height for the 'inline' card size.
 ☐ General:
-    ✔ Helmet for each page @done(22-08-10 15:09)
     ☐ Tests for compilation
     ☐ manifest
         ☐ confirm theme/background color
         ☐ get more icon sizes
     ☐ confirm index.html set up
-    ☐ Responsivity of descriptions in cards
-        Not sure how to handle this just yet.
-        We need them to be the same height regardless of how many lines the description takes up
-        Give them a predefined height and text-overflow: ellipsis
-        webkit line clamp may be an option but need to check the support for it
-        Ok webkit line clamp is widely supported now. The question is what do we want the overflow to look like?
-        Ellipsis? Fade out?
-
 ☐ API Integration:
     ☐ Awaiting websocket/REST data should render the components, just with empty data.
     ☐ Governance page proposal list view
-    ☐ Should the API url go in a .env or is it okay in the constants file?
     ☐ Email list integration
     ☐ Pass email ref from appropriate field to the handle function
     ☐ Post email to backend
     ☐ Proposal > Voting
         ☐ GET of $RUNNER count
         ☐ POST of vote
-
 ☐ Home:
+    ☐ Volume Earning Image in CSS not static svg
+☐ Roadmap:
+    ☐ Left aligned indicator put into CSS
+☐ Proposals:
+    ☐ Finalize what the menu items should be and do
+    ☐ What should the meta description be? Just general for all proposals? Or contain the summary?
+☐ FAQ:
+    ☐ Copywriting
+☐ DASHBOARDS:
+☐ OTHER:
+    ☐ Opengraph images
+
+ARCHIVE:
+    ✔ FAQ Dropdown @done(22-08-05 10:12)
+    ✔ Accordion on hover effects @done(22-08-10 02:23)
+    ✔ Helmet for each page @done(22-08-10 15:09)
     ✔ Should the email text field be controlled and both are equal? @done(22-08-10 13:38)
     ✔ Email error message display and email valid checker @done(22-08-10 13:38)
     ✔ Select Icon and the Close Icon in SysMessage are MUI not FA @done(22-08-10 17:05)
     ✔ Add appropriate provider logos @done(22-08-10 17:52)
     ✔ Add outline and background? to provider logos @done(22-08-10 17:52)
-    ☐ Volume Earning Image in CSS not static svg
-
-☐ Roadmap:
     ✔ Dynamic versioning image on margin @done(22-08-05 10:12)
     ✔ Cards @done(22-08-05 10:12)
     ✔ Status indicators @done(22-08-05 10:12)
-    ☐ Left aligned indicator put into CSS
-
-☐ Proposals:
     ✔ Proposal Page @done(22-08-09 16:23)
     ✔ Ellipsis Menu Items and their functions @done(22-08-10 02:22)
-    ☐ Finalize what the menu items should be and do
-    ☐ What should the meta description be? Just general for all proposals? Or contain the summary?
-
-☐ FAQ:
-    ✔ Dropdown @done(22-08-05 10:12)
-    ✔ Accordion on hover effects @done(22-08-10 02:23)
-        Note: right now just the icon lights up to white
-    ☐ Copywriting
-
-☐ DASHBOARDS:
-
-☐ OTHER:
-    ☐ Opengraph images
-
-ARCHIVE:
     ✔ Governance: @done(22-08-10 16:54)
     ✔ This goddamn select box is going to be the death of me @done(22-08-10 16:44)
         LETS FUCKING GO.

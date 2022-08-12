@@ -26,7 +26,6 @@ const ModuleCard = (
                         className="provider-icon-container"
                         style={{backgroundImage: `url(${providerLogo})`}}
                     >
-                        {/* <img src={providerLogo} alt={provider} /> */}
                     </div>
                     <span className="provider-name">{provider}</span>
                 </div>
