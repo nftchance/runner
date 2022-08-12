@@ -56,8 +56,11 @@ class WaitlistEntry(OrgIDMixin, models.Model):
         self.invited_at = django.utils.timezone.now()
         self.save()
     
+    def can_accept(self):
+        return not WaitlistEntry.objects.filter(accepted_at__gte=django.utils.timezone.now() - django.utils.timezone.timedelta(hours=WAITLIST_PERIOD_DURATION_HOURS)).count() >= WAITLIST_PERIOD_ENTRIES
+
     def accept(self, user):
-        if WaitlistEntry.objects.filter(accepted_at__gte=django.utils.timezone.now() - django.utils.timezone.timedelta(hours=WAITLIST_PERIOD_DURATION_HOURS)).count() >= WAITLIST_PERIOD_ENTRIES:
+        if not self.can_accept():
             raise Exception("Waitlist redemption limit reached")
 
         if self.accepted_at:
@@ -69,6 +72,25 @@ class WaitlistEntry(OrgIDMixin, models.Model):
         self.user = user
         self.accepted_at = django.utils.timezone.now()
         self.save()
+
+    def time_until_can_accept(self):
+        if self.accepted_at:
+            return None
+
+        if self.invited_at == None:
+            return None
+
+        if self.can_accept():
+            return 0
+
+        # get the 5 most recent waitlist entries that have been accepted
+        accepted_entries = WaitlistEntry.objects.filter(accepted_at__gte=django.utils.timezone.now() - django.utils.timezone.timedelta(hours=WAITLIST_PERIOD_DURATION_HOURS)).order_by("accepted_at")[:WAITLIST_PERIOD_ENTRIES]
+
+        if accepted_entries.exists():
+            # get difference between now and accepted_at + 24 hours of the first object in the queryset
+            return (django.utils.timezone.now() - accepted_entries.first().accepted_at) + django.utils.timezone.timedelta(hours=WAITLIST_PERIOD_DURATION_HOURS)
+
+        return 0
 
     class Meta:
         ordering = ['created_at']

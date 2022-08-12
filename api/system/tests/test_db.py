@@ -115,6 +115,8 @@ class SystemTestCase(TestCase):
             # accept waitlist entry
             entry = WaitlistEntry.objects.get(email=username)
 
+            self.assertEqual(entry.time_until_can_accept(), 0)
+
             entry.accept(user)
 
         # create another waitlist entry
@@ -123,8 +125,11 @@ class SystemTestCase(TestCase):
             invited_at=django.utils.timezone.now()
         )
 
+        self.assertNotEqual(obj.time_until_can_accept(), 0)
+
         user = create_user(username="user6@example.com")
 
         with self.assertRaises(Exception):
             # accept waitlist entry
             obj.accept(user)
+
