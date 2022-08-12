@@ -1,6 +1,8 @@
 import django
+import re
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from utils.uuid import OrgIDMixin
@@ -24,6 +26,13 @@ class Broadcast(models.Model):
         return self.title
     
 class WaitlistEntry(OrgIDMixin, models.Model):
+    def save(self, *args, **kwargs):
+        # filter out the +tags of an email
+        if self.email and "+" in self.email:
+            self.email = re.sub(r"([+])\w+", "", self.email)
+
+        super(WaitlistEntry, self).save(*args, **kwargs)
+
     email = models.EmailField(max_length=100, unique=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

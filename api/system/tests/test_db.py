@@ -1,5 +1,6 @@
 import django
 
+from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
@@ -46,15 +47,15 @@ class SystemTestCase(TestCase):
                 email="user@example.com"
             )
 
-    # def test_cannot_create_waitlist_entry_twice_with_salted_email(self):
-    #     WaitlistEntry.objects.create(
-    #         email="user@example.com"
-    #     )
+    def test_cannot_create_waitlist_entry_twice_with_salted_email(self):
+        WaitlistEntry.objects.create(
+            email="user@example.com"
+        )
 
-    #     with self.assertRaises(Exception):
-    #         WaitlistEntry.objects.create(
-    #             email="user+test@example.com"
-    #         )
+        with self.assertRaises(IntegrityError):
+            WaitlistEntry.objects.create(
+                email="user+test@example.com"
+            )
 
     def test_can_invite_waitlist_entry(self):
         entry = WaitlistEntry.objects.create(
