@@ -38,7 +38,6 @@ class WaitlistEntry(OrgIDMixin, models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     invited_at = models.DateTimeField(blank=True, null=True)
-    invite_id = models.CharField(max_length=100, null=True, blank=True)
 
     accepted_at = models.DateTimeField(blank=True, null=True)
 
