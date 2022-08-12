@@ -98,3 +98,32 @@ class SystemTestCase(TestCase):
 
         with self.assertRaises(Exception):
             entry.accept(self.user)
+
+    def test_user_cannot_accept_invitation_exceeding_daily_limit(self):
+        # create five waitlist entries
+        for i in range(5):
+            username = f"user{i}@example.com"
+
+            WaitlistEntry.objects.create(
+                email=username,
+                invited_at=django.utils.timezone.now()
+            )
+
+            user = create_user(username=username)
+
+            # accept waitlist entry
+            entry = WaitlistEntry.objects.get(email=username)
+
+            entry.accept(user)
+
+        # create another waitlist entry
+        obj = WaitlistEntry.objects.create(
+            email="user6@example.com",
+            invited_at=django.utils.timezone.now()
+        )
+
+        user = create_user(username="user6@example.com")
+
+        with self.assertRaises(Exception):
+            # accept waitlist entry
+            obj.accept(user)

@@ -5,6 +5,8 @@ from django.db import models
 
 from utils.uuid import OrgIDMixin
 
+from .utils import WAITLIST_PERIOD_DURATION_HOURS, WAITLIST_PERIOD_ENTRIES
+
 User = get_user_model()
 
 class Broadcast(models.Model):
@@ -46,6 +48,9 @@ class WaitlistEntry(OrgIDMixin, models.Model):
         self.save()
     
     def accept(self, user):
+        if WaitlistEntry.objects.filter(accepted_at__gte=django.utils.timezone.now() - django.utils.timezone.timedelta(hours=WAITLIST_PERIOD_DURATION_HOURS)).count() >= WAITLIST_PERIOD_ENTRIES:
+            raise Exception("Waitlist redemption limit reached")
+
         if self.accepted_at:
             raise Exception("Already accepted")
 
