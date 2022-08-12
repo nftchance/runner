@@ -13,11 +13,11 @@ class BroadcastSerializer(serializers.ModelSerializer):
 
 class WaitlistEntrySerializer(serializers.ModelSerializer):
     def validate(self, data):
+        # On the first validation of an object we will remove the tag from a whitelist entry so that someone can use filter tags on an email and get a ton of entries -- filters chance+test@utc24.io to chance@utc24.io
         if not 'id' in data:
             if 'email' in data and "+" in data['email']:
                 data['email'] = re.sub(r"([+])\w+", "", data['email'])
 
-        
             if WaitlistEntry.objects.filter(email=data['email']).exists():
                 raise serializers.ValidationError(
                     {"email": "Waitlist entry with email already exists."}

@@ -36,21 +36,24 @@ class WaitlistEntryViewSet(
 
         if not entry.can_accept():
             return Response(
-                {'detail': 'Waitlist redemption limit reached'},
+                {'error': 'Waitlist redemption limit reached'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         if entry.accepted_at:
             return Response(
-                {'detail': 'Already accepted'},
+                {'error': 'Already accepted'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         if request.user.email != entry.email:
             return Response(
-                {'detail': 'Invite email does not match user email'},
+                {'email': 'Invite email does not match user email'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         entry.accept(request.user)
-        return Response({"message": "You have accepted the waitlist entry."})
+
+        serializer = self.get_serializer(entry)
+
+        return Response(serializer.data)
