@@ -1,4 +1,3 @@
-from rest_framework import permissions
 from rest_framework.schemas import get_schema_view
 
 from django.contrib import admin
