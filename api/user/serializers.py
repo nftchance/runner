@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "username",
+            "email",
             "password1",
             "password2",
             "first_name",
@@ -129,3 +130,13 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
+
+class LogOutSerializer(serializers.Serializer):
+    def validate(self, data):
+        user = self.context["request"].user
+        if user.is_anonymous:
+            raise serializers.ValidationError(
+                {"authorize": "You dont have permission for this user."})
+        return data
+
+    refresh_token = serializers.CharField(write_only=True)
