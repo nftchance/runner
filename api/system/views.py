@@ -49,7 +49,9 @@ class WaitlistEntryViewSet(viewsets.ModelViewSet):
 
         waitlist_entry.invite()
 
-        return Response(status=status.HTTP_200_OK)
+        serializer = self.get_serializer(waitlist_entry)
+
+        return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def accept(self, request, *args, **kwargs):

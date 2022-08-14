@@ -59,6 +59,9 @@ class Transfer(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        permissions = (
+            "manage_transfer", "Can manage transfer",
+        )
 
 
 class Coin(models.Model):
