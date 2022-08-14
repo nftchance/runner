@@ -1,6 +1,7 @@
 import datetime
 import django
-from ..models import WaitlistEntry
+
+from django.contrib.auth.models import Permission
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -14,7 +15,7 @@ from org.models import Org, OrgInvitation
 from org.permission_constants import org_permissions
 from org.utils import Role, load_permissions
 
-from system.models import Broadcast
+from system.models import Broadcast, WaitlistEntry
 
 
 class HttpTest(APITestCase):
@@ -57,8 +58,7 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION="Bearer " + self.access,
         )
 
-        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED,
-                         response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_can_list_broadcasts(self):
         response = self.client.get(
@@ -110,6 +110,8 @@ class HttpTest(APITestCase):
 
         # make sure the returned data has all the broadcasts
         self.assertEqual(0, len(response.data))
+
+    
 
     def test_can_create_waitlist_entry(self):
         response = self.client.post(
@@ -308,3 +310,211 @@ class HttpTest(APITestCase):
         )
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_cannot_retrieve_waitlist_entry(self):
+        response = self.client.get(
+            reverse("waitlist-detail", kwargs={'waitlist_entry_id': 1}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_cannot_list_waitlist_entries(self):
+        response = self.client.get(
+            reverse("waitlist-list"),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_user_with_can_manage_waitlist_entry_permission_can_list_waitlist_entries(self):
+        # create new user with can_manage_waitlist_entry permission
+        user = create_user(username="user7@example.com")
+
+        # add permission to user
+        permission = Permission.objects.filter(codename="manage_waitlistentry").first()
+        user.user_permissions.add(permission)
+        user.save()
+
+        user_response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": "user7@example.com",
+                "password": PASSWORD,
+            },
+        )
+
+        self.assertEqual(status.HTTP_200_OK, user_response.status_code) 
+        self.assertEqual(user.has_perm('system.manage_waitlistentry'), True)
+
+        response = self.client.get(
+            reverse("waitlist-list"),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_user_with_can_manage_waitlist_entry_permission_can_invite_waitlist_entry(self):
+        # create new user with can_manage_waitlist_entry permission
+        user = create_user(username="user7@example.com")
+
+        # add permission to user
+        permission = Permission.objects.filter(codename="manage_waitlistentry").first()
+        user.user_permissions.add(permission)
+        user.save()
+
+        user_response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": "user7@example.com",
+                "password": PASSWORD,
+            },
+        )
+
+        self.assertEqual(status.HTTP_200_OK, user_response.status_code) 
+        self.assertEqual(user.has_perm('system.manage_waitlistentry'), True)
+
+        response = self.client.get(
+            reverse("waitlist-list"),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # create new waitlist entry
+        response = self.client.post(
+            reverse("waitlist-list"),
+            data={
+                "email": "user8@example.com"
+            }
+        )
+
+        # make post request to invite user
+        response = self.client.post(
+            reverse("waitlist-invite", kwargs={'waitlist_entry_id': response.data['id']}),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_user_with_can_manage_waitlist_entry_permission_can_delete_waitlist_entry(self):
+        # create new user with can_manage_waitlist_entry permission
+        user = create_user(username="user9@example.com")
+
+        # add permission to user
+        permission = Permission.objects.filter(codename="manage_waitlistentry").first()
+        user.user_permissions.add(permission)
+        user.save()
+
+        user_response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": "user9@example.com",
+                "password": PASSWORD,
+            },
+        )
+
+        self.assertEqual(status.HTTP_200_OK, user_response.status_code) 
+        self.assertEqual(user.has_perm('system.manage_waitlistentry'), True)
+
+        response = self.client.post(
+            reverse("waitlist-list"),
+            data={
+                "email": "user8@example.com"
+            }
+        )
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        # delete waitlist entry
+        response = self.client.delete(
+            reverse("waitlist-detail", kwargs={'waitlist_entry_id': response.data['id']}),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_user_with_can_manage_waitlist_entry_permission_cannot_invite_user_twice(self):
+        # create new user with can_manage_waitlist_entry permission
+        user = create_user(username="user7@example.com")
+
+        # add permission to user
+        permission = Permission.objects.filter(codename="manage_waitlistentry").first()
+        user.user_permissions.add(permission)
+        user.save()
+
+        user_response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": "user7@example.com",
+                "password": PASSWORD,
+            },
+        )
+
+        self.assertEqual(status.HTTP_200_OK, user_response.status_code) 
+        self.assertEqual(user.has_perm('system.manage_waitlistentry'), True)
+
+        response = self.client.get(
+            reverse("waitlist-list"),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # create new waitlist entry
+        response = self.client.post(
+            reverse("waitlist-list"),
+            data={
+                "email": "user8@example.com"
+            }
+        )
+
+        # make post request to invite user
+        response = self.client.post(
+            reverse("waitlist-invite", kwargs={'waitlist_entry_id': response.data['id']}),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)         
+
+        # make post request to invite user
+        response = self.client.post(
+            reverse("waitlist-invite", kwargs={'waitlist_entry_id': response.data['id']}),
+            HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

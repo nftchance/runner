@@ -2,7 +2,6 @@ import django
 import re
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from utils.uuid import OrgIDMixin
@@ -24,6 +23,12 @@ class Broadcast(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-created_at']
+        permissions = (
+            ('manage_broadcast', 'Can manage broadcast'),
+        )
     
 class WaitlistEntry(OrgIDMixin, models.Model):
     def save(self, *args, **kwargs):
@@ -93,3 +98,6 @@ class WaitlistEntry(OrgIDMixin, models.Model):
 
     class Meta:
         ordering = ['created_at']
+        permissions = (
+            ("manage_waitlistentry", "Can manage waitlist entries"),
+        )
