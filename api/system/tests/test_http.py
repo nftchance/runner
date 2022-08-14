@@ -111,8 +111,6 @@ class HttpTest(APITestCase):
         # make sure the returned data has all the broadcasts
         self.assertEqual(0, len(response.data))
 
-    
-
     def test_can_create_waitlist_entry(self):
         response = self.client.post(
             reverse("waitlist-list"),
@@ -469,6 +467,11 @@ class HttpTest(APITestCase):
             }
         )
 
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        # make sure id is in response data
+        self.assertIn('id', response.data)
+        self.assertNotEqual(response.data['id'], None)
+
         # make post request to invite user
         response = self.client.post(
             reverse("waitlist-invite", kwargs={'waitlist_entry_id': response.data['id']}),
@@ -477,20 +480,12 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)         
 
-        # make post request to invite user
         response = self.client.post(
             reverse("waitlist-invite", kwargs={'waitlist_entry_id': response.data['id']}),
             HTTP_AUTHORIZATION=f"Bearer {user_response.data['access']}"
         )
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-     
-
-
-
-
-
-
 
 
 
