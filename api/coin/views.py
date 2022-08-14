@@ -7,13 +7,13 @@ from .permissions import CanManageTransfer
 from .serializers import TransferSerializer
 
 
-class TransferViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class TransferViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
     lookup_url_kwarg = "transfer_id"
 
     queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
-    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.AllowAny]
 
     filter_backends = (filters.OrderingFilter, filters.SearchFilter)
 
