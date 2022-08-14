@@ -487,9 +487,7 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-
-
-
+    
 
 
 

@@ -46,6 +46,12 @@ class HttpTest(APITestCase):
         self.coin.mint(self.user, 100)
         self.coin.mint(self.secondary_user, 100)
 
+    def test_cannot_list_transfers_as_unauthenticated_user(self):
+        response = self.client.get(
+            reverse("transfer-list"),
+        )
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
     def test_can_list_transfers(self):
         response = self.client.get(
             reverse("transfer-list"),
