@@ -14,7 +14,7 @@ const VolumeGraph = () => {
                 {VOLUME_BARS.map((bar, idx) => (
                     <VolumeBar 
                         key={`bar-${idx}`}
-                        bar={bar} 
+                        bar={bar}
                         min={VOLUME_BARS[0].volume}
                         max={VOLUME_BARS[VOLUME_BARS.length-1].volume}
                         idx={idx}

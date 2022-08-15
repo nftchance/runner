@@ -18,11 +18,30 @@ const Bar = styled.div`
     height: ${(props) => props.height};
 `
 
+const BarGridCol = styled.div`
+    &:last-child {
+        .bar-container {
+            &:after {
+                display: ${(props) => props.hiddenLast ? 'hidden' : 'block'};
+            }
+        }
+    }
+    &:first-child {
+        .bar-container {
+            &:after {
+                display: ${(props) => props.hiddenFirst ? 'hidden' : 'block'};
+            }
+        }
+    }
+`
+
 const VolumeBar = ({bar, min, max, idx, hovered, setHovered}) => {
     return (
-        <div 
+        <BarGridCol 
             className={`bar-grid-col ${hovered === idx ? 'hovered' : ''}`}
             onMouseEnter={setHovered}
+            hiddenFirst={hovered < 2}
+            hiddenLast={hovered > 25}
         >
             <BarContainer 
                 className="bar-container"
@@ -34,7 +53,7 @@ const VolumeBar = ({bar, min, max, idx, hovered, setHovered}) => {
                 <div className={`before-line ${idx}`} />
                 <Bar height={bar.height} className="bar" />
             </BarContainer>
-        </div>
+        </BarGridCol>
     )
 }
 
