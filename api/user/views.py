@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
+from rest_framework.schemas import AutoSchema
+from rest_framework.schemas.openapi import SchemaGenerator
 
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -12,6 +14,7 @@ from .serializers import (
     UpdateUserSerializer,
     ChangePasswordSerializer,
     UserSerializer,
+    LogOutSerializer
 )
 
 User = get_user_model()
@@ -46,10 +49,14 @@ class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
 
-class LogOutView(views.APIView):
+class LogOutView(generics.GenericAPIView):
+    generator = SchemaGenerator(title='Stock Prices API')
+
     permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request):
+    serializer_class = LogOutSerializer
+
+    def post(self, request, *args, **kwargs):
         try:
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
@@ -57,7 +64,6 @@ class LogOutView(views.APIView):
 
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            print("exception", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 

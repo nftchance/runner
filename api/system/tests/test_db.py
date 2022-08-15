@@ -1,3 +1,7 @@
+import django
+
+from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from utils.tests.user import create_user
@@ -5,9 +9,9 @@ from utils.tests.user import create_user
 from org.permission_constants import org_permissions
 from org.utils import load_permissions
 
-from system.models import Broadcast
+from system.models import Broadcast, WaitlistEntry
 
-class BroadcastTestCase(TestCase):
+class SystemTestCase(TestCase):
     def setUp(self):
         self.user = create_user()
         self.secondary_user = create_user(username="secondaryuser@example.com")        
@@ -24,4 +28,108 @@ class BroadcastTestCase(TestCase):
         )
 
         self.assertEqual(Broadcast.objects.count(), 1)
+
+    def test_create_waitlist_entry(self):
+        WaitlistEntry.objects.create(
+            email="user@example.com"
+        )
+
+        self.assertEqual(WaitlistEntry.objects.count(), 1)
+
+    def test_cannot_create_waitlist_entry_for_same_email_address_twice(self):
+        WaitlistEntry.objects.create(
+            email="user@example.com"
+        )
+
+        # make sure create errors out due to email not being unique
+        with self.assertRaises(IntegrityError):
+            WaitlistEntry.objects.create(
+                email="user@example.com"
+            )
+
+    def test_cannot_create_waitlist_entry_twice_with_salted_email(self):
+        WaitlistEntry.objects.create(
+            email="user@example.com"
+        )
+
+        with self.assertRaises(IntegrityError):
+            WaitlistEntry.objects.create(
+                email="user+test@example.com"
+            )
+
+    def test_can_invite_waitlist_entry(self):
+        entry = WaitlistEntry.objects.create(
+            email="inviteuser@example.com"
+        )
+
+        entry.invite()
+
+        self.assertEqual(WaitlistEntry.objects.count(), 1)
+        self.assertIsNotNone(entry.invited_at)
+
+    def test_user_can_accept_invitation(self):
+        entry = WaitlistEntry.objects.create(
+            email="user@example.com")
+
+        entry.invite()
+        entry.accept(self.user)
+
+        self.assertIsNotNone(entry.user)
+        self.assertIsNotNone(entry.accepted_at)
+
+    def test_user_cannot_accept_invitation_twice(self):
+        entry = WaitlistEntry.objects.create(
+            email="user@example.com")
+
+        entry.invite()
+
+        entry.accept(self.user)
+
+        self.assertIsNotNone(entry.user)
+        self.assertIsNotNone(entry.accepted_at) 
+        
+        with self.assertRaises(Exception):
+            entry.accept(self.user)
+
+    def test_user_cannot_accept_invitation_for_different_email(self):
+        entry = WaitlistEntry.objects.create(
+            email="userbigdog@example.com")
+
+        entry.invite()
+
+        with self.assertRaises(Exception):
+            entry.accept(self.user)
+
+    def test_user_cannot_accept_invitation_exceeding_daily_limit(self):
+        # create five waitlist entries
+        for i in range(5):
+            username = f"user{i}@example.com"
+
+            WaitlistEntry.objects.create(
+                email=username,
+                invited_at=django.utils.timezone.now()
+            )
+
+            user = create_user(username=username)
+
+            # accept waitlist entry
+            entry = WaitlistEntry.objects.get(email=username)
+
+            self.assertEqual(entry.time_until_can_accept(), 0)
+
+            entry.accept(user)
+
+        # create another waitlist entry
+        obj = WaitlistEntry.objects.create(
+            email="user6@example.com",
+            invited_at=django.utils.timezone.now()
+        )
+
+        self.assertNotEqual(obj.time_until_can_accept(), 0)
+
+        user = create_user(username="user6@example.com")
+
+        with self.assertRaises(Exception):
+            # accept waitlist entry
+            obj.accept(user)
 
