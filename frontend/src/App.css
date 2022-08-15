@@ -116,10 +116,11 @@ p {
 .headline {
   margin-top: 200px;
   margin-bottom: 180px;
+  max-width: 850px;
 }
 
 .headline > .subtitle {
-  width: 40%;
+  max-width: 650px;
   margin-top: 50px;
   margin-bottom: 60px;
 }
@@ -172,7 +173,7 @@ p {
 
 @media screen and (max-width: 600px) {
   :root {
-    --page-margins: 30px;
+    --page-margins: 20px;
   }
 }
 

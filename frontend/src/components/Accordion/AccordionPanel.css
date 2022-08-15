@@ -9,14 +9,21 @@
 }
 
 .accordion-summary {
-    height: 100px;
+    min-height: 100px;
+    padding: 10px 10px 10px 10px;
     padding-left: 0px;
     border-bottom: 1px solid var(--dark-border);
 }
 
+.accordion-summary > .MuiAccordionSummary-content {
+    max-width: 85%;
+    float: left;
+    margin-right: auto;
+}
+
 .accordion-summary:hover .expand-icon,
 .accordion-summary:focus .expand-icon {
-    color: var(--white-65)
+    color: var(--white)
 }
 
 .accordion-details {
@@ -26,5 +33,7 @@
 }
 
 .expand-icon {
-    color: var(--white);
+    float: right;
+    margin-left: auto;
+    color: var(--white-65);
 }

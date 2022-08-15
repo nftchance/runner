@@ -25,7 +25,7 @@ const FAQ = () => {
 
             <Page>
                 <div className="headline">
-                    <h1>Join us in the run towards a better future <br />of service business management.</h1>
+                    <h1>Join us in the run towards a better future of service business management.</h1>
                     <h5 className="subtitle">
                         Runner is an open source and community led service business automation tool. 
                         Modernize your business with automation, asynchronous task completion, 
