@@ -7,13 +7,30 @@
     display: grid;
     grid-template-columns: repeat(28, 1fr);
     grid-template-rows: 340px;
-    column-gap: 10px;
+}
+
+.bar-grid-col {
+    position: relative;
+    align-items: baseline;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.bar-grid-col:last-child > .bar-container::after,
+.bar-grid-col:first-child > .bar-container::after {
+    display: block;
+    color: var(--white-65);
+    position: absolute;
+    bottom: -29px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .bar-container {
     position: relative;
-    width: auto;
-    align-self: end;
+    vertical-align: bottom;
+    width: 100%;
+    bottom: -100%;
     padding-bottom: 6px;
     margin-bottom: -1px;
     border-color: var(--dark-border);
@@ -22,6 +39,7 @@
     font-weight: 700;
     color: var(--white);
     line-height: 17px;
+    transform: translateY(-100%);
 }
 
 .bar {
@@ -30,28 +48,19 @@
     border-color: inherit;
 }
 
-.bar-container:hover,
-.bar-container:focus {
+.bar-grid-col.hovered > .bar-container {
     border-bottom: 1px solid var(--yellow);
     background-color: var(--yellow);
     background-clip: content-box;
     border-color: var(--dark-yellow);
 }
 
-.bar-container:hover > .before-line {
+.bar-grid-col.hovered > .bar-container > .before-line {
     background-color: var(--yellow);
 }
 
-.bar-container:last-child::after,
-.bar-container:first-child::after {
-    color: var(--white-65);
-    position: absolute;
-    bottom: -29px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.bar-container:hover::after {
+.bar-grid-col.hovered > .bar-container::after {
+    display: block;
     position: absolute;
     bottom: -30px;
     left: 50%;
@@ -59,7 +68,8 @@
     color: var(--white);
 }
 
-.bar-container:hover::before {
+.bar-grid-col.hovered > .bar-container::before {
+    display: block;
     white-space: nowrap;
     position: absolute;
     top: -60px;
@@ -68,11 +78,11 @@
 }
 
 .before-line {
+    display: inherit;
     height: 40px;
     width: 1px;
     position: absolute;
     top: -40px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: transparent;
 }

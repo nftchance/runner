@@ -1,24 +1,16 @@
-import { memo } from "react";
 import styled from "styled-components";
 
 const BarContainer = styled.div`
-    &:hover {
-        &:before {
-            content: "${(props) => props.bar.runner}";
-        }
-        &:after {
-            content: "${(props) => props.bar.volume}";
-        }
-    }
-    &:last-child {
-        &:after {
-            content: "${(props) => props.max}";
+    &:before {
+        display: none;
+        content: "${(props) => props.bar.runner}";
+        .before-line {
+            display: none;
         }
     }
-    &:first-child {
-        &:after {
-            content: "${(props) => props.min}";
-        }
+    &:after {
+        display: none;
+        content: "${(props) => props.bar.volume}";
     }
 `;
 
@@ -26,18 +18,24 @@ const Bar = styled.div`
     height: ${(props) => props.height};
 `
 
-const VolumeBar = ({bar, min, max}) => {
+const VolumeBar = ({bar, min, max, idx, hovered, setHovered}) => {
     return (
-        <BarContainer 
-            className="bar-container"
-            bar={bar}
-            min={min}
-            max={max}
+        <div 
+            className={`bar-grid-col ${hovered === idx ? 'hovered' : ''}`}
+            onMouseEnter={setHovered}
         >
-            <div className="before-line" />
-            <Bar height={bar.height} className="bar" />
-        </BarContainer>
+            <BarContainer 
+                className="bar-container"
+                bar={bar}
+                min={min}
+                max={max}
+                height={bar.height}
+            >
+                <div className={`before-line ${idx}`} />
+                <Bar height={bar.height} className="bar" />
+            </BarContainer>
+        </div>
     )
 }
 
-export default memo(VolumeBar);
+export default VolumeBar;

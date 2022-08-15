@@ -451,17 +451,17 @@ export const VOLUME_BARS = [
         runner: "0 $RUNNER"
     },
     {
-        height: "0px",
+        height: "3px",
         volume: "$805.56",
         runner: "4 $RUNNER"
     },
     {
-        height: "2px",
+        height: "5px",
         volume: "$1,611.11",
         runner: "10 $RUNNER"
     },
     {
-        height: "2px",
+        height: "6px",
         volume: "$2,416.67",
         runner: "17 $RUNNER"
     },
@@ -471,12 +471,12 @@ export const VOLUME_BARS = [
         runner: "24 $RUNNER"
     },
     {
-        height: "7px",
+        height: "8px",
         volume: "$4,027.78",
         runner: "32 $RUNNER"
     },
     {
-        height: "7px",
+        height: "9px",
         volume: "$4,833.33",
         runner: "40 $RUNNER"
     },
@@ -486,7 +486,7 @@ export const VOLUME_BARS = [
         runner: "49 $RUNNER"
     },
     {
-        height: "11px",
+        height: "12px",
         volume: "$6,444.44",
         runner: "58 $RUNNER"
     },
