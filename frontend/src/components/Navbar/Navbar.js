@@ -13,7 +13,7 @@ const Navbar = () => {
                     <Link className="nav-link" to="/">
                         <div className="text-with-icon">
                             <div className="img-container">
-                                <img id="nav-badge" src="/badge.svg" alt="Runner badge" />
+                                <img data-testid="nav-badge" id="nav-badge" src="/badge.svg" alt="Runner badge" />
                             </div>
                             <h4>runner</h4>
                         </div>

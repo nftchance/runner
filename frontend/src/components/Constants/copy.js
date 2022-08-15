@@ -443,3 +443,146 @@ export const PROPOSAL_DATA = [
         linkTo: '/'
     },
 ]
+
+export const VOLUME_BARS = [
+    {
+        height: "0px",
+        volume: "$0.00",
+        runner: "0 $RUNNER"
+    },
+    {
+        height: "0px",
+        volume: "$805.56",
+        runner: "4 $RUNNER"
+    },
+    {
+        height: "2px",
+        volume: "$1,611.11",
+        runner: "10 $RUNNER"
+    },
+    {
+        height: "2px",
+        volume: "$2,416.67",
+        runner: "17 $RUNNER"
+    },
+    {
+        height: "7px",
+        volume: "$3,222.22",
+        runner: "24 $RUNNER"
+    },
+    {
+        height: "7px",
+        volume: "$4,027.78",
+        runner: "32 $RUNNER"
+    },
+    {
+        height: "7px",
+        volume: "$4,833.33",
+        runner: "40 $RUNNER"
+    },
+    {
+        height: "11px",
+        volume: "$5,638.89",
+        runner: "49 $RUNNER"
+    },
+    {
+        height: "11px",
+        volume: "$6,444.44",
+        runner: "58 $RUNNER"
+    },
+    {
+        height: "15px",
+        volume: "$7,250.00",
+        runner: "67 $RUNNER"
+    },
+    {
+        height: "20px",
+        volume: "$8,055.56",
+        runner: "76 $RUNNER"
+    },
+    {
+        height: "24px",
+        volume: "$8,861.11",
+        runner: "86 $RUNNER"
+    },
+    {
+        height: "33px",
+        volume: "$9,666.67",
+        runner: "96 $RUNNER"
+    },
+    {
+        height: "42px",
+        volume: "$10,472.22",
+        runner: "106 $RUNNER"
+    },
+    {
+        height: "50px",
+        volume: "$11,277.78",
+        runner: "116 $RUNNER"
+    },
+    {
+        height: "59px",
+        volume: "$12,083.33",
+        runner: "127 $RUNNER"
+    },
+    {
+        height: "68px",
+        volume: "$12,888.89",
+        runner: "137 $RUNNER"
+    },
+    {
+        height: "82px",
+        volume: "$13,694.44",
+        runner: "148 $RUNNER"
+    },
+    {
+        height: "91px",
+        volume: "$14,500.00",
+        runner: "159 $RUNNER"
+    },
+    {
+        height: "108px",
+        volume: "$15,305.56",
+        runner: "170 $RUNNER"
+    },
+    {
+        height: "123px",
+        volume: "$16,111.11",
+        runner: "182 $RUNNER"
+    },
+    {
+        height: "138px",
+        volume: "$16,916.67",
+        runner: "193 $RUNNER"
+    },
+    {
+        height: "158px",
+        volume: "$17,722.22",
+        runner: "204 $RUNNER"
+    },
+    {
+        height: "180px",
+        volume: "$18,527.78",
+        runner: "216 $RUNNER"
+    },
+    {
+        height: "204px",
+        volume: "$19,333.33",
+        runner: "228 $RUNNER"
+    },
+    {
+        height: "226px",
+        volume: "$20,138.89",
+        runner: "240 $RUNNER"
+    },
+    {
+        height: "254px",
+        volume: "$20,944.44",
+        runner: "252 $RUNNER"
+    },
+    {
+        height: "278px",
+        volume: "$21,750.00",
+        runner: "264 $RUNNER"
+    },
+]

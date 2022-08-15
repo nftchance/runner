@@ -7,9 +7,10 @@ import SecondaryButton from "@components/Buttons/SecondaryButton";
 import TextFieldInline from "@components/TextFields/TextFieldInline";
 import ModuleCard from "@components/Cards/ModuleCard";
 import GhostCard from "@components/Cards/GhostCard";
+import VolumeGraph from "@components/StyledAssets/VolumeGraph";
 
 import hero from "@images/landing/hero.svg";
-import volume from "@images/landing/volume.svg";
+// import volume from "@images/landing/volume.svg";
 import dashboard from "@images/landing/dashboard.svg";
 
 import { 
@@ -40,7 +41,7 @@ const Home = () => {
         <Page>
             <div className="home">
                 <div className="hero-text">
-                    <h1>Revolutionize your service business<br /> with</h1>
+                    <h1 data-testid="hero-title">Revolutionize your service business<br /> with</h1>
                     <h1 className="yellow"> automation tools of 2032.</h1>
                     <div className="shadow-text">No we're not time travelers.</div>
 
@@ -177,7 +178,7 @@ const Home = () => {
                     <div className="governance-headline">
                         <h3>Volume driven platform governance and influence</h3>
                         <p className="formula">
-                            {"$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 100000"}
+                            {"$RUNNER Earned / Job = ($ Volume <= 21750) ** 1.25 / 1000"}
                         </p>
                     </div>
 
@@ -198,7 +199,8 @@ const Home = () => {
                         />
                     </div>
 
-                    <img id="volume-img" src={volume} alt="Volume graph" />
+                    {/* <img id="volume-img" src={volume} alt="Volume graph" /> */}
+                    <VolumeGraph />
                 </div>
 
                 <div className="cta">
