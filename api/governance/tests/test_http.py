@@ -409,7 +409,47 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
-    def test_cannot_update_proposal(self):
+    def test_can_update_before_being_approved(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=False,
+        )
+
+        response = self.client.patch(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            data={
+                "title": "New Title",
+                "description": "New Description",
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["title"], "New Title")
+        self.assertEqual(response.data["description"], "New Description")
+
+    def test_cannot_update_proposal_after_being_approved(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved=True,
+        )
+
+        response = self.client.put(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            data={
+                "title": "Updated Proposal",
+                "description": "Updated proposal",
+            },
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+    def test_cannot_update_proposal_for_other_user(self):
         proposal = Proposal.objects.create(
             title="Test Proposal",
             description="Test proposal",
@@ -426,8 +466,7 @@ class HttpTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
         )
 
-        self.assertEqual(status.HTTP_405_METHOD_NOT_ALLOWED,
-                         response.status_code)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_cannot_vote_on_proposal_not_approved(self):
         proposal = Proposal.objects.create(

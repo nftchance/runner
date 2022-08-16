@@ -48,6 +48,9 @@ class ProposalVote(models.Model):
         self.released_at = django.utils.timezone.now()
         self.save()
 
+    class Meta: 
+        ordering = ['-created_at']
+
 
 class Proposal(models.Model):
     def save(self, *args, **kwargs):
@@ -162,3 +165,6 @@ class Proposal(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        permissions = (
+            ("manage_proposal", "Can manage proposal"),
+        )
