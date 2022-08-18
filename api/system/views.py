@@ -1,6 +1,8 @@
-import re
+import django
 
-from rest_framework import mixins, permissions, status, viewsets
+from django.db.models import Q
+
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -10,7 +12,40 @@ from .serializers import BroadcastSerializer, WaitlistEntrySerializer
 
 
 class BroadcastViewSet(viewsets.ModelViewSet):
-    queryset = Broadcast.objects.all().exclude(expired_at__isnull=False)
+    """
+    retrieve:
+        Return a Broadcast instance.
+
+        permissions: 
+            Request user must have manage_broadcast permission.
+    list:
+        Return a list of all Waitlist Entries.
+
+        permissions: 
+            Anyone can list the active Broadcast instances.
+    create:
+        Create a new Waitlist Entry.
+
+        permissions: 
+            Request user must have manage_broadcast permission.
+    delete:
+        Remove an existing Broadcast.
+
+        permissions: 
+            Request user must have manage_broadcast permission.
+    partial_update:
+        Update one or more fields on an existing Broadcast.
+
+        permissions: 
+            Request user must have manage_broadcast permission.
+    update:
+        Update a Broadcast.
+
+        permissions: 
+            Request user must have manage_broadcast permission.
+    """
+
+    queryset = Broadcast.objects.filter(Q(expired_at__isnull=True) | Q(expired_at__gt=django.utils.timezone.now())).distinct()
     serializer_class = BroadcastSerializer
 
     permission_classes = (permissions.AllowAny,)
@@ -23,6 +58,48 @@ class BroadcastViewSet(viewsets.ModelViewSet):
 
 
 class WaitlistEntryViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        Return a Waitlist Entry instance.
+
+        permissions: 
+            Request user must have manage_waitlistentry permission.
+    list:
+        Return a list of all Waitlist Entries.
+
+        permissions: 
+            Request user must have manage_waitlistentry permission.
+    create:
+        Create a new Waitlist Entry.
+
+        permissions: 
+            To create a proposal there are no locking permissions in place, however the requesting user must have a sufficient balance which acts as a psuedo-permission.
+    delete:
+        Remove an existing Waitlist Entry.
+
+        permissions: 
+            Request user must have manage_waitlistentry permission.
+    partial_update:
+        Update one or more fields on an existing Waitlist Entry.
+
+        permissions: 
+            Request user must have manage_waitlistentry permission.
+    update:
+        Update a Waitlist Entry.
+
+        permissions: 
+            Request user must have manage_waitlistentry permission.
+    invite:
+        Invite a user to become a user of runner.
+
+        permissions:
+            Request user must have manage_waitlistentry permission.
+    accept: 
+        Approve a Waitlist Entry that has been marked as an active invitation.
+
+        permissions:
+            User must be authenticated and not logged into an account that is already accepted.
+    """
     lookup_field = "id"
     lookup_url_kwarg = "waitlist_entry_id"
 
@@ -59,6 +136,9 @@ class WaitlistEntryViewSet(viewsets.ModelViewSet):
 
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        if WaitlistEntry.objects.filter(user=request.user, accepted_at__isnull=False).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Already accepted"})
 
         if not entry.can_accept():
             return Response(
