@@ -73,7 +73,7 @@ class WaitlistEntryViewSet(viewsets.ModelViewSet):
         Create a new Waitlist Entry.
 
         permissions: 
-            To create a proposal there are no locking permissions in place, however the requesting user must have a sufficient balance which acts as a psuedo-permission.
+            Allow any, the email provided simply cannot be arleady in the waitlist. 
     delete:
         Remove an existing Waitlist Entry.
 
