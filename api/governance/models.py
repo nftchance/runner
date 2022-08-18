@@ -48,7 +48,7 @@ class ProposalVote(models.Model):
         self.released_at = django.utils.timezone.now()
         self.save()
 
-    class Meta: 
+    class Meta:
         ordering = ['-created_at']
 
 
@@ -57,7 +57,7 @@ class Proposal(models.Model):
         if self.tags and not all(tag in dict(Tag.TAGS) for tag in self.tags):
             raise ValueError("One or more tags are invalid")
 
-        if not self.closed_at:
+        if self.approved_at and not self.closed_at:
             self.closed_at = django.utils.timezone.now(
             ) + datetime.timedelta(days=PROPOSAL_DURATION_DAYS)
 
@@ -65,8 +65,6 @@ class Proposal(models.Model):
             self.summary = self.description[:100]
 
         super(Proposal, self).save(*args, **kwargs)
-
-    approved = models.BooleanField(default=False)
 
     proposed_by = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
@@ -80,6 +78,7 @@ class Proposal(models.Model):
 
     votes = models.ManyToManyField(ProposalVote, blank=True)
 
+    approved_at = models.DateTimeField(blank=True, null=True)
     closed_at = models.DateTimeField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -91,11 +90,33 @@ class Proposal(models.Model):
     def get_absolute_url(self):
         return reverse("proposal-detail", kwargs={"proposal_id": self.pk})
 
+    def approve(self):
+        now = django.utils.timezone.now()
+        # Prevent users from approving proposals that have an approval date in the past
+        if self.approved_at and self.approved_at > now:
+            raise ValueError("Proposal already approved")
+
+        if self.closed_at and self.closed_at < now:
+            raise ValueError("Proposal already closed")
+
+        self.approved_at = now
+
+        self.save()
+
+    def deny(self):
+        now = django.utils.timezone.now()
+        if self.closed_at and self.closed_at < now:
+            raise ValueError("Proposal already closed")
+
+        self.closed_at = now
+        self.save()
+
     def get_status(self):
-        if not self.approved:
+        now = django.utils.timezone.now()
+        if not self.approved_at or self.approved_at < now:
             return "Pending"
 
-        if django.utils.timezone.now() > self.closed_at:
+        if now > self.closed_at:
             return "Closed"
 
         return "In Progress"
@@ -144,6 +165,14 @@ class Proposal(models.Model):
         return self.votes.filter(voter=voter).exists()
 
     def vote(self, voter, _vote, amount):
+        now = django.utils.timezone.now()
+
+        if not self.approved_at or self.approved_at > now:
+            raise ValueError("Proposal not approved")
+
+        if self.closed_at and self.closed_at < now:
+            raise ValueError("Proposal already closed")
+
         vote_obj = ProposalVote.objects.create(
             voter=voter,
             vote=_vote,
@@ -156,10 +185,16 @@ class Proposal(models.Model):
         self.save()
 
     def release(self, voter):
+        if not self.closed_at:
+            raise ValueError("Proposal not closed")
+
         if self.votes.filter(voter=voter).exists():
             self.votes.filter(voter=voter).first().release()
 
     def release_all(self):
+        if not self.closed_at:
+            raise ValueError("Proposal not closed")
+
         for vote in self.votes.all():
             vote.release()
 

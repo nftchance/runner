@@ -2,6 +2,8 @@ import datetime
 import django
 import time
 
+from django.contrib.auth.models import Permission
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -93,13 +95,13 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             )
         ]
 
@@ -119,13 +121,13 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             )
         ]
 
@@ -155,7 +157,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         ),
 
         time.sleep(0.1)
@@ -163,7 +165,7 @@ class HttpTest(APITestCase):
             title="Secondary Proposal",
             description="Secondary proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         # get proposal list sorted by votes_total
@@ -183,26 +185,52 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
-                approved=False
+                approved_at=django.utils.timezone.now() + datetime.timedelta(days=2),
             )
         ]
 
         response = self.client.get(
-            f'{reverse("proposal-list")}?approved=true',
+            f'{reverse("proposal-list")}?status=in_progress',
             HTTP_AUTHORIZATION=f"Bearer {self.access}"
         )
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        # confirm we only got back the approved proposal
-        # self.assertEqual(response.data[0]["id"], proposals[0].id)
         self.assertEqual(len(response.data), 1)
+
+    def test_can_list_proposals_with_status_closed(self):
+        proposals = [
+            Proposal.objects.create(
+                title="Test Proposal",
+                description="Test proposal",
+                proposed_by=self.user,
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
+            ),
+            Proposal.objects.create(
+                title="Secondary Proposal",
+                description="Secondary proposal",
+                proposed_by=self.user,
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=2),
+                closed_at=django.utils.timezone.now() - datetime.timedelta(days=1),
+            )
+        ]
+
+        # get proposal list sorted by votes_total
+        response = self.client.get(
+            f'{reverse("proposal-list")}?status=closed',
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # confirm the second proposal is the first in the list
+        self.assertEqual(response.data[0]["id"], proposals[1].id)
 
     def test_can_list_proposals_by_status(self):
         proposals = [
@@ -210,13 +238,13 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
-                approved=False
+                approved_at=django.utils.timezone.now() + datetime.timedelta(days=1),
             )
         ]
 
@@ -237,13 +265,13 @@ class HttpTest(APITestCase):
                 title="Test Proposal",
                 description="Test proposal",
                 proposed_by=self.user,
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             ),
             Proposal.objects.create(
                 title="Secondary Proposal",
                 description="Secondary proposal",
                 proposed_by=self.user,
-                approved=False
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             )
         ]
 
@@ -267,7 +295,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.get(
@@ -296,7 +324,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.secondary_user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -330,7 +358,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             closed_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
@@ -351,7 +379,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.secondary_user,
-            approved=True,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -382,7 +410,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -414,7 +442,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=False,
+            approved_at=django.utils.timezone.now() + datetime.timedelta(days=1),
         )
 
         response = self.client.patch(
@@ -435,7 +463,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.put(
@@ -454,7 +482,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.put(
@@ -491,7 +519,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -510,7 +538,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -532,7 +560,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -555,7 +583,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -594,7 +622,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             tags=['ux']
         )
 
@@ -639,7 +667,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -666,7 +694,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.get(
@@ -681,7 +709,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.get(
@@ -697,7 +725,7 @@ class HttpTest(APITestCase):
             title="Test Proposal",
             description="Test proposal",
             proposed_by=self.user,
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         response = self.client.post(
@@ -718,3 +746,189 @@ class HttpTest(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['has_voted'], True)
+
+    def test_can_approve_proposal(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertNotEqual(response.data['approved_at'], None)
+
+    def test_cannot_approve_proposal_after_being_approved(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
+        )
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_cannot_approve_proposal_after_being_closed(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=2),
+            closed_at=django.utils.timezone.now() - datetime.timedelta(days=1),
+        )
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_cannot_retrieve_proposal_before_approved(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        response = self.client.get(
+            reverse("proposal-detail", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
+        )
+
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+    def test_cannot_approve_proposal_without_permission(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        self.assertEqual(self.secondary_user.has_perm('governance.manage_proposal'), False)
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_cannot_deny_proposal_after_approving(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response = self.client.post(
+            reverse("proposal-deny", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_cannot_deny_proposal_after_being_denied(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+            closed_at=django.utils.timezone.now() - datetime.timedelta(days=1),
+        )
+
+        response = self.client.post(
+            reverse("proposal-deny", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_cannot_deny_proposal_without_permission(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        self.assertEqual(self.secondary_user.has_perm('governance.manage_proposal'), False)
+
+        response = self.client.post(
+            reverse("proposal-deny", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_can_deny(self):
+        # add governance.manage_proposal permission to self.user
+        self.user.user_permissions.add(Permission.objects.get(codename='manage_proposal'))
+
+        self.user.save()
+
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.user,
+        )
+
+        response = self.client.post(
+            reverse("proposal-deny", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access}"
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertNotEqual(response.data['closed_at'], None)
+
+    def test_cannot_approve_own_proposal_without_permission(self):
+        proposal = Proposal.objects.create(
+            title="Test Proposal",
+            description="Test proposal",
+            proposed_by=self.secondary_user,
+        )
+
+        response = self.client.post(
+            reverse("proposal-approve", kwargs={"proposal_id": proposal.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}"
+        )
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)

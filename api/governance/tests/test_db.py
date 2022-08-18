@@ -31,7 +31,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         self.assertEqual(proposal.title, "Test Proposal")
@@ -42,7 +42,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         proposal.vote(self.user, Vote.FOR, 1)
@@ -54,9 +54,10 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
+        print(proposal.closed_at)
         proposal.vote(self.user, Vote.FOR, 1)
 
         self.user.refresh_from_db()
@@ -81,7 +82,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         self.assertEqual(str(proposal), f"[RP{proposal.id}] Test proposal")
@@ -91,7 +92,7 @@ class GovernanceTestCase(TestCase):
             proposed_by=self.user,
             title="Test Proposal",
             description="This is a test proposal",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         self.assertEqual(proposal.summary, "This is a test proposal")
@@ -102,7 +103,7 @@ class GovernanceTestCase(TestCase):
             title="Test Proposal",
             description="This is a test proposal",
             summary="This is a test proposal summary",
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         self.assertEqual(proposal.summary, "This is a test proposal summary")
@@ -114,7 +115,7 @@ class GovernanceTestCase(TestCase):
                 title="Test Proposal",
                 description="This is a test proposal",
                 tags=["test", "test", "test"],
-                approved=True
+                approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
             )
 
     def test_can_create_proposal_with_valid_tags(self):
@@ -123,7 +124,7 @@ class GovernanceTestCase(TestCase):
             title="Test Proposal",
             description="This is a test proposal",
             tags=["ux"],
-            approved=True
+            approved_at=django.utils.timezone.now() - datetime.timedelta(days=1),
         )
 
         self.assertEqual(proposal.tags, ["ux"])

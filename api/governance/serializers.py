@@ -60,6 +60,9 @@ class ProposalSerializer(serializers.ModelSerializer):
         return obj.get_vote_percentages()
 
     def get_has_voted(self, obj):
+        if 'request' not in self.context:
+            return False
+
         return obj.has_voted(self.context['request'].user)
 
     def create(self, *args, **kwargs):
@@ -79,6 +82,7 @@ class ProposalSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'proposed_by': {'read_only': True},
             'votes': {'read_only': True},
+            'approved_at': {'read_only': True},
             'closed_at': {'read_only': True},
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
