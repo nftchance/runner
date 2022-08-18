@@ -1,14 +1,13 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import generics, permissions, status, views
+from rest_framework import generics, mixins, permissions, status, views, viewsets
 from rest_framework.response import Response
-from rest_framework.schemas import AutoSchema
-from rest_framework.schemas.openapi import SchemaGenerator
 
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .permissions import CanManageUser
 from .serializers import (
     LogInSerializer,
     UpdateUserSerializer,
@@ -19,6 +18,23 @@ from .serializers import (
 
 User = get_user_model()
 
+class UserViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
+    lookup_field = "id"
+    lookup_url_kwarg = "user_id"
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated, CanManageUser]
+
+    def get_queryset(self):
+        if self.request.user.has_perm('user.manage_user'):
+            return self.get_queryset.all()
+
+        return self.queryset.filter(id=self.request.user.id)
 
 class SignUpView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
@@ -50,8 +66,6 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 class LogOutView(generics.GenericAPIView):
-    generator = SchemaGenerator(title='Stock Prices API')
-
     permission_classes = (permissions.IsAuthenticated,)
 
     serializer_class = LogOutSerializer

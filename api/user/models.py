@@ -8,3 +8,8 @@ class User(AbstractUser):
     org_relationships = models.ManyToManyField(OrgRelationship)
 
     balance = models.DecimalField(max_digits=20, decimal_places=4, default=0)
+
+    class Meta:
+        permissions = [
+            ('manage_user', 'Can manage user'),
+        ]

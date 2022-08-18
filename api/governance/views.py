@@ -12,6 +12,9 @@ from .models import Proposal
 from .permissions import CanManageProposal, CanProgressProposal
 from .serializers import ProposalSerializer, ProposalVoteSerializer
 
+
+# TODO: Move vote action into it's own ProposalVote View Set because we are returning the serializer of the vote and not the proposal which means it's in the wrong place currently
+
 class ProposalViewSet(viewsets.ModelViewSet):
     """
     retrieve:
