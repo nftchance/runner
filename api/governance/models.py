@@ -199,7 +199,7 @@ class Proposal(models.Model):
             vote.release()
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-approved_at', '-closed_at', '-created_at']
         permissions = (
             ("manage_proposal", "Can manage proposal"),
         )
