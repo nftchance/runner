@@ -110,10 +110,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def sign_up(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        user = serializer.save()
-
-        serializer = self.get_serializer(user)
+        serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

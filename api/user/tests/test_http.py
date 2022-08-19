@@ -24,6 +24,7 @@ class AuthenticationTest(APITestCase):
         )
         user = get_user_model().objects.last()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        print(response.data)
         self.assertEqual(response.data["id"], user.id)
         self.assertEqual(response.data["username"], user.username)
         self.assertEqual(response.data["first_name"], user.first_name)

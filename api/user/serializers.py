@@ -83,13 +83,12 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             )
         return value
 
+
 class UpdateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
 
     def update(self, instance, validated_data):
-        user = self.context["request"].user
-
-        if User.objects.exclude(pk=user.pk).filter(email=validated_data["email"]).exists():
+        if User.objects.exclude(pk=instance.pk).filter(email=validated_data["email"]).exists():
             raise serializers.ValidationError(
                 {"email": "This email is already in use."}
             )
@@ -110,6 +109,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
+
 
 class LogOutSerializer(serializers.Serializer):
     def validate(self, data):
