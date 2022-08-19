@@ -72,11 +72,33 @@ class OrgViewSet(viewsets.ModelViewSet):
         return [permission() for permission in self.permission_classes]
 
 class OrgRelationshipViewSet(
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    """
+    retrieve:
+        Return a Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission or be a member of the org.
+    list:
+        Return 
+    
+        permissions: 
+            Request user must have manage_orgrelationship permission or be a member of the org.
+    partial_update:
+        Update one or more fields on an existing Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission as admin or org member.
+    update:
+        Update an Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission as admin or org member. 
+    """
     lookup_field = "id"
     lookup_url_kwarg = "org_relationship_id"
 
@@ -87,6 +109,7 @@ class OrgRelationshipViewSet(
     def get_queryset(self):
         if "org_relationship_id" in self.kwargs:
             return OrgRelationship.objects.filter(id=self.kwargs["org_relationship_id"])
+
         return OrgRelationship.objects.filter(org=self.kwargs["org_id"])
 
 

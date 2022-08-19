@@ -25,6 +25,10 @@ class CanManageOrgRelationship(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        if not request.user.is_authenticated: return False
+
+        if request.user.has_perm("org.manage_org"): return True
+
         relationship_obj = request.user.org_relationships.filter(
             org=request.resolver_match.kwargs.get("org_id")
         ).first()
