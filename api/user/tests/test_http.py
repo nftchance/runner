@@ -252,8 +252,82 @@ class AuthenticationTest(APITestCase):
         )
 
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        # self.assertEqual(response.data["username"]["username"], "A user with that username already exists.")
-        self.assertEqual(response.data["email"]['email'], "This email is already in use.")
+        self.assertEqual(response.data["username"][0], "A user with that username already exists.")
+
+    def test_user_cannot_update_user_to_non_unique_email(self):
+        user = create_user()
+        response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": user.username,
+                "password": PASSWORD,
+            },
+        )
+
+        access = response.data["access"]
+        header, payload, signature = access.split(".")
+        decoded_payload = base64.b64decode(f"{payload}==")
+        payload_data = json.loads(decoded_payload)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(payload_data["id"], user.id)
+        self.assertEqual(payload_data["username"], user.username)
+        self.assertEqual(payload_data["first_name"], user.first_name)
+        self.assertEqual(payload_data["last_name"], user.last_name)
+
+        response = self.client.put(
+            reverse("user-detail", kwargs={"user_id": user.id}),
+            data={
+                "first_name": "Test",
+                "last_name": "User",
+                "email": "chance@utc24.io",
+                "username": "nftchance"
+            },
+            HTTP_AUTHORIZATION=f"Bearer {access}",
+        )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["first_name"], "Test")
+        self.assertEqual(response.data["last_name"], "User")
+
+        # create second user
+        user2 = create_user(username="nftchance-test")
+        response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": user2.username,
+                "password": PASSWORD,
+            },
+        )
+
+        access = response.data["access"]
+        header, payload, signature = access.split(".")
+        decoded_payload = base64.b64decode(f"{payload}==")
+        payload_data = json.loads(decoded_payload)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(payload_data["id"], user2.id)
+        self.assertEqual(payload_data["username"], user2.username)
+        self.assertEqual(payload_data["first_name"], user2.first_name)
+        self.assertEqual(payload_data["last_name"], user2.last_name)
+        self.assertEqual(float(payload_data['balance']), user2.balance)
+
+        # try and use duplicate username
+        response = self.client.put(
+            reverse("user-detail", kwargs={"user_id": user2.id}),
+            data={
+                "first_name": "Test",
+                "last_name": "User",
+                "email": "chance@utc24.io",
+                "username": "nftchance-test"
+            },
+            HTTP_AUTHORIZATION=f"Bearer {access}",
+        )
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        print(response.data)
+        self.assertEqual(response.data["email"], "This email is already in use.")
 
     def test_user_can_log_out_all(self):
         user = create_user()

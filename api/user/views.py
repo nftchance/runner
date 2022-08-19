@@ -109,7 +109,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'], url_path='sign-up')
     def sign_up(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
 
         user = serializer.save()
@@ -121,7 +120,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['put', 'patch'], url_path='password')
     def update_password(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
 
         user = self.get_object()
