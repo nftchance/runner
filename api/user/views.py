@@ -21,6 +21,58 @@ User = get_user_model()
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        Return a User instance.
+
+        permissions: 
+            Must be logged in the user or manage_user permission.
+    list:
+        Return all Users, or only the user that is logged in.
+
+        permissions: 
+            Must be logged in the user or manage_user permission.
+    create:
+        Create a new User.
+
+        permissions: 
+            Allow any user.
+    delete:
+        Remove an existing User.
+
+        permissions: 
+            Must be logged in the user or manage_user permission.
+    partial_update:
+        Update one or more fields on an existing User.
+
+        permissions: 
+            Must be the logged in user or have manage_user permission.
+    update:
+        Update a User.
+
+        permissions: 
+            Must be the logged in user or have manage_user permission.
+    sign_up:
+        Create a new User.
+
+        permissions:
+            Allow any user.
+    update_password:
+        Update the password of the logged in user.
+
+        permissions:
+            Must be the logged in user or have manage_user permission.
+    log_out:
+        Log out the user.
+
+        permissions:
+            Must be the logged in user or have manage_user permission.
+    log_out_all:
+        Expire all tokens associated with the logged in user.
+
+        permissions:
+             Must be the logged in user or have manage_user permission.
+    """
     lookup_field = "id"
     lookup_url_kwarg = "user_id"
 
@@ -29,9 +81,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, CanManageUser]
 
     def get_serializer_class(self):
-        print('action', self.action)
-
-        if self.action in ['update', 'partial_update'] or self.request.method == 'PATCH':
+        if self.action in ['update', 'partial_update']:
             self.serializer_class = UpdateUserSerializer
 
         if self.action in ['log_out']:
@@ -101,4 +151,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class LogInView(TokenObtainPairView):
+    """
+    post: 
+        Log in a user. 
+
+        permissions:
+            Allow any user.
+    """
+
     serializer_class = LogInSerializer
