@@ -14,6 +14,7 @@ from .serializers import (
     OrgInvitationSerializer,
 )
 
+
 class OrgViewSet(viewsets.ModelViewSet):
     """
     retrieve:
@@ -67,9 +68,11 @@ class OrgViewSet(viewsets.ModelViewSet):
     # the orgs they are customers of.
     def get_permissions(self):
         if self.action in ["update", "partial_update", "destroy"]:
-            self.permission_classes = [permissions.IsAuthenticated, CanManageOrg]
+            self.permission_classes = [
+                permissions.IsAuthenticated, CanManageOrg]
 
         return [permission() for permission in self.permission_classes]
+
 
 class OrgRelationshipViewSet(
     mixins.ListModelMixin,
@@ -85,7 +88,7 @@ class OrgRelationshipViewSet(
             Request user must have manage_orgrelationship permission or be a member of the org.
     list:
         Return 
-    
+
         permissions: 
             Request user must have manage_orgrelationship permission or be a member of the org.
     partial_update:
@@ -104,7 +107,8 @@ class OrgRelationshipViewSet(
 
     serializer_class = OrgRelationshipSerializer
 
-    permission_classes = [permissions.IsAuthenticated, CanManageOrgRelationship]
+    permission_classes = [
+        permissions.IsAuthenticated, CanManageOrgRelationship]
 
     def get_queryset(self):
         if "org_relationship_id" in self.kwargs:
@@ -114,6 +118,38 @@ class OrgRelationshipViewSet(
 
 
 class OrgInvitationViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        Return a Org.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    list:
+        Return a list of all Orgs if request user has manage_org permission or orgs of the logged in user.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    create:
+        Create a new Org.
+
+        permissions: 
+            Request user must be authenticated.
+    delete:
+        Delete an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    partial_update:
+        Update one or more fields on an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    update:
+        Update an Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member. 
+    """
     lookup_field = "id"
     lookup_url_kwarg = "org_invitation_id"
 
@@ -124,7 +160,10 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # when they are accepting an invitiation allow it with direct code only
         if self.action == "accept":
-            return OrgInvitation.objects.filter(id=self.kwargs["org_invitation_id"])
+            return OrgInvitation.objects.filter(
+                org__id=self.kwargs['org_id'],
+                id=self.kwargs["org_invitation_id"]
+            )
 
         # return the invitations for the users organizations
         return OrgInvitation.objects.filter(
@@ -132,9 +171,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
                 "org", flat=True
             )
         )
-
-    def perform_create(self, serializer):
-        serializer.save(invited_by=self.request.user)
 
     @action(
         detail=True,
@@ -150,12 +186,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if org_invitation.org.pk != kwargs["org_id"]:
-            return Response(
-                {"error": "This invitation is not for this org."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if org_invitation.invited_user:
             return Response(
                 {"error": "This invitation has already been used."},
@@ -164,7 +194,7 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
         org_invitation.accept(request.user)
 
-        serializer = OrgInvitationSerializer(org_invitation)
+        serializer = self.get_serializer(org_invitation)
 
         return Response(serializer.data)
 
@@ -186,6 +216,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
         org_invitation.revoke()
 
-        serializer = OrgInvitationSerializer(org_invitation)
+        serializer = self.get_serializer(org_invitation)
 
         return Response(serializer.data)

@@ -87,6 +87,10 @@ class OrgRelationshipSerializer(serializers.ModelSerializer):
 
 
 class OrgInvitationSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        validated_data['invited_by'] = self.context['request'].user
+        return super().create(validated_data)
+
     class Meta:
         model = OrgInvitation
         fields = "__all__"
