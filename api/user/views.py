@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import generics, mixins, permissions, status, views, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -110,6 +110,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def sign_up(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
