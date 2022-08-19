@@ -83,19 +83,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise serializers.ValidationError(
-                {"authorize": "You dont have permission for this user."})
-
-        instance.set_password(validated_data["password1"])
-        instance.save()
-
-        return instance
-
-
 class UpdateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
 

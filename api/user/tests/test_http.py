@@ -13,7 +13,7 @@ from utils.tests.user import PASSWORD, create_user
 class AuthenticationTest(APITestCase):
     def test_user_can_sign_up(self):
         response = self.client.post(
-            reverse("sign-up"),
+            reverse("user-sign-up"),
             data={
                 "username": "user@example.com",
                 "first_name": "Test",
@@ -75,7 +75,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(payload_data["last_name"], user.last_name)
 
         response = self.client.post(
-            reverse("log-out"),
+            reverse("user-log-out"),
             data={'refresh_token': response.data['refresh']},
             HTTP_AUTHORIZATION=f"Bearer {access}",
         )
@@ -83,7 +83,7 @@ class AuthenticationTest(APITestCase):
 
     def test_user_can_change_password(self):
         user = create_user()
-        response = self.client.post(
+        user_response = self.client.post(
             reverse("log-in"),
             data={
                 "username": user.username,
@@ -91,20 +91,20 @@ class AuthenticationTest(APITestCase):
             },
         )
 
-        access = response.data["access"]
+        access = user_response.data["access"]
         header, payload, signature = access.split(".")
         decoded_payload = base64.b64decode(f"{payload}==")
         payload_data = json.loads(decoded_payload)
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(status.HTTP_200_OK, user_response.status_code)
+        self.assertIsNotNone(user_response.data["refresh"])
         self.assertEqual(payload_data["id"], user.id)
         self.assertEqual(payload_data["username"], user.username)
         self.assertEqual(payload_data["first_name"], user.first_name)
         self.assertEqual(payload_data["last_name"], user.last_name)
 
         response = self.client.put(
-            reverse("update-password", kwargs={"user_id": user.id}),
+            reverse("user-update-password", kwargs={"user_id": user.id}),
             data={
                 "old_password": PASSWORD,
                 "password1": PASSWORD + 'test',
@@ -113,6 +113,36 @@ class AuthenticationTest(APITestCase):
             HTTP_AUTHORIZATION=f"Bearer {access}",
         )
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        # log out user
+        response = self.client.post(
+            reverse("user-log-out"),
+            data={'refresh_token': user_response.data['refresh']},
+            HTTP_AUTHORIZATION=f"Bearer {access}",
+        )
+
+        # log in with new password
+        response = self.client.post(
+            reverse("log-in"),
+            data={
+                "username": user.username,
+                "password": PASSWORD + 'test',
+            },
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        access = response.data["access"]
+        header, payload, signature = access.split(".")
+        decoded_payload = base64.b64decode(f"{payload}==")
+        payload_data = json.loads(decoded_payload)
+
+        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(payload_data["id"], user.id)
+        self.assertEqual(payload_data["username"], user.username)
+        self.assertEqual(payload_data["first_name"], user.first_name)
+        self.assertEqual(payload_data["last_name"], user.last_name)
+        
     
     def test_user_can_update_user(self):
         user = create_user()
@@ -137,7 +167,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(payload_data["last_name"], user.last_name)
 
         response = self.client.put(
-            reverse("update-user", kwargs={"user_id": user.id}),
+            reverse("user-detail", kwargs={"user_id": user.id}),
             data={
                 "first_name": "Test",
                 "last_name": "User",
@@ -173,7 +203,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(payload_data["last_name"], user.last_name)
 
         response = self.client.put(
-            reverse("update-user", kwargs={"user_id": user.id}),
+            reverse("user-detail", kwargs={"user_id": user.id}),
             data={
                 "first_name": "Test",
                 "last_name": "User",
@@ -211,7 +241,7 @@ class AuthenticationTest(APITestCase):
 
         # try and use duplicate username
         response = self.client.put(
-            reverse("update-user", kwargs={"user_id": user2.id}),
+            reverse("user-detail", kwargs={"user_id": user2.id}),
             data={
                 "first_name": "Test",
                 "last_name": "User",
@@ -248,7 +278,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(payload_data["last_name"], user.last_name)
 
         response = self.client.post(
-            reverse("log-out-all"),
+            reverse("user-log-out-all"),
             HTTP_AUTHORIZATION=f"Bearer {access}",
         )
         self.assertEqual(status.HTTP_205_RESET_CONTENT, response.status_code)
