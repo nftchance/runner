@@ -75,7 +75,8 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     ordering_fields = '__all__'
     search_fields = ('title', 'description')
-    filterset_fields = ('id', 'title', 'description', 'approved_at', 'closed_at')
+    filterset_fields = ('id', 'title', 'description',
+                        'approved_at', 'closed_at')
 
     def get_queryset(self):
         now = django.utils.timezone.now()
@@ -97,7 +98,8 @@ class ProposalViewSet(viewsets.ModelViewSet):
                 if status == 'in_progress':
                     self.queryset = self.queryset.filter(approved_at__lte=now)
                 elif status == 'pending':
-                    self.queryset = self.queryset.filter(Q(approved_at__lte=now) | Q(approved_at__isnull=True))
+                    self.queryset = self.queryset.filter(
+                        Q(approved_at__lte=now) | Q(approved_at__isnull=True))
                 elif status == 'closed':
                     self.queryset = self.queryset.filter(closed_at__lte=now)
 
@@ -108,7 +110,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         elif self.action in ['partial_update', 'update']:
             self.queryset = self.queryset.filter(
-                Q(proposed_by=self.request.user, approved_at__isnull=True) | 
+                Q(proposed_by=self.request.user, approved_at__isnull=True) |
                 Q(proposed_by=self.request.user, approved_at__gt=now)
             )
 
@@ -121,7 +123,8 @@ class ProposalViewSet(viewsets.ModelViewSet):
             self.permission_classes = [
                 permissions.IsAuthenticated, CanManageProposal]
         elif self.action in ['approve', 'deny']:
-            self.permission_classes = [permissions.IsAuthenticated, CanProgressProposal]
+            self.permission_classes = [
+                permissions.IsAuthenticated, CanProgressProposal]
 
         return [permission() for permission in self.permission_classes]
 
@@ -138,8 +141,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         proposal.approve()
 
-        serializer = ProposalSerializer(proposal)
-
+        serializer = self.get_serializer(proposal)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
@@ -152,19 +154,12 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         proposal.deny()
 
-        serializer = ProposalSerializer(proposal)
-
+        serializer = self.get_serializer(proposal)
         return Response(serializer.data)
-
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def vote(self, request, *args, **kwargs):
-        proposals = Proposal.objects.filter(id=self.kwargs['proposal_id'])
-
-        if not proposals.exists():
-            return Response(status=status.HTTP_404_NOT_FOUND, data={"error": "Proposal does not exist"})
-
-        proposal = proposals.first()
+        proposal = self.get_object()
         user = request.user
 
         if not proposal.approved_at:
@@ -177,24 +172,15 @@ class ProposalViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data={'error': 'Proposal is closed'})
 
-        amount = float(request.data.get('amount', 0))
-
-        if request.data['vote'].lower() not in ['for', 'against', 'abstain']:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Invalid vote'})
-
-        if not amount or amount < 1:
-            return Response(status=status.HTTP_400_BAD_REQUEST,
-                            data={'error': 'Amount must be greater than 0'})
-
-        if 1 > user.balance:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Insufficient balance'})
-
         if proposal.votes.filter(voter=user).exists():
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Already voted'})
 
         try:
             obj = proposal.vote(
-                user, request.data['vote'].lower(), request.data['amount'])
+                user,
+                request.data['vote'].lower(),
+                float(request.data['amount'])
+            )
 
             serializer = ProposalVoteSerializer(obj)
 

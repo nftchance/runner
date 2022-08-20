@@ -11,6 +11,18 @@ from .utils import PROPOSAL_SUBMISSION_BALANCE_MINIMUM, Tag
 class ProposalVoteSerializer(serializers.ModelSerializer):
     voter = UserSerializer(read_only=True)
     
+    def validate_vote(self, value):
+        if value not in ['for', 'against', 'abstain']:
+            raise serializers.ValidationError('Invalid vote')
+        return value
+
+    def create(self, validated_data):
+        # make sure amount is less than the user balance
+        user = self.context['request'].user
+        amount = validated_data['amount']
+        if amount > user.balance:
+            raise serializers.ValidationError('Insufficient balance')
+
     class Meta:
         model = ProposalVote
         fields = "__all__"
@@ -40,6 +52,21 @@ class ProposalSerializer(serializers.ModelSerializer):
     votes = ProposalVoteSerializer(many=True, read_only=True)
 
     has_voted = serializers.SerializerMethodField()
+
+    def validate_amount(self, value):
+        if not value or value < 1:
+            raise serializers.ValidationError(
+                {'error': 'Amount must be greater than 0'})
+
+        return value
+
+
+    def validate_tags(self, value):
+        if not all(tag in dict(Tag.TAGS) for tag in value):
+            raise serializers.ValidationError(
+                {'error': 'Invalid tags'})
+
+        return value
 
     def get_status(self, obj):
         return obj.get_status()
