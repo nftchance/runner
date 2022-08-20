@@ -1,9 +1,28 @@
 from rest_framework import serializers
 
 from .models import Org, OrgInvitation, OrgRelationship, OrgRole
-
+from .utils import Role
 
 class OrgSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        # create the org
+        instance = Org.objects.create(**validated_data)
+
+        # create admin relationship object
+        relationship = OrgRelationship.objects.get_or_create(
+            org=instance, related_user=self.context['request'].user
+        )[0]
+        # assign the admin role
+        role = OrgRole.objects.get_or_create(name=Role.ADMIN)[0]
+        relationship.role = role
+        relationship.save()
+
+        # add this org to the users orgs
+        self.context['request'].user.org_relationships.add(relationship)
+        self.context['request'].user.save()
+
+        return instance
+
     class Meta:
         model = Org
         fields = (
@@ -68,6 +87,10 @@ class OrgRelationshipSerializer(serializers.ModelSerializer):
 
 
 class OrgInvitationSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        validated_data['invited_by'] = self.context['request'].user
+        return super().create(validated_data)
+
     class Meta:
         model = OrgInvitation
         fields = "__all__"

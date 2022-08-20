@@ -46,20 +46,35 @@ class HttpTest(APITestCase):
         self.coin.mint(self.user, 100)
         self.coin.mint(self.secondary_user, 100)
 
+    def test_cannot_list_transfers_as_unauthenticated_user(self):
+        response = self.client.get(
+            reverse("transfer-list"),
+        )
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
     def test_can_list_transfers(self):
         response = self.client.get(
             reverse("transfer-list"),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 1)
 
-    def test_can_retrieve_transfer(self):
+    def test_cannot_retrieve_transfer_of_other(self):
         transfer = Transfer.objects.all().first()
         
         response = self.client.get(
             reverse("transfer-detail", kwargs={"transfer_id": transfer.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_can_retrieve_transfer_of_self(self):
+        transfer = Transfer.objects.all().first()
+        
+        response = self.client.get(
+            reverse("transfer-detail", kwargs={"transfer_id": transfer.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.secondary_access}",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["id"], transfer.id)
@@ -74,7 +89,7 @@ class HttpTest(APITestCase):
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_cannot_update_transfer(self):
         transfer = Transfer.objects.all().first()
@@ -87,7 +102,7 @@ class HttpTest(APITestCase):
             },
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_cannot_delete_transfer(self):
         transfer = Transfer.objects.all().first()
@@ -95,4 +110,4 @@ class HttpTest(APITestCase):
             reverse("transfer-detail", kwargs={"transfer_id": transfer.id}),
             HTTP_AUTHORIZATION=f"Bearer {self.access}",
         )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)

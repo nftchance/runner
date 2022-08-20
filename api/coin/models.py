@@ -8,6 +8,9 @@ from .utils import Label
 
 class Transfer(models.Model):
     def save(self, *args, **kwargs):
+        """
+        All of this takes place in the save function so that the validation and operation is atomic rather than needing to be called by a function or waiting for something. If an object is stored to the database and we don't encounter any unexpected errors, then we can assume that the object is valid and that the operation was successful.
+        """
         if not self.settled:
             if self.from_user == self.to_user:
                 raise ValueError('Cannot transfer coin to self.')
@@ -59,6 +62,9 @@ class Transfer(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        permissions = (
+            ("manage_transfer", "Can manage transfer"),
+        )
 
 
 class Coin(models.Model):

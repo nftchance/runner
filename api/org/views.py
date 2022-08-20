@@ -1,13 +1,10 @@
-from django.http import JsonResponse
-
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Org, OrgInvitation, OrgRelationship, OrgRole
+from .models import Org, OrgInvitation, OrgRelationship
 from .permissions import (
     CanManageOrg,
-    CanViewOrg,
     CanManageOrgRelationship,
     CanManageOrgInvitiation,
 )
@@ -16,18 +13,53 @@ from .serializers import (
     OrgRelationshipSerializer,
     OrgInvitationSerializer,
 )
-from .utils import Role
 
 
 class OrgViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        Return a Org.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    list:
+        Return a list of all Orgs if request user has manage_org permission or orgs of the logged in user.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    create:
+        Create a new Org.
+
+        permissions: 
+            Request user must be authenticated.
+    delete:
+        Delete an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    partial_update:
+        Update one or more fields on an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    update:
+        Update an Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    """
     lookup_field = "id"
     lookup_url_kwarg = "org_id"
 
     serializer_class = OrgSerializer
 
-    permission_classes = [permissions.IsAuthenticated, CanViewOrg]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        # if runner team member, can access all orgs
+        if self.request.user.has_perm("org.manage_org"):
+            return Org.objects.all()
+
         # return organizations of all relationships for request user
         relationships = self.request.user.org_relationships.all()
         return Org.objects.filter(relationships__in=relationships)
@@ -35,50 +67,89 @@ class OrgViewSet(viewsets.ModelViewSet):
     # Allow only admins to create new orgs and any other user to view
     # the orgs they are customers of.
     def get_permissions(self):
-        admin_actions = ["update", "destroy"]
-
-        if self.action in admin_actions:
-            self.permission_classes.append(CanManageOrg)
+        if self.action in ["update", "partial_update", "destroy"]:
+            self.permission_classes = [
+                permissions.IsAuthenticated, CanManageOrg]
 
         return [permission() for permission in self.permission_classes]
 
-    def perform_create(self, serializer):
-        # save the new org into the database
-        obj = serializer.save()
-
-        # create admin relationship object
-        relationship = OrgRelationship.objects.get_or_create(
-            org=obj, related_user=self.request.user
-        )[0]
-        # assign the admin role
-        role = OrgRole.objects.get_or_create(name=Role.ADMIN)[0]
-        relationship.role = role
-        relationship.save()
-
-        # add this org to the users orgs
-        self.request.user.org_relationships.add(relationship)
-        self.request.user.save()
 
 class OrgRelationshipViewSet(
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    """
+    retrieve:
+        Return a Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission or be a member of the org.
+    list:
+        Return 
+
+        permissions: 
+            Request user must have manage_orgrelationship permission or be a member of the org.
+    partial_update:
+        Update one or more fields on an existing Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission as admin or org member.
+    update:
+        Update an Org Relationship.
+
+        permissions: 
+            Request user must have manage_orgrelationship permission as admin or org member. 
+    """
     lookup_field = "id"
     lookup_url_kwarg = "org_relationship_id"
 
     serializer_class = OrgRelationshipSerializer
 
-    permission_classes = [permissions.IsAuthenticated, CanManageOrgRelationship]
+    permission_classes = [
+        permissions.IsAuthenticated, CanManageOrgRelationship]
 
     def get_queryset(self):
         if "org_relationship_id" in self.kwargs:
             return OrgRelationship.objects.filter(id=self.kwargs["org_relationship_id"])
+
         return OrgRelationship.objects.filter(org=self.kwargs["org_id"])
 
 
 class OrgInvitationViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        Return a Org.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    list:
+        Return a list of all Orgs if request user has manage_org permission or orgs of the logged in user.
+
+        permissions: 
+            Request user must have manage_org permission or be a member of the org.
+    create:
+        Create a new Org.
+
+        permissions: 
+            Request user must be authenticated.
+    delete:
+        Delete an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    partial_update:
+        Update one or more fields on an existing Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member.
+    update:
+        Update an Org.
+
+        permissions: 
+            Request user must have manage_org permission as admin or org member. 
+    """
     lookup_field = "id"
     lookup_url_kwarg = "org_invitation_id"
 
@@ -89,7 +160,10 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # when they are accepting an invitiation allow it with direct code only
         if self.action == "accept":
-            return OrgInvitation.objects.filter(id=self.kwargs["org_invitation_id"])
+            return OrgInvitation.objects.filter(
+                org__id=self.kwargs['org_id'],
+                id=self.kwargs["org_invitation_id"]
+            )
 
         # return the invitations for the users organizations
         return OrgInvitation.objects.filter(
@@ -97,9 +171,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
                 "org", flat=True
             )
         )
-
-    def perform_create(self, serializer):
-        serializer.save(invited_by=self.request.user)
 
     @action(
         detail=True,
@@ -115,12 +186,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if org_invitation.org.pk != kwargs["org_id"]:
-            return Response(
-                {"error": "This invitation is not for this org."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if org_invitation.invited_user:
             return Response(
                 {"error": "This invitation has already been used."},
@@ -129,7 +194,7 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
         org_invitation.accept(request.user)
 
-        serializer = OrgInvitationSerializer(org_invitation)
+        serializer = self.get_serializer(org_invitation)
 
         return Response(serializer.data)
 
@@ -151,6 +216,6 @@ class OrgInvitationViewSet(viewsets.ModelViewSet):
 
         org_invitation.revoke()
 
-        serializer = OrgInvitationSerializer(org_invitation)
+        serializer = self.get_serializer(org_invitation)
 
         return Response(serializer.data)

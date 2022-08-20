@@ -7,22 +7,16 @@ class CanManageOrg(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        relationship_obj = request.user.org_relationships.filter(org=obj).first()
-        if not relationship_obj:
+        if not request.user.is_authenticated:
             return False
-        return relationship_obj.has_perm("org.manage_org")
 
+        if request.user.has_perm("org.manage_org"):
+            return True
 
-class CanViewOrg(permissions.BasePermission):
-    """
-    Make sure that a user has the permission to view an organizations data.
-    """
-
-    def has_object_permission(self, request, view, obj):
-        relationship_obj = request.user.org_relationships.filter(org=obj).first()
-        if not relationship_obj:
+        relationship_obj = request.user.org_relationships.filter(org=obj)
+        if not relationship_obj.exists():
             return False
-        return relationship_obj.has_perm("org.view_org")
+        return relationship_obj.first().has_perm("org.manage_org")
 
 
 class CanManageOrgRelationship(permissions.BasePermission):
@@ -31,6 +25,10 @@ class CanManageOrgRelationship(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        if not request.user.is_authenticated: return False
+
+        if request.user.has_perm("org.manage_org"): return True
+
         relationship_obj = request.user.org_relationships.filter(
             org=request.resolver_match.kwargs.get("org_id")
         ).first()

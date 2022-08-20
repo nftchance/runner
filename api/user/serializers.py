@@ -83,36 +83,15 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise serializers.ValidationError(
-                {"authorize": "You dont have permission for this user."})
-
-        instance.set_password(validated_data["password1"])
-        instance.save()
-
-        return instance
-
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
 
-    def validate_email(self, value):
-        user = self.context["request"].user
-        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
+    def update(self, instance, validated_data):
+        if User.objects.exclude(pk=instance.pk).filter(email=validated_data["email"]).exists():
             raise serializers.ValidationError(
                 {"email": "This email is already in use."}
             )
-        return value
-
-    def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise serializers.ValidationError(
-                {"authorize": "You dont have permission for this user."})
 
         instance.first_name = validated_data["first_name"]
         instance.last_name = validated_data["last_name"]
@@ -130,6 +109,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
+
 
 class LogOutSerializer(serializers.Serializer):
     def validate(self, data):
