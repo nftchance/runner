@@ -10,7 +10,6 @@ import GhostCard from "@components/Cards/GhostCard";
 import VolumeGraph from "@components/StyledAssets/VolumeGraph";
 
 import hero from "@images/landing/hero.svg";
-// import volume from "@images/landing/volume.svg";
 import dashboard from "@images/landing/dashboard.svg";
 
 import { 
@@ -41,7 +40,7 @@ const Home = () => {
         <Page>
             <div className="home">
                 <div className="hero-text">
-                    <h1 data-testid="hero-title">Revolutionize your service business<br /> with</h1>
+                    <h1 data-testid="hero-title">Revolutionize your service business with</h1>
                     <h1 className="yellow"> automation tools of 2032.</h1>
                     <div className="shadow-text">No we're not time travelers.</div>
 
@@ -136,7 +135,9 @@ const Home = () => {
                                 </div>
                                 <div className="dashboard-tab">
                                     <button 
-                                        className={dashboardTab === "Services" ? "active" : ""}                                        
+                                        className={
+                                            dashboardTab === "Services" ? "active" : ""
+                                        }
                                         onClick={() => setDashboardTab("Services")}
                                     >
                                         <p>Services</p>
@@ -144,7 +145,9 @@ const Home = () => {
                                 </div>
                                 <div className="dashboard-tab">
                                     <button 
-                                        className={dashboardTab === "Maintenance" ? "active" : ""}                                                                            
+                                        className={
+                                            dashboardTab === "Maintenance" ? "active" : ""
+                                        }                                                                            
                                         onClick={() => setDashboardTab("Maintenance")}
                                     >
                                         <p>Maintenance</p>

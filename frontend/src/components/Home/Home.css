@@ -1,5 +1,5 @@
 .home {
-    margin-top: 200px;
+    margin-top: 100px;
 }
 
 .side-by-side {
@@ -130,7 +130,7 @@
 .dashboard-tab > button:focus,
 .dashboard-tab > button.active {
     color: var(--white);
-    border-bottom: 1px solid #FFFFFF;
+    box-shadow: 0 1px 0 0 var(--white);
 }
 
 .dashboard-tab > button > p {
@@ -190,4 +190,10 @@
 
 .cta-email.email-signup {
     justify-content: center;
+}
+
+@media only screen and (min-width: 600px) {
+    .home {
+        margin-top: 200px;
+    }
 }

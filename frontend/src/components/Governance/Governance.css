@@ -39,7 +39,7 @@
 .filter-tab > button:focus,
 .filter-tab > button.active {
     color: var(--white);
-    border-bottom: 1px solid var(--white);
+    box-shadow: 0 1px 0 0 var(--white);
 }
 
 .filter-tab > button > p {
@@ -73,8 +73,7 @@
 .sort-tab > div:hover,
 .sort-tab > div:focus,
 .sort-tab > div:active {
-    border-bottom: 1px solid #FFFFFF;
-    margin-bottom: -1px;
+    box-shadow: 0 1px 0 0 var(--white);
 }
 
 .governance-proposals {

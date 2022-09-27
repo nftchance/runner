@@ -72,7 +72,7 @@ const Governance = () => {
         
             <Page>
                 <div className="headline">
-                    <h1>Play an active role in determining the <br />future of runner.</h1>
+                    <h1>Play an active role in determining the future of runner.</h1>
                     <h5 className="subtitle">
                         Runner is an open source and community led service business automation tool. 
                         Modernize your business with automation, asynchronous task completion, 

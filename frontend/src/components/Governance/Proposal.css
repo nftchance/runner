@@ -4,7 +4,7 @@
     grid-template-rows: auto;
     column-gap: 150px;
     margin-bottom: 250px;
-    margin-top: 120px;
+    margin-top: 100px;
 }
 
 .proposal-details > .proposal-title {
@@ -162,4 +162,10 @@
     flex-direction: row;
     height: 32px;
     gap: 10px;
+}
+
+@media only screen and (min-width: 600px) {
+    .proposal-grid {
+        margin-top: 200px;
+    }
 }
