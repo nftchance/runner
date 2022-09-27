@@ -1,0 +1,90 @@
+#vol-graph {
+    width: 100%;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.bars {
+    display: grid;
+    grid-template-columns: repeat(28, 1fr);
+    grid-template-rows: 340px;
+}
+
+.bar-grid-col {
+    position: relative;
+    align-items: baseline;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.bar-container {
+    position: relative;
+    vertical-align: bottom;
+    width: 100%;
+    bottom: -100%;
+    padding-bottom: 6px;
+    margin-bottom: -1px;
+    border-color: var(--dark-border);
+    font-family: franklin-gothic-urw;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 17px;
+    transform: translateY(-100%);
+}
+
+.bar {
+    width: auto;
+    border: 1px solid;
+    border-color: inherit;
+}
+
+.bar-grid-col:last-child > .bar-container::after,
+.bar-grid-col:first-child > .bar-container::after {
+    color: var(--white-65);
+    position: absolute;
+    bottom: -29px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bar-grid-col.hovered > .bar-container {
+    margin-bottom: -2px;
+    border-bottom: 1px solid var(--yellow);
+    background-color: var(--yellow);
+    background-clip: content-box;
+    border-color: var(--dark-yellow);
+    text-align: center;
+}
+
+.bar-grid-col.hovered > .bar-container > .before-line {
+    background-color: var(--yellow);
+}
+
+.bar-grid-col.hovered > .bar-container::after {
+    display: block;
+    position: absolute;
+    padding: auto;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--white);
+}
+
+.bar-grid-col.hovered > .bar-container::before {
+    display: block;
+    white-space: nowrap;
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.before-line {
+    display: inherit;
+    height: 40px;
+    width: 1px;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+}

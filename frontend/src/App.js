@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { HelmetProvider, Helmet } from "react-helmet-async";
+import { StyledEngineProvider } from '@mui/material/styles';
+
+import { library } from "@fortawesome/fontawesome-svg-core"
+import { fab } from "@fortawesome/free-brands-svg-icons"
+import { fal } from "@fortawesome/pro-light-svg-icons"
+
+import Router from "@components/Router/Router";
+import { SEO_CONSTANTS } from "@components/Constants/constants";
+
+import "./App.css";
+
+library.add(fab, fal)
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <>
+        <HelmetProvider>
+          <Helmet>
+              <title>{SEO_CONSTANTS.home.title}</title>
+              <meta name="og:title" content={SEO_CONSTANTS.home.title} />
+
+              <meta name="description" content={SEO_CONSTANTS.home.description} />
+              <meta name="og:description" content={SEO_CONSTANTS.home.description} />
+
+              <meta property="og:url" content={`${window.location.href}`} />
+          </Helmet>
+        </HelmetProvider>
+        
+        <StyledEngineProvider injectFirst>
+          <Router />
+        </StyledEngineProvider>
+      </>
   );
 }
 

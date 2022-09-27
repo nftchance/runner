@@ -1,0 +1,25 @@
+.btn-text {
+    color: var(--white-65);
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+    transition: gap .2s;
+}
+
+.btn-text:hover,
+.btn-text:focus {
+    color: var(--white);
+    background-color: transparent;
+    gap: 10px;
+}
+
+.chevron {
+    color: #FFFFFF;
+    height: 12px;
+    margin-top: 1px;
+}

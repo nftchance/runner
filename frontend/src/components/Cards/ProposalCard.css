@@ -1,0 +1,71 @@
+.proposal-tags {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.proposal-tags > .tag {
+    width: auto;
+    border: 1px solid var(--light-border);
+    border-radius: 4px;
+    padding: 2px 5px 2px 5px;
+}
+
+.tag > .tag-text {
+    color: var(--white);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+}
+
+.proposal-info {
+    background-color: var(--dark-border);
+    border-radius: 4px 4px 0px 0px;
+    padding: 20px 17px 30px 17px;
+}
+
+.proposal-actions {
+    background-color: var(--dark);
+    border-radius: 0px 0px 4px 4px;
+    padding: 12px 17px 12px 17px;
+}
+
+.proposal-actions > .action-btns {
+    display: flex;
+    flex-direction: row;
+    height: 32px;
+    gap: 10px;
+}
+
+.proposal-actions > .action-btns > .btn-secondary {
+    width: 105px;
+}
+
+.votes-bar {
+    display: flex;
+    width: 100%;
+    height: 6px;
+}
+
+.yes-votes {
+    height: 6px;
+    border: 1px solid var(--dark-green);
+    border-right: none;
+    background-color: var(--green);
+}
+
+.no-votes {
+    height: 6px;
+    border: 1px solid var(--dark-red);
+    border-left: none;
+    background-color: var(--red);
+}
+
+.missing-votes {
+    height: 7px;
+    border: 1px solid var(--dark);
+    border-left: none;
+    background-color: var(--dark-border);
+    flex-grow: 1;
+}

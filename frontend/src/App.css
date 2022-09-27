@@ -1,38 +1,197 @@
-.App {
-  text-align: center;
+@import url("https://use.typekit.net/evr1bsi.css");
+
+:root {
+  --darkest: rgb(28, 28, 28);
+  --darkest-65: rgba(28, 28, 28, 0.65);
+  --dark: rgb(39, 39, 39);
+  --dark-border: rgb(61, 61, 61);
+
+  --light-border: rgb(112, 112, 112);
+  --light-border-65: rgba(112, 112, 112, 0.65);
+
+  --white: rgb(255, 255, 255);
+  --white-65: rgba(255, 255, 255, 0.65);
+
+  --yellow: rgb(239, 248, 85);
+  --dark-yellow: rgb(190, 199, 41);
+
+  --green: rgb(85, 248, 85);
+  --dark-green: rgb(41, 199, 46);
+  --red: rgb(248, 85, 85);
+  --dark-red: rgb(199, 41, 41);
+  --light-blue: rgb(85, 248, 237);
+  --dark-blue: rgb(41, 194, 199);
+
+  --page-margins: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  box-sizing: border-box;
+  font-family: franklin-gothic-urw, serif;
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  background: var(--darkest);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+h1 {
+  color: var(--white);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 68px;
+}
+
+h3 {
+  color: var(--white);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 34px;
+}
+
+h4 {
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+h5 {
+  color: var(--white-65);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+h6 {
+  color: var(--white-65);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+p {
+  color: var(--white-65);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--darkest);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFFFFF65;
+  border-radius: 8px;
+  border: 2px solid var(--darkest);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+::selection {
+  background-color: var(--light-border);
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.link-wrapper {
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.headline {
+  margin-top: 100px;
+  margin-bottom: 180px;
+  max-width: 850px;
+}
+
+.headline > .subtitle {
+  max-width: 650px;
+  margin-top: 50px;
+  margin-bottom: 60px;
+}
+
+.headline > .btn-secondary {
+  height: 36px;
+}
+
+.status-indicator {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
-.App-link {
-  color: #61dafb;
+.status-indicator.green {
+  background-color: var(--green);
+  border: 1px solid var(--dark-green);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.status-indicator.light-blue {
+  background-color: var(--light-blue);
+  border: 1px solid var(--dark-blue);
+}
+
+/* Menus */
+.MuiPopover-root > .MuiPaper-root {
+  background-color: var(--dark-border);
+  font-family: inherit;
+  color: #FFFFFF;
+}
+
+.MuiList-root > .MuiButtonBase-root {
+  color: var(--white-65);
+}
+
+.MuiButtonBase-root[aria-expanded="true"] {
+  color: var(--white);
+}
+
+.MuiList-root > .MuiButtonBase-root:hover,
+.MuiList-root > .MuiButtonBase-root:active,
+.MuiList-root > .MuiButtonBase-root:focus,
+.MuiList-root > .MuiButtonBase-root.Mui-selected,
+.MuiList-root > .MuiButtonBase-root.Mui-selected:hover,
+.MuiList-root > .MuiButtonBase-root.Mui-selected:focus {
+  color: var(--white);
+  background-color: rgba(255,255,255,0.1);
+}
+
+@media screen and (min-width: 600px) {
+  :root {
+    --page-margins: 60px;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --page-margins: 100px;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  :root {
+    --page-margins: 140px;
+  }
+}
+
+/* Different breakpoint for the navbar */
+@media only screen and (min-width: 600px) {
+  .headline {
+    margin-top: 200px;
   }
 }

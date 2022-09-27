@@ -1,0 +1,25 @@
+.btn-secondary {
+    background-color: var(--dark);
+    text-transform: none;
+    border-radius: 8px;
+    border: 1px solid var(--dark-border);
+    height: 100%;
+    color: var(--white-65);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: var(--dark-border);
+    color: var(--white);
+}
+
+.btn-secondary > .text {
+    color: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    white-space: nowrap;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

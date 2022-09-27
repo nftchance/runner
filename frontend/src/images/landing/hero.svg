@@ -1,0 +1,29 @@
+<svg id="Component_1_1" data-name="Component 1 – 1" xmlns="http://www.w3.org/2000/svg" width="1920.5" height="300" viewBox="0 0 1920.5 300">
+  <line id="Line_2" data-name="Line 2" x2="1103" transform="translate(0 291.5)" fill="none" stroke="#bec729" stroke-width="1"/>
+  <g id="Ellipse_29" data-name="Ellipse 29" transform="translate(1103 283)" fill="none" stroke="#bec729" stroke-width="1">
+    <circle cx="8.5" cy="8.5" r="8.5" stroke="none"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="none"/>
+  </g>
+  <g id="Ellipse_30" data-name="Ellipse 30" transform="translate(1353 35)" fill="#eff855" stroke="#bec729" stroke-width="1">
+    <circle cx="8.5" cy="8.5" r="8.5" stroke="none"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="none"/>
+  </g>
+  <line id="Line_3" data-name="Line 3" y1="237" x2="238" transform="translate(1117.5 49.5)" fill="none" stroke="#bec729" stroke-width="1"/>
+  <text id="Job_Scheduled" data-name="Job Scheduled" transform="translate(1354 9)" fill="#fff" font-size="12" font-family="FranklinGothicURW-Dem, FranklinGothic URW"><tspan x="0" y="0">Job Scheduled</tspan></text>
+  <line id="Line_4" data-name="Line 4" y1="18" transform="translate(1361.5 17)" fill="none" stroke="#bec729" stroke-width="1"/>
+  <line id="Line_8" data-name="Line 8" y1="18" transform="translate(1464.5 17)" fill="none" stroke="#bec729" stroke-width="1"/>
+  <line id="Line_9" data-name="Line 9" y1="18" transform="translate(1695.5 17)" fill="none" stroke="#3d3d3d" stroke-width="1"/>
+  <line id="Line_5" data-name="Line 5" x2="86.5" transform="translate(1370 43.5)" fill="none" stroke="#bec729" stroke-width="1"/>
+  <line id="Line_6" data-name="Line 6" x1="215" transform="translate(1472.5 43.5)" fill="none" stroke="#3d3d3d" stroke-width="1"/>
+  <line id="Line_7" data-name="Line 7" x1="216.5" transform="translate(1704 43.5)" fill="none" stroke="#3d3d3d" stroke-width="1"/>
+  <g id="Ellipse_31" data-name="Ellipse 31" transform="translate(1456 35)" fill="#eff855" stroke="#bec729" stroke-width="1">
+    <circle cx="8.5" cy="8.5" r="8.5" stroke="none"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="none"/>
+  </g>
+  <text id="Team_Assigned" data-name="Team Assigned" transform="translate(1457 9)" fill="#fff" font-size="12" font-family="FranklinGothicURW-Dem, FranklinGothic URW"><tspan x="0" y="0">Team Assigned</tspan></text>
+  <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(1687 35)" fill="none" stroke="#3d3d3d" stroke-width="1">
+    <circle cx="8.5" cy="8.5" r="8.5" stroke="none"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="none"/>
+  </g>
+  <text id="Job_Started" data-name="Job Started" transform="translate(1688 9)" fill="#fff" font-size="12" font-family="FranklinGothicURW-Dem, FranklinGothic URW" opacity="0.65"><tspan x="0" y="0">Job Started</tspan></text>
+</svg>

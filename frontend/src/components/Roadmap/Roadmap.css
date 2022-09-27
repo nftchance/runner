@@ -1,0 +1,36 @@
+.headline > .btn-secondary > .text {
+    font-size: 14px;
+}
+
+.roadmap {
+    margin-bottom: 200px;
+}
+
+.roadmap-indicator {
+    width: var(--page-margins);
+    float: left;
+    text-align: end;
+    padding-right: 30px;
+    margin-left: calc(-1 * var(--page-margins));
+}
+
+.version-subtitle {
+    margin-bottom: 10px;
+}
+
+.version-subtext {
+    width: 30%;
+    margin-bottom: 50px;
+}
+
+.roadmap-tasks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 15px;
+    margin-bottom: 80px;
+}
+
+.future {
+    display: block;
+}

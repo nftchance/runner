@@ -1,0 +1,39 @@
+.accordion {
+    background-color: transparent;
+    box-shadow: none;
+    margin: 0px;
+}
+
+.accordion::before {
+    position: inherit;
+}
+
+.accordion-summary {
+    min-height: 100px;
+    padding: 10px 10px 10px 10px;
+    padding-left: 0px;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.accordion-summary > .MuiAccordionSummary-content {
+    max-width: 85%;
+    float: left;
+    margin-right: auto;
+}
+
+.accordion-summary:hover .expand-icon,
+.accordion-summary:focus .expand-icon {
+    color: var(--white)
+}
+
+.accordion-details {
+    padding: 35px 0px 50px 0px;
+    white-space: pre-wrap;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.expand-icon {
+    float: right;
+    margin-left: auto;
+    color: var(--white-65);
+}

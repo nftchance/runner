@@ -1,0 +1,19 @@
+.text-field-inline {
+    border-radius: 8px;
+    background-color: var(--dark);
+    border: 1px solid var(--dark-border);
+    width: 200px;
+    height: 100%;
+}
+
+.text-field-inline::after,
+.text-field-inline::before{
+    all: unset;
+}
+
+.text-field-inline > input {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px;
+}

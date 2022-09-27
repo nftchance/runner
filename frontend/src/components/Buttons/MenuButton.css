@@ -1,0 +1,8 @@
+.menu-icon {
+    color: var(--white-65);
+}
+
+.menu-icon:hover,
+.menu-icon:active {
+    color: var(--white);
+}
